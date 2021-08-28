@@ -1,4 +1,4 @@
-module github.com/Fantom-foundation/go-zilionixx
+module github.com/zilionixx/go-zilionixx
 
 go 1.14
 
