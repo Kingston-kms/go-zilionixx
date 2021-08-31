@@ -3,21 +3,21 @@ package gossip
 import (
 	"errors"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/evmstore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/sfcapi"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/inter/drivertype"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/gossip/evmstore"
+	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/inter/drivertype"
+	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/opera/genesis"
 )
 
 // ApplyGenesis writes initial state.
@@ -102,7 +102,7 @@ func (s *Store) applyEpoch0Genesis(g opera.Genesis) (evmBlock *evmcore.EvmBlock,
 		LastBlock:             highestBlock,
 		FinalizedStateRoot:    hash.Hash(evmBlock.Root),
 		EpochGas:              0,
-		EpochCheaters:         lachesis.Cheaters{},
+		EpochCheaters:         zilionbft.Cheaters{},
 		ValidatorStates:       make([]blockproc.ValidatorBlockState, 0),
 		NextValidatorProfiles: make(map[idx.ValidatorID]drivertype.Validator),
 		DirtyRules:            g.Rules,

@@ -1,12 +1,12 @@
 package eventcheck
 
 import (
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/basiccheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/epochcheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/gaspowercheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/heavycheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/parentscheck"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/eventcheck/basiccheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/gaspowercheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/heavycheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/parentscheck"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 // Checkers is collection of all the checkers

@@ -35,17 +35,17 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip/contract/driver100"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/contract/driverauth100"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/contract/netinit100"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/contract/sfc100"
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/driver"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/driverauth"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/evmwriter"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/netinit"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/sfc"
-	"github.com/Fantom-foundation/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/gossip/contract/driver100"
+	"github.com/zilionixx/go-zilionixx/gossip/contract/driverauth100"
+	"github.com/zilionixx/go-zilionixx/gossip/contract/netinit100"
+	"github.com/zilionixx/go-zilionixx/gossip/contract/sfc100"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/driver"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/driverauth"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/netinit"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/sfc"
+	"github.com/zilionixx/go-zilionixx/utils"
 )
 
 func TestSFC(t *testing.T) {

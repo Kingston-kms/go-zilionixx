@@ -3,7 +3,7 @@ package emitter
 import (
 	"math"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter/piecefunc"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter/piecefunc"
 )
 
 var (

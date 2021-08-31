@@ -21,9 +21,9 @@ import (
 	"context"
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
@@ -34,9 +34,9 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/sfcapi"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 // PeerProgress is synchronization status of a peer

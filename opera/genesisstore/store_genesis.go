@@ -4,18 +4,18 @@ import (
 	"crypto/sha256"
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/common/bigendian"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/zilionixx/zilion-base/common/bigendian"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/kvdb"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/gpos"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/opera/genesis"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
 )
 
 type (

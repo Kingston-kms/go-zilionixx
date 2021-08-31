@@ -4,14 +4,14 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/leveldb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/leveldb"
+	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/gossip"
 )
 
 func DBProducer(chaindataDir string) kvdb.IterableDBProducer {
@@ -33,8 +33,8 @@ func CheckDBList(names []string) error {
 	if !namesMap["gossip"] {
 		return errors.New("gossip DB is not found")
 	}
-	if !namesMap["lachesis"] {
-		return errors.New("lachesis DB is not found")
+	if !namesMap["zilionbft"] {
+		return errors.New("zilionbft DB is not found")
 	}
 	if !namesMap["genesis"] {
 		return errors.New("genesis DB is not found")
@@ -46,10 +46,10 @@ func dbCacheSize(name string) int {
 	if name == "gossip" {
 		return 64 * opt.MiB
 	}
-	if name == "lachesis" {
+	if name == "zilionbft" {
 		return 4 * opt.MiB
 	}
-	if strings.HasPrefix(name, "lachesis-") {
+	if strings.HasPrefix(name, "zilionbft-") {
 		return 8 * opt.MiB
 	}
 	if strings.HasPrefix(name, "gossip-") {

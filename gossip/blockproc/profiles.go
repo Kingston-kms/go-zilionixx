@@ -3,11 +3,11 @@ package blockproc
 import (
 	"io"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 	"github.com/ethereum/go-ethereum/rlp"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter/drivertype"
+	"github.com/zilionixx/go-zilionixx/inter/drivertype"
 )
 
 type ValidatorProfiles map[idx.ValidatorID]drivertype.Validator

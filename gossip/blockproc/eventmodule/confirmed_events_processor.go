@@ -1,8 +1,8 @@
 package eventmodule
 
 import (
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 type ValidatorEventsModule struct{}

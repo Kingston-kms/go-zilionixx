@@ -23,7 +23,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/rawdb"
@@ -34,10 +33,11 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
-	"github.com/Fantom-foundation/go-zilionixx/topicsdb"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/topicsdb"
 )
 
 type testBackend struct {

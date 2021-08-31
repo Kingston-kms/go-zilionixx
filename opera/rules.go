@@ -5,13 +5,13 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/vm"
 	ethparams "github.com/ethereum/go-ethereum/params"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
 )
 
 const (

@@ -5,11 +5,11 @@ import (
 
 	"github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/utils/wgmutex"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
-	"github.com/Fantom-foundation/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/utils/wgmutex"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
+	"github.com/zilionixx/go-zilionixx/vecmt"
 )
 
 // emitterWorld implements emitter.World interface

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/Fantom-foundation/go-zilionixx/utils/bits"
-	"github.com/Fantom-foundation/go-zilionixx/utils/fast"
+	"github.com/zilionixx/go-zilionixx/utils/bits"
+	"github.com/zilionixx/go-zilionixx/utils/fast"
 )
 
 var (

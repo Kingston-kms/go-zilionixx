@@ -3,14 +3,14 @@ package gossip
 import (
 	"sync/atomic"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/gaspowercheck"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/eventcheck/gaspowercheck"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/opera"
 )
 
 // GasPowerCheckReader is a helper to run gas power check

@@ -3,13 +3,13 @@ package sfcapi
 import (
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/sfc"
-	"github.com/Fantom-foundation/go-zilionixx/topicsdb"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/sfc"
+	"github.com/zilionixx/go-zilionixx/topicsdb"
 )
 
 func ApplyGenesis(s *Store, index *topicsdb.Index) {

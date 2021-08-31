@@ -5,16 +5,16 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagprocessor"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
 
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/epochcheck"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/eventcheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 var (

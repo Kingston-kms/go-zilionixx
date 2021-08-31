@@ -10,10 +10,10 @@ import (
 	"github.com/ethereum/go-ethereum/p2p"
 	"github.com/ethereum/go-ethereum/p2p/enode"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/utils"
 )
 
 const (
@@ -41,7 +41,7 @@ func FuzzPM(data []byte) int {
 	}
 	peer := p2p.NewPeer(enode.RandomID(enode.ID{}, 1), "fake-node-1", []p2p.Cap{})
 	input := &fuzzMsgReadWriter{msg}
-	other := fuzzedPM.newPeer(lachesis62, peer, input)
+	other := fuzzedPM.newPeer(zilionbft62, peer, input)
 
 	err = fuzzedPM.handleMsg(other)
 	if err != nil {

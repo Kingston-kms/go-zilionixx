@@ -10,8 +10,8 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/params"
 
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
 )
 
 func TestFakeNetFlag_NonValidator(t *testing.T) {

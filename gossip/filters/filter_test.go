@@ -23,7 +23,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
 	"github.com/ethereum/go-ethereum/core"
@@ -31,9 +30,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/params"
+	"github.com/zilionixx/zilion-base/kvdb/table"
 
-	"github.com/Fantom-foundation/go-zilionixx/topicsdb"
-	"github.com/Fantom-foundation/go-zilionixx/utils/adapters/ethdb2kvdb"
+	"github.com/zilionixx/go-zilionixx/topicsdb"
+	"github.com/zilionixx/go-zilionixx/utils/adapters/ethdb2kvdb"
 )
 
 func makeReceipt(addr common.Address) *types.Receipt {

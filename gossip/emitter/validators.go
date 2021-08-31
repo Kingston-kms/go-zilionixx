@@ -3,10 +3,10 @@ package emitter
 import (
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter/piecefunc"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter/piecefunc"
 )
 
 const (

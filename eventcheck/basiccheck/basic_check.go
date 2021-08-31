@@ -4,11 +4,11 @@ import (
 	"errors"
 	"math"
 
-	base "github.com/Fantom-foundation/lachesis-base/eventcheck/basiccheck"
+	base "github.com/zilionixx/zilion-base/eventcheck/basiccheck"
 	"github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 var (

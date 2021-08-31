@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/Fantom-foundation/go-zilionixx/utils/cser"
+	"github.com/zilionixx/go-zilionixx/utils/cser"
 )
 
 func encodeSig(r, s *big.Int) (sig [64]byte) {

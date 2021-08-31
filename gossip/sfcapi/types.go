@@ -3,10 +3,10 @@ package sfcapi
 import (
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 var (

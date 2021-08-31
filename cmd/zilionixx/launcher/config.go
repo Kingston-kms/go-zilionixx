@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
@@ -19,16 +18,18 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/naoina/toml"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/gasprice"
-	"github.com/Fantom-foundation/go-zilionixx/integration"
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesisstore"
-	futils "github.com/Fantom-foundation/go-zilionixx/utils"
-	"github.com/Fantom-foundation/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
+	"github.com/zilionixx/go-zilionixx/integration"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
+	futils "github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/vecmt"
 )
 
 var (
@@ -352,7 +353,7 @@ func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 		Opera:         gossip.DefaultConfig(),
 		OperaStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(),
+		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),
 	}
 	if ctx.GlobalIsSet(FakeNetFlag.Name) {

@@ -6,11 +6,6 @@ import (
 	"math/rand"
 	"sync"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
-	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -21,30 +16,35 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/discv5"
 	"github.com/ethereum/go-ethereum/p2p/enr"
 	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/utils/workers"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
-	"github.com/Fantom-foundation/go-zilionixx/ethapi"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/basiccheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/epochcheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/gaspowercheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/heavycheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/parentscheck"
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/drivermodule"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/eventmodule"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/evmmodule"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/sealmodule"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/verwatcher"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/filters"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/gasprice"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
-	"github.com/Fantom-foundation/go-zilionixx/utils/wgmutex"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
-	"github.com/Fantom-foundation/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/ethapi"
+	"github.com/zilionixx/go-zilionixx/eventcheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/basiccheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/gaspowercheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/heavycheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/parentscheck"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/drivermodule"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/eventmodule"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/evmmodule"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/sealmodule"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/verwatcher"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter"
+	"github.com/zilionixx/go-zilionixx/gossip/filters"
+	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/utils/wgmutex"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
+	"github.com/zilionixx/go-zilionixx/vecmt"
 )
 
 type ServiceFeed struct {
@@ -118,7 +118,7 @@ type Service struct {
 
 	// application
 	store               *Store
-	engine              lachesis.Consensus
+	engine              zilionbft.Consensus
 	dagIndexer          *vecmt.Index
 	engineMu            *sync.RWMutex
 	emitter             *emitter.Emitter
@@ -152,7 +152,7 @@ type Service struct {
 	logger.Instance
 }
 
-func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func NewService(stack *node.Node, config Config, store *Store, signer valkeystor
 	return svc, nil
 }
 
-func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	svc := &Service{
 		config:             config,
 		done:               make(chan struct{}),

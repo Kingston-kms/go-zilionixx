@@ -3,7 +3,7 @@ language: go
 go:
   - 1.14.x
 
-go_import_path: github.com/Fantom-foundation/go-zilionixx
+go_import_path: github.com/zilionixx/go-zilionixx
 
 cache:
   directories:

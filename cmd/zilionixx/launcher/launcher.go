@@ -19,15 +19,15 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx/launcher/metrics"
-	"github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx/launcher/tracing"
-	"github.com/Fantom-foundation/go-zilionixx/debug"
-	"github.com/Fantom-foundation/go-zilionixx/flags"
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
-	"github.com/Fantom-foundation/go-zilionixx/integration"
-	"github.com/Fantom-foundation/go-zilionixx/utils/errlock"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
-	_ "github.com/Fantom-foundation/go-zilionixx/version"
+	"github.com/zilionixx/go-zilionixx/cmd/zilionixx/launcher/metrics"
+	"github.com/zilionixx/go-zilionixx/cmd/zilionixx/launcher/tracing"
+	"github.com/zilionixx/go-zilionixx/debug"
+	"github.com/zilionixx/go-zilionixx/flags"
+	"github.com/zilionixx/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/integration"
+	"github.com/zilionixx/go-zilionixx/utils/errlock"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
+	_ "github.com/zilionixx/go-zilionixx/version"
 )
 
 const (
@@ -168,7 +168,7 @@ func init() {
 
 	// App.
 
-	app.Action = lachesisMain
+	app.Action = zilionbftMain
 	app.Version = params.VersionWithCommit(gitCommit, gitDate)
 	app.HideVersion = true // we have a command to print the version
 	app.Commands = []cli.Command{
@@ -229,7 +229,7 @@ func Launch(args []string) error {
 // opera is the main entry point into the system if no special subcommand is ran.
 // It creates a default node based on the command line arguments and runs it in
 // blocking mode, waiting for it to be shut down.
-func lachesisMain(ctx *cli.Context) error {
+func zilionbftMain(ctx *cli.Context) error {
 	if args := ctx.Args(); len(args) > 0 {
 		return fmt.Errorf("invalid command: %q", args[0])
 	}

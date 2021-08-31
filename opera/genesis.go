@@ -3,13 +3,13 @@ package opera
 import (
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesis/gpos"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera/genesis"
+	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
 )
 
 type Genesis struct {

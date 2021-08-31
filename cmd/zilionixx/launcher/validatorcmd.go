@@ -13,9 +13,9 @@ import (
 	"github.com/status-im/keycard-go/hexutils"
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore/encryption"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
+	"github.com/zilionixx/go-zilionixx/valkeystore/encryption"
 )
 
 var (

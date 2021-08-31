@@ -1,9 +1,9 @@
 package rlpstore
 
 import (
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb"
 	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/zilionixx/go-zilionixx/logger"
 )
 
 type Helper struct {

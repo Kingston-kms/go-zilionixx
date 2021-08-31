@@ -3,7 +3,6 @@ module github.com/zilionixx/go-zilionixx
 go 1.14
 
 require (
-	github.com/Fantom-foundation/lachesis-base v0.0.0-20210323130105-a8e5ca7f15ac
 	github.com/allegro/bigcache v1.2.1 // indirect
 	github.com/aristanetworks/goarista v0.0.0-20191023202215-f096da5361bb // indirect
 	github.com/btcsuite/btcd v0.20.1-beta // indirect
@@ -49,10 +48,11 @@ require (
 	github.com/tyler-smith/go-bip39 v1.0.2
 	github.com/uber/jaeger-client-go v2.20.1+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible
+	github.com/zilionixx/zilion-base v0.1.0
 	go.uber.org/atomic v1.5.1 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0
 )
 
-replace github.com/ethereum/go-ethereum => github.com/Fantom-foundation/go-ethereum v1.9.22-ftm-0.5
+replace github.com/ethereum/go-ethereum => github.com/zilionixx/go-ethereum v1.9.8-zilion-0.2
 
 replace github.com/dvyukov/go-fuzz => github.com/guzenok/go-fuzz v0.0.0-20210103140116-f9104dfb626f

@@ -12,8 +12,8 @@ import (
 	"github.com/ethereum/go-ethereum/node"
 	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
 )
 
 func addFakeValidatorKey(ctx *cli.Context, key *ecdsa.PrivateKey, pubkey validatorpk.PubKey, valKeystore valkeystore.RawKeystoreI) {

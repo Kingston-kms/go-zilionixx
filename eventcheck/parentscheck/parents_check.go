@@ -3,9 +3,9 @@ package parentscheck
 import (
 	"errors"
 
-	base "github.com/Fantom-foundation/lachesis-base/eventcheck/parentscheck"
+	base "github.com/zilionixx/zilion-base/eventcheck/parentscheck"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 var (

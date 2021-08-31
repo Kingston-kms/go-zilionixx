@@ -1,11 +1,11 @@
 package sfcapi
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/table"
 
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/utils/rlpstore"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/utils/rlpstore"
 )
 
 // Store is a node persistent storage working over physical key-value database.

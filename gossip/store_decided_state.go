@@ -1,12 +1,12 @@
 package gossip
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/opera"
 )
 
 const sKey = "s"

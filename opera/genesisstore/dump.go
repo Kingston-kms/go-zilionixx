@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/zilionixx/zilion-base/hash"
 	"github.com/status-im/keycard-go/hexutils"
 
-	"github.com/Fantom-foundation/go-zilionixx/utils/iodb"
-	"github.com/Fantom-foundation/go-zilionixx/utils/ioread"
+	"github.com/zilionixx/go-zilionixx/utils/iodb"
+	"github.com/zilionixx/go-zilionixx/utils/ioread"
 )
 
 var (

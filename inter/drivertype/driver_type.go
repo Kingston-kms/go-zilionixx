@@ -3,9 +3,9 @@ package drivertype
 import (
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
 )
 
 var (

@@ -3,8 +3,8 @@ package evmstore
 import (
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 )
 
 func cachedStore() *Store {

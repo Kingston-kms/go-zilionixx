@@ -10,7 +10,8 @@ them using your favourite package manager. Once the dependencies are installed, 
 ```shell
 make zilionixx
 ```
-The build output is ```build/zilionixx``` executable.
+
+The build output is `build/zilionixx` executable.
 
 ## Running `zilionixx`
 
@@ -70,11 +71,13 @@ $ zilionixx --nat extip:1.2.3.4
 
 The network is specified only by its genesis file, so running a testnet node is equivalent to
 using a testnet genesis file instead of a mainnet genesis file:
+
 ```shell
 $ zilionixx --genesis /path/to/testnet.g # launch node
 ```
 
 It may be convenient to use a separate datadir for your testnet node to avoid collisions with other networks:
+
 ```shell
 $ zilionixx --genesis /path/to/testnet.g --datadir /path/to/datadir # launch node
 $ zilionixx --datadir /path/to/datadir account new # create new account
@@ -84,37 +87,38 @@ $ zilionixx --datadir /path/to/datadir attach # attach to IPC
 ### Testing
 
 Lachesis has extensive unit-testing. Use the Go tool to run tests:
+
 ```shell
 go test ./...
 ```
 
 If everything goes well, it should output something along these lines:
+
 ```
-ok  	github.com/Fantom-foundation/go-zilionixx/app	0.033s
-?   	github.com/Fantom-foundation/go-zilionixx/cmd/cmdtest	[no test files]
-ok  	github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx	13.890s
-?   	github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx/metrics	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx/tracing	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/crypto	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/debug	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/ethapi	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/eventcheck	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/eventcheck/basiccheck	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/eventcheck/gaspowercheck	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/eventcheck/heavycheck	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/eventcheck/parentscheck	[no test files]
-ok  	github.com/Fantom-foundation/go-zilionixx/evmcore	6.322s
-?   	github.com/Fantom-foundation/go-zilionixx/gossip	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/gossip/emitter	[no test files]
-ok  	github.com/Fantom-foundation/go-zilionixx/gossip/filters	1.250s
-?   	github.com/Fantom-foundation/go-zilionixx/gossip/gasprice	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/gossip/occuredtxs	[no test files]
-?   	github.com/Fantom-foundation/go-zilionixx/gossip/piecefunc	[no test files]
-ok  	github.com/Fantom-foundation/go-zilionixx/integration	21.640s
+ok  	github.com/zilionixx/go-zilionixx/app	0.033s
+?   	github.com/zilionixx/go-zilionixx/cmd/cmdtest	[no test files]
+ok  	github.com/zilionixx/go-zilionixx/cmd/zilionixx	13.890s
+?   	github.com/zilionixx/go-zilionixx/cmd/zilionixx/metrics	[no test files]
+?   	github.com/zilionixx/go-zilionixx/cmd/zilionixx/tracing	[no test files]
+?   	github.com/zilionixx/go-zilionixx/crypto	[no test files]
+?   	github.com/zilionixx/go-zilionixx/debug	[no test files]
+?   	github.com/zilionixx/go-zilionixx/ethapi	[no test files]
+?   	github.com/zilionixx/go-zilionixx/eventcheck	[no test files]
+?   	github.com/zilionixx/go-zilionixx/eventcheck/basiccheck	[no test files]
+?   	github.com/zilionixx/go-zilionixx/eventcheck/gaspowercheck	[no test files]
+?   	github.com/zilionixx/go-zilionixx/eventcheck/heavycheck	[no test files]
+?   	github.com/zilionixx/go-zilionixx/eventcheck/parentscheck	[no test files]
+ok  	github.com/zilionixx/go-zilionixx/evmcore	6.322s
+?   	github.com/zilionixx/go-zilionixx/gossip	[no test files]
+?   	github.com/zilionixx/go-zilionixx/gossip/emitter	[no test files]
+ok  	github.com/zilionixx/go-zilionixx/gossip/filters	1.250s
+?   	github.com/zilionixx/go-zilionixx/gossip/gasprice	[no test files]
+?   	github.com/zilionixx/go-zilionixx/gossip/occuredtxs	[no test files]
+?   	github.com/zilionixx/go-zilionixx/gossip/piecefunc	[no test files]
+ok  	github.com/zilionixx/go-zilionixx/integration	21.640s
 ```
 
 Also it is tested with [fuzzing](./FUZZING.md).
-
 
 ### Operating a private network (fakenet)
 
@@ -128,21 +132,25 @@ Maintaining your own private network is more involved as a lot of configurations
 granted in the official networks need to be manually set up.
 
 To run the fakenet with just one validator (which will work practically as a PoA blockchain), use:
+
 ```shell
 $ zilionixx --fakenet 1/1
 ```
 
 To run the fakenet with 5 validators, run the command for each validator:
+
 ```shell
 $ zilionixx --fakenet 1/5 # first node, use 2/5 for second node
 ```
 
 If you have to launch a non-validator node in fakenet, use 0 as ID:
+
 ```shell
 $ zilionixx --fakenet 0/5
 ```
 
 After that, you have to connect your nodes. Either connect them statically or specify a bootnode:
+
 ```shell
 $ zilionixx --fakenet 1/5 --bootnodes "enode://verylonghex@1.2.3.4:5050"
 ```
@@ -150,6 +158,7 @@ $ zilionixx --fakenet 1/5 --bootnodes "enode://verylonghex@1.2.3.4:5050"
 ### Running the demo
 
 For the testing purposes, the full demo may be launched using:
+
 ```shell
 cd demo/
 ./start.sh # start the Zilionixx processes

@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagprocessor"
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagstream/streamleecher"
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagstream/streamseeder"
-	"github.com/Fantom-foundation/lachesis-base/gossip/itemsfetcher"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
+	"github.com/zilionixx/zilion-base/gossip/dagstream/streamleecher"
+	"github.com/zilionixx/zilion-base/gossip/dagstream/streamseeder"
+	"github.com/zilionixx/zilion-base/gossip/itemsfetcher"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/heavycheck"
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/verwatcher"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/evmstore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/gasprice"
+	"github.com/zilionixx/go-zilionixx/eventcheck/heavycheck"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/verwatcher"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter"
+	"github.com/zilionixx/go-zilionixx/gossip/evmstore"
+	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 )
 
 const nominalSize uint = 1
@@ -130,7 +131,7 @@ func DefaultConfig() Config {
 			MsgsSemaphoreTimeout:    10 * time.Second,
 			ProgressBroadcastPeriod: 10 * time.Second,
 
-			Processor: dagprocessor.DefaultConfig(),
+			Processor: dagprocessor.DefaultConfig(cachescale.Identity),
 			DagFetcher: itemsfetcher.Config{
 				ForgetTimeout:       1 * time.Minute,
 				ArriveTimeout:       1000 * time.Millisecond,
@@ -150,7 +151,7 @@ func DefaultConfig() Config {
 				MaxParallelRequests: 64,
 			},
 			StreamLeecher:            streamleecher.DefaultConfig(),
-			StreamSeeder:             streamseeder.DefaultConfig(),
+			StreamSeeder:             streamseeder.DefaultConfig(cachescale.Identity),
 			MaxInitialTxHashesSend:   20000,
 			MaxRandomTxHashesSend:    128,
 			RandomTxHashesSendPeriod: 20 * time.Second,

@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
 )
 
 type encryptedAccountKeyJSONV3 struct {

@@ -1,8 +1,8 @@
 package gossip
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/table"
 )
 
 type asyncStore struct {

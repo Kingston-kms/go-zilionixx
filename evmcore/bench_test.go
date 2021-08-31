@@ -33,7 +33,7 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 )
 
 func BenchmarkInsertChain_empty_memdb(b *testing.B) {

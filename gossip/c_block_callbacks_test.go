@@ -8,8 +8,8 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/utils"
 )
 
 func TestConsensusCallback(t *testing.T) {

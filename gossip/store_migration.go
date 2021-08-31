@@ -1,9 +1,9 @@
 package gossip
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb"
 
-	"github.com/Fantom-foundation/go-zilionixx/utils/migration"
+	"github.com/zilionixx/go-zilionixx/utils/migration"
 )
 
 func isEmptyDB(db kvdb.Iteratee) bool {

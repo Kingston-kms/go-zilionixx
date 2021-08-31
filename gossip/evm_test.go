@@ -9,13 +9,13 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/require"
+	"github.com/zilionixx/zilion-base/hash"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip/contract/ballot"
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/gossip/contract/ballot"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/utils"
 )
 
 func BenchmarkBallotTxsProcessing(b *testing.B) {

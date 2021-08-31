@@ -25,7 +25,7 @@ import (
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/flags"
+	"github.com/zilionixx/go-zilionixx/flags"
 )
 
 // AppHelpFlagGroups is the application flags, grouped by functionality.

@@ -1,7 +1,7 @@
 package verwatcher
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/common/bigendian"
+	"github.com/zilionixx/zilion-base/common/bigendian"
 )
 
 const (

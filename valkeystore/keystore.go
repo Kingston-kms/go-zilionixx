@@ -1,8 +1,8 @@
 package valkeystore
 
 import (
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore/encryption"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/valkeystore/encryption"
 )
 
 type RawKeystoreI interface {

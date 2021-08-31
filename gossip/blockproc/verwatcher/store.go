@@ -1,9 +1,9 @@
 package verwatcher
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb"
 
-	"github.com/Fantom-foundation/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/logger"
 )
 
 // Store is a node persistent storage working over physical key-value database.

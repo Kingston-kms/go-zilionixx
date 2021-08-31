@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 
 	"github.com/ethereum/go-ethereum/params"
 )
@@ -57,7 +57,7 @@ func TestIPCAttachWelcome(t *testing.T) {
 	// Configure the instance for IPC attachement
 	var ipc string
 	if runtime.GOOS == "windows" {
-		ipc = `\\.\pipe\lachesis.ipc`
+		ipc = `\\.\pipe\zilionbft.ipc`
 	} else {
 		ws := tmpdir(t)
 		defer os.RemoveAll(ws)

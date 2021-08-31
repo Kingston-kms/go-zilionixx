@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Fantom-foundation/go-zilionixx/cmd/zilionixx/launcher"
+	"github.com/zilionixx/go-zilionixx/cmd/zilionixx/launcher"
 )
 
 func main() {

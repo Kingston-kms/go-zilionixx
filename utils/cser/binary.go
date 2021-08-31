@@ -1,8 +1,8 @@
 package cser
 
 import (
-	"github.com/Fantom-foundation/go-zilionixx/utils/bits"
-	"github.com/Fantom-foundation/go-zilionixx/utils/fast"
+	"github.com/zilionixx/go-zilionixx/utils/bits"
+	"github.com/zilionixx/go-zilionixx/utils/fast"
 )
 
 func MarshalBinaryAdapter(marshalCser func(writer *Writer) error) ([]byte, error) {

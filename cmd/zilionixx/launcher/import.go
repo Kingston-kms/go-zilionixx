@@ -13,21 +13,21 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/status-im/keycard-go/hexutils"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter"
-	"github.com/Fantom-foundation/go-zilionixx/integration"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/utils/iodb"
-	"github.com/Fantom-foundation/go-zilionixx/utils/ioread"
+	"github.com/zilionixx/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter"
+	"github.com/zilionixx/go-zilionixx/integration"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/utils/iodb"
+	"github.com/zilionixx/go-zilionixx/utils/ioread"
 )
 
 func importEvm(ctx *cli.Context) error {

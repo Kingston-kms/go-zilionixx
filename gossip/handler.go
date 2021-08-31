@@ -9,16 +9,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagprocessor"
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagstream"
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagstream/streamleecher"
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagstream/streamseeder"
-	"github.com/Fantom-foundation/lachesis-base/gossip/itemsfetcher"
-	"github.com/Fantom-foundation/lachesis-base/utils/datasemaphore"
+	"github.com/zilionixx/zilion-base/eventcheck/queuedcheck"
+	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
+	"github.com/zilionixx/zilion-base/gossip/dagstream"
+	"github.com/zilionixx/zilion-base/gossip/dagstream/streamleecher"
+	"github.com/zilionixx/zilion-base/gossip/dagstream/streamseeder"
+	"github.com/zilionixx/zilion-base/gossip/itemsfetcher"
+	"github.com/zilionixx/zilion-base/utils/datasemaphore"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	notify "github.com/ethereum/go-ethereum/event"
@@ -26,13 +24,16 @@ import (
 	"github.com/ethereum/go-ethereum/p2p"
 	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck"
-	"github.com/Fantom-foundation/go-zilionixx/eventcheck/parentlesscheck"
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/logger"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/eventcheck"
+	"github.com/zilionixx/go-zilionixx/eventcheck/parentlesscheck"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/opera"
 )
 
 const (
@@ -307,8 +308,8 @@ func (pm *ProtocolManager) makeProcessor(checkers *eventcheck.Checkers) *dagproc
 			},
 
 			CheckParents: bufferedCheck,
-			CheckParentless: func(inEvents dag.Events, checked func(ee dag.Events, errs []error)) {
-				_ = parentlessChecker.Enqueue(inEvents, checked)
+			CheckParentless: func(tasks []queuedcheck.EventTask, checked func(ee []queuedcheck.EventTask)) {
+				_ = parentlessChecker.Enqueue(tasks, checked)
 			},
 			OnlyInterested: pm.onlyInterestedEvents,
 		},

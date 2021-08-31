@@ -6,20 +6,21 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/leveldb"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/leveldb"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
-	"github.com/Fantom-foundation/go-zilionixx/integration/makegenesis"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera/genesisstore"
-	"github.com/Fantom-foundation/go-zilionixx/utils"
-	"github.com/Fantom-foundation/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
+	"github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/vecmt"
 )
 
 func BenchmarkFlushDBs(b *testing.B) {
@@ -43,7 +44,7 @@ func BenchmarkFlushDBs(b *testing.B) {
 		Opera:         gossip.DefaultConfig(),
 		OperaStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(),
+		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),
 	})
 	defer store.Close()

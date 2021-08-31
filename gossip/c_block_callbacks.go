@@ -6,30 +6,30 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
-	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/zilion-base/utils/workers"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
-	"github.com/Fantom-foundation/go-zilionixx/evmcore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/blockproc/verwatcher"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/emitter"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/evmstore"
-	"github.com/Fantom-foundation/go-zilionixx/gossip/sfcapi"
-	"github.com/Fantom-foundation/go-zilionixx/inter"
-	"github.com/Fantom-foundation/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
+	"github.com/zilionixx/go-zilionixx/gossip/blockproc/verwatcher"
+	"github.com/zilionixx/go-zilionixx/gossip/emitter"
+	"github.com/zilionixx/go-zilionixx/gossip/evmstore"
+	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
+	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/opera"
 )
 
 // GetConsensusCallbacks returns single (for Service) callback instance.
-func (s *Service) GetConsensusCallbacks() lachesis.ConsensusCallbacks {
-	return lachesis.ConsensusCallbacks{
+func (s *Service) GetConsensusCallbacks() zilionbft.ConsensusCallbacks {
+	return zilionbft.ConsensusCallbacks{
 		BeginBlock: consensusCallbackBeginBlockFn(
 			s.blockProcTasks,
 			&s.blockProcWg,
@@ -46,7 +46,7 @@ func (s *Service) GetConsensusCallbacks() lachesis.ConsensusCallbacks {
 }
 
 // consensusCallbackBeginBlockFn takes only necessaries for block processing and
-// makes lachesis.BeginBlockFn.
+// makes zilionbft.BeginBlockFn.
 // Note that onBlockEnd would be run async.
 func consensusCallbackBeginBlockFn(
 	parallelTasks *workers.Workers,
@@ -59,8 +59,8 @@ func consensusCallbackBeginBlockFn(
 	emitter *emitter.Emitter,
 	verWatcher *verwatcher.VerWarcher,
 	onBlockEnd func(block *inter.Block, preInternalReceipts, internalReceipts, externalReceipts types.Receipts),
-) lachesis.BeginBlockFn {
-	return func(cBlock *lachesis.Block) lachesis.BlockCallbacks {
+) zilionbft.BeginBlockFn {
+	return func(cBlock *zilionbft.Block) zilionbft.BlockCallbacks {
 		wg.Wait()
 		start := time.Now()
 
@@ -85,7 +85,7 @@ func consensusCallbackBeginBlockFn(
 		atroposDegenerate := true
 		confirmedEvents := make(hash.OrderedEvents, 0, 3*es.Validators.Len())
 
-		return lachesis.BlockCallbacks{
+		return zilionbft.BlockCallbacks{
 			ApplyEvent: func(_e dag.Event) {
 				e := _e.(inter.EventI)
 				if cBlock.Atropos == e.ID() {
@@ -341,7 +341,7 @@ func spillBlockEvents(store *Store, block *inter.Block, network opera.Rules) (*i
 	return block, fullEvents
 }
 
-func mergeCheaters(a, b lachesis.Cheaters) lachesis.Cheaters {
+func mergeCheaters(a, b zilionbft.Cheaters) zilionbft.Cheaters {
 	if len(b) == 0 {
 		return a
 	}
@@ -349,7 +349,7 @@ func mergeCheaters(a, b lachesis.Cheaters) lachesis.Cheaters {
 		return b
 	}
 	aSet := a.Set()
-	merged := make(lachesis.Cheaters, 0, len(b)+len(a))
+	merged := make(zilionbft.Cheaters, 0, len(b)+len(a))
 	for _, v := range a {
 		merged = append(merged, v)
 	}

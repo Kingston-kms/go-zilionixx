@@ -3,16 +3,17 @@ package integration
 import (
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/node"
 	"github.com/ethereum/go-ethereum/p2p/simulations/adapters"
 	"github.com/status-im/keycard-go/hexutils"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 
-	"github.com/Fantom-foundation/go-zilionixx/gossip"
-	"github.com/Fantom-foundation/go-zilionixx/inter/validatorpk"
-	"github.com/Fantom-foundation/go-zilionixx/valkeystore"
-	"github.com/Fantom-foundation/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/gossip"
+	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
+	"github.com/zilionixx/go-zilionixx/valkeystore"
+	"github.com/zilionixx/go-zilionixx/vecmt"
 )
 
 var (
@@ -26,7 +27,7 @@ func NewIntegration(ctx *adapters.ServiceContext, genesis InputGenesis, stack *n
 		Opera:         gossipCfg,
 		OperaStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(),
+		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),
 	}
 
