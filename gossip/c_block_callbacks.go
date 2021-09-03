@@ -24,7 +24,7 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/evmstore"
 	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 // GetConsensusCallbacks returns single (for Service) callback instance.
@@ -46,7 +46,7 @@ func (s *Service) GetConsensusCallbacks() zilionbft.ConsensusCallbacks {
 }
 
 // consensusCallbackBeginBlockFn takes only necessaries for block processing and
-// makes zilionbft.BeginBlockFn.
+// makes zilionixx.BeginBlockFn.
 // Note that onBlockEnd would be run async.
 func consensusCallbackBeginBlockFn(
 	parallelTasks *workers.Workers,
@@ -312,7 +312,7 @@ func consensusCallbackBeginBlockFn(
 }
 
 // spillBlockEvents excludes first events which exceed MaxBlockGas
-func spillBlockEvents(store *Store, block *inter.Block, network opera.Rules) (*inter.Block, inter.EventPayloads) {
+func spillBlockEvents(store *Store, block *inter.Block, network zilionixx.Rules) (*inter.Block, inter.EventPayloads) {
 	fullEvents := make(inter.EventPayloads, len(block.Events))
 	if len(block.Events) == 0 {
 		return block, fullEvents

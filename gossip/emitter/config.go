@@ -4,11 +4,11 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/params"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 // EmitIntervals is the configuration of emit intervals.
@@ -49,9 +49,9 @@ func DefaultConfig() Config {
 		VersionToPublish: params.VersionWithMeta(),
 
 		EmitIntervals: EmitIntervals{
-			Min:                        110 * time.Millisecond,
-			Max:                        10 * time.Minute,
-			Confirming:                 120 * time.Millisecond,
+			Min:                        200 * time.Millisecond,
+			Max:                        9 * time.Minute,
+			Confirming:                 200 * time.Millisecond,
 			DoublesignProtection:       27 * time.Minute, // should be greater than MaxEmitInterval
 			ParallelInstanceProtection: 1 * time.Minute,
 		},
@@ -60,9 +60,9 @@ func DefaultConfig() Config {
 
 		MaxParents: 0,
 
-		LimitedTpsThreshold: opera.DefaultEventGas * 120,
-		NoTxsThreshold:      opera.DefaultEventGas * 30,
-		EmergencyThreshold:  opera.DefaultEventGas * 5,
+		LimitedTpsThreshold: zilionixx.DefaultEventGas * 120,
+		NoTxsThreshold:      zilionixx.DefaultEventGas * 30,
+		EmergencyThreshold:  zilionixx.DefaultEventGas * 5,
 	}
 }
 

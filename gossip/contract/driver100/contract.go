@@ -597,7 +597,7 @@ type ContractAdvanceEpochs struct {
 	Raw types.Log // Blockchain specific contextual infos
 }
 
-// FilterAdvanceEpochs is a free log retrieval operation binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
+// FilterAdvanceEpochs is a free log retrieval zilionixxtion binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
 //
 // Solidity: event AdvanceEpochs(uint256 num)
 func (_Contract *ContractFilterer) FilterAdvanceEpochs(opts *bind.FilterOpts) (*ContractAdvanceEpochsIterator, error) {
@@ -609,7 +609,7 @@ func (_Contract *ContractFilterer) FilterAdvanceEpochs(opts *bind.FilterOpts) (*
 	return &ContractAdvanceEpochsIterator{contract: _Contract.contract, event: "AdvanceEpochs", logs: logs, sub: sub}, nil
 }
 
-// WatchAdvanceEpochs is a free log subscription operation binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
+// WatchAdvanceEpochs is a free log subscription zilionixxtion binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
 //
 // Solidity: event AdvanceEpochs(uint256 num)
 func (_Contract *ContractFilterer) WatchAdvanceEpochs(opts *bind.WatchOpts, sink chan<- *ContractAdvanceEpochs) (event.Subscription, error) {
@@ -646,7 +646,7 @@ func (_Contract *ContractFilterer) WatchAdvanceEpochs(opts *bind.WatchOpts, sink
 	}), nil
 }
 
-// ParseAdvanceEpochs is a log parse operation binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
+// ParseAdvanceEpochs is a log parse zilionixxtion binding the contract event 0x0151256d62457b809bbc891b1f81c6dd0b9987552c70ce915b519750cd434dd1.
 //
 // Solidity: event AdvanceEpochs(uint256 num)
 func (_Contract *ContractFilterer) ParseAdvanceEpochs(log types.Log) (*ContractAdvanceEpochs, error) {
@@ -730,7 +730,7 @@ type ContractUpdateNetworkRules struct {
 	Raw  types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdateNetworkRules is a free log retrieval operation binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
+// FilterUpdateNetworkRules is a free log retrieval zilionixxtion binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
 //
 // Solidity: event UpdateNetworkRules(bytes diff)
 func (_Contract *ContractFilterer) FilterUpdateNetworkRules(opts *bind.FilterOpts) (*ContractUpdateNetworkRulesIterator, error) {
@@ -742,7 +742,7 @@ func (_Contract *ContractFilterer) FilterUpdateNetworkRules(opts *bind.FilterOpt
 	return &ContractUpdateNetworkRulesIterator{contract: _Contract.contract, event: "UpdateNetworkRules", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdateNetworkRules is a free log subscription operation binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
+// WatchUpdateNetworkRules is a free log subscription zilionixxtion binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
 //
 // Solidity: event UpdateNetworkRules(bytes diff)
 func (_Contract *ContractFilterer) WatchUpdateNetworkRules(opts *bind.WatchOpts, sink chan<- *ContractUpdateNetworkRules) (event.Subscription, error) {
@@ -779,7 +779,7 @@ func (_Contract *ContractFilterer) WatchUpdateNetworkRules(opts *bind.WatchOpts,
 	}), nil
 }
 
-// ParseUpdateNetworkRules is a log parse operation binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
+// ParseUpdateNetworkRules is a log parse zilionixxtion binding the contract event 0x47d10eed096a44e3d0abc586c7e3a5d6cb5358cc90e7d437cd0627f7e765fb99.
 //
 // Solidity: event UpdateNetworkRules(bytes diff)
 func (_Contract *ContractFilterer) ParseUpdateNetworkRules(log types.Log) (*ContractUpdateNetworkRules, error) {
@@ -863,7 +863,7 @@ type ContractUpdateNetworkVersion struct {
 	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdateNetworkVersion is a free log retrieval operation binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
+// FilterUpdateNetworkVersion is a free log retrieval zilionixxtion binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
 //
 // Solidity: event UpdateNetworkVersion(uint256 version)
 func (_Contract *ContractFilterer) FilterUpdateNetworkVersion(opts *bind.FilterOpts) (*ContractUpdateNetworkVersionIterator, error) {
@@ -875,7 +875,7 @@ func (_Contract *ContractFilterer) FilterUpdateNetworkVersion(opts *bind.FilterO
 	return &ContractUpdateNetworkVersionIterator{contract: _Contract.contract, event: "UpdateNetworkVersion", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdateNetworkVersion is a free log subscription operation binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
+// WatchUpdateNetworkVersion is a free log subscription zilionixxtion binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
 //
 // Solidity: event UpdateNetworkVersion(uint256 version)
 func (_Contract *ContractFilterer) WatchUpdateNetworkVersion(opts *bind.WatchOpts, sink chan<- *ContractUpdateNetworkVersion) (event.Subscription, error) {
@@ -912,7 +912,7 @@ func (_Contract *ContractFilterer) WatchUpdateNetworkVersion(opts *bind.WatchOpt
 	}), nil
 }
 
-// ParseUpdateNetworkVersion is a log parse operation binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
+// ParseUpdateNetworkVersion is a log parse zilionixxtion binding the contract event 0x2ccdfd47cf0c1f1069d949f1789bb79b2f12821f021634fc835af1de66ea2feb.
 //
 // Solidity: event UpdateNetworkVersion(uint256 version)
 func (_Contract *ContractFilterer) ParseUpdateNetworkVersion(log types.Log) (*ContractUpdateNetworkVersion, error) {
@@ -997,7 +997,7 @@ type ContractUpdateValidatorPubkey struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdateValidatorPubkey is a free log retrieval operation binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
+// FilterUpdateValidatorPubkey is a free log retrieval zilionixxtion binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
 //
 // Solidity: event UpdateValidatorPubkey(uint256 indexed validatorID, bytes pubkey)
 func (_Contract *ContractFilterer) FilterUpdateValidatorPubkey(opts *bind.FilterOpts, validatorID []*big.Int) (*ContractUpdateValidatorPubkeyIterator, error) {
@@ -1014,7 +1014,7 @@ func (_Contract *ContractFilterer) FilterUpdateValidatorPubkey(opts *bind.Filter
 	return &ContractUpdateValidatorPubkeyIterator{contract: _Contract.contract, event: "UpdateValidatorPubkey", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdateValidatorPubkey is a free log subscription operation binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
+// WatchUpdateValidatorPubkey is a free log subscription zilionixxtion binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
 //
 // Solidity: event UpdateValidatorPubkey(uint256 indexed validatorID, bytes pubkey)
 func (_Contract *ContractFilterer) WatchUpdateValidatorPubkey(opts *bind.WatchOpts, sink chan<- *ContractUpdateValidatorPubkey, validatorID []*big.Int) (event.Subscription, error) {
@@ -1056,7 +1056,7 @@ func (_Contract *ContractFilterer) WatchUpdateValidatorPubkey(opts *bind.WatchOp
 	}), nil
 }
 
-// ParseUpdateValidatorPubkey is a log parse operation binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
+// ParseUpdateValidatorPubkey is a log parse zilionixxtion binding the contract event 0x0f0ef1ab97439def0a9d2c6d9dc166207f1b13b99e62b442b2993d6153c63a6e.
 //
 // Solidity: event UpdateValidatorPubkey(uint256 indexed validatorID, bytes pubkey)
 func (_Contract *ContractFilterer) ParseUpdateValidatorPubkey(log types.Log) (*ContractUpdateValidatorPubkey, error) {
@@ -1141,7 +1141,7 @@ type ContractUpdateValidatorWeight struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdateValidatorWeight is a free log retrieval operation binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
+// FilterUpdateValidatorWeight is a free log retrieval zilionixxtion binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
 //
 // Solidity: event UpdateValidatorWeight(uint256 indexed validatorID, uint256 weight)
 func (_Contract *ContractFilterer) FilterUpdateValidatorWeight(opts *bind.FilterOpts, validatorID []*big.Int) (*ContractUpdateValidatorWeightIterator, error) {
@@ -1158,7 +1158,7 @@ func (_Contract *ContractFilterer) FilterUpdateValidatorWeight(opts *bind.Filter
 	return &ContractUpdateValidatorWeightIterator{contract: _Contract.contract, event: "UpdateValidatorWeight", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdateValidatorWeight is a free log subscription operation binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
+// WatchUpdateValidatorWeight is a free log subscription zilionixxtion binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
 //
 // Solidity: event UpdateValidatorWeight(uint256 indexed validatorID, uint256 weight)
 func (_Contract *ContractFilterer) WatchUpdateValidatorWeight(opts *bind.WatchOpts, sink chan<- *ContractUpdateValidatorWeight, validatorID []*big.Int) (event.Subscription, error) {
@@ -1200,7 +1200,7 @@ func (_Contract *ContractFilterer) WatchUpdateValidatorWeight(opts *bind.WatchOp
 	}), nil
 }
 
-// ParseUpdateValidatorWeight is a log parse operation binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
+// ParseUpdateValidatorWeight is a log parse zilionixxtion binding the contract event 0xb975807576e3b1461be7de07ebf7d20e4790ed802d7a0c4fdd0a1a13df72a935.
 //
 // Solidity: event UpdateValidatorWeight(uint256 indexed validatorID, uint256 weight)
 func (_Contract *ContractFilterer) ParseUpdateValidatorWeight(log types.Log) (*ContractUpdateValidatorWeight, error) {
@@ -1284,7 +1284,7 @@ type ContractUpdatedBackend struct {
 	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdatedBackend is a free log retrieval operation binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
+// FilterUpdatedBackend is a free log retrieval zilionixxtion binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
 //
 // Solidity: event UpdatedBackend(address indexed backend)
 func (_Contract *ContractFilterer) FilterUpdatedBackend(opts *bind.FilterOpts, backend []common.Address) (*ContractUpdatedBackendIterator, error) {
@@ -1301,7 +1301,7 @@ func (_Contract *ContractFilterer) FilterUpdatedBackend(opts *bind.FilterOpts, b
 	return &ContractUpdatedBackendIterator{contract: _Contract.contract, event: "UpdatedBackend", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdatedBackend is a free log subscription operation binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
+// WatchUpdatedBackend is a free log subscription zilionixxtion binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
 //
 // Solidity: event UpdatedBackend(address indexed backend)
 func (_Contract *ContractFilterer) WatchUpdatedBackend(opts *bind.WatchOpts, sink chan<- *ContractUpdatedBackend, backend []common.Address) (event.Subscription, error) {
@@ -1343,7 +1343,7 @@ func (_Contract *ContractFilterer) WatchUpdatedBackend(opts *bind.WatchOpts, sin
 	}), nil
 }
 
-// ParseUpdatedBackend is a log parse operation binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
+// ParseUpdatedBackend is a log parse zilionixxtion binding the contract event 0x64ee8f7bfc37fc205d7194ee3d64947ab7b57e663cd0d1abd3ef245035830693.
 //
 // Solidity: event UpdatedBackend(address indexed backend)
 func (_Contract *ContractFilterer) ParseUpdatedBackend(log types.Log) (*ContractUpdatedBackend, error) {

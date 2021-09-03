@@ -8,7 +8,7 @@ import (
 )
 
 // PublicAbftAPI provides an API to access consensus related information.
-// It offers only methods that operate on public data that is freely available to anyone.
+// It offers only methods that zilionixxte on public data that is freely available to anyone.
 type PublicAbftAPI struct {
 	b Backend
 }

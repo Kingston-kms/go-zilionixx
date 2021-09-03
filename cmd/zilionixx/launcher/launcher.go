@@ -32,7 +32,7 @@ import (
 
 const (
 	// clientIdentifier to advertise over the network.
-	clientIdentifier = "go-opera"
+	clientIdentifier = "go-zilionixx"
 )
 
 var (
@@ -40,7 +40,7 @@ var (
 	gitCommit = ""
 	gitDate   = ""
 	// The app that holds all commands and flags.
-	app = flags.NewApp(gitCommit, gitDate, "the go-opera command line interface")
+	app = flags.NewApp(gitCommit, gitDate, "the go-zilionixx command line interface")
 
 	testFlags    []cli.Flag
 	mainnetFlags []cli.Flag
@@ -168,7 +168,7 @@ func init() {
 
 	// App.
 
-	app.Action = zilionbftMain
+	app.Action = zilionixxMain
 	app.Version = params.VersionWithCommit(gitCommit, gitDate)
 	app.HideVersion = true // we have a command to print the version
 	app.Commands = []cli.Command{
@@ -226,10 +226,10 @@ func Launch(args []string) error {
 	return app.Run(args)
 }
 
-// opera is the main entry point into the system if no special subcommand is ran.
+// zilionixx is the main entry point into the system if no special subcommand is ran.
 // It creates a default node based on the command line arguments and runs it in
 // blocking mode, waiting for it to be shut down.
-func zilionbftMain(ctx *cli.Context) error {
+func zilionixxMain(ctx *cli.Context) error {
 	if args := ctx.Args(); len(args) > 0 {
 		return fmt.Errorf("invalid command: %q", args[0])
 	}
@@ -242,7 +242,7 @@ func zilionbftMain(ctx *cli.Context) error {
 	//defer tracingStop()
 
 	cfg := makeAllConfigs(ctx)
-	genesisPath := getOperaGenesis(ctx)
+	genesisPath := getZilionixxGenesis(ctx)
 	node, _, nodeClose := makeNode(ctx, cfg, genesisPath)
 	defer nodeClose()
 	startNode(ctx, node)
@@ -267,10 +267,10 @@ func makeNode(ctx *cli.Context, cfg *config, genesis integration.InputGenesis) (
 	metrics.SetDataDir(cfg.Node.DataDir)
 
 	valKeystore := valkeystore.NewDefaultFileKeystore(path.Join(getValKeystoreDir(cfg.Node), "validator"))
-	valPubkey := cfg.Opera.Emitter.Validator.PubKey
+	valPubkey := cfg.Zilionixx.Emitter.Validator.PubKey
 
 	/*
-		if key := getFakeValidatorKey(ctx); key != nil && cfg.Opera.Emitter.Validator.ID != 0 {
+		if key := getFakeValidatorKey(ctx); key != nil && cfg.Zilionixx.Emitter.Validator.ID != 0 {
 			addFakeValidatorKey(ctx, key, valPubkey, valKeystore)
 			coinbase := integration.SetAccountKey(stack.AccountManager(), key, "fakepassword")
 			log.Info("Unlocked fake validator account", "address", coinbase.Address.Hex())
@@ -287,7 +287,7 @@ func makeNode(ctx *cli.Context, cfg *config, genesis integration.InputGenesis) (
 
 	// Create and register a gossip network service.
 
-	svc, err := gossip.NewService(stack, cfg.Opera, gdb, signer, blockProc, engine, dagIndex)
+	svc, err := gossip.NewService(stack, cfg.Zilionixx, gdb, signer, blockProc, engine, dagIndex)
 	if err != nil {
 		utils.Fatalf("Failed to create the service: %v", err)
 	}
@@ -332,7 +332,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	events := make(chan accounts.WalletEvent, 16)
 	stack.AccountManager().Subscribe(events)
 
-	// Create a client to interact with local opera node.
+	// Create a client to interact with local zilionixx node.
 	rpcClient, err := stack.Attach()
 	if err != nil {
 		utils.Fatalf("Failed to attach to self: %v", err)

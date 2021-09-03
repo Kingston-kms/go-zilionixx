@@ -33,7 +33,7 @@ import (
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/logger"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 const (
@@ -67,7 +67,7 @@ type dagNotifier interface {
 
 type ProtocolManager struct {
 	config Config
-	net    opera.Rules
+	net    zilionixx.Rules
 
 	synced uint32 // Flag whether we're considered synchronised (enables transaction processing, events broadcasting)
 

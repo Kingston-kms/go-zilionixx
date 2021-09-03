@@ -41,7 +41,7 @@ const (
 
 	// txSlotSize is used to calculate how many data slots a single transaction
 	// takes up based on its size. The slots are used as DoS protection, ensuring
-	// that validating a new transaction remains a constant operation (in reality
+	// that validating a new transaction remains a constant zilionixxtion (in reality
 	// O(maxslots), where max slots are 4 currently).
 	txSlotSize = 32 * 1024
 
@@ -425,7 +425,7 @@ func (pool *TxPool) GasPrice() *big.Int {
 	defer pool.mu.RUnlock()
 
 	current := new(big.Int).Set(pool.gasPrice)
-	// opera-specific gas price limit
+	// zilionixx-specific gas price limit
 	limit := pool.chain.MinGasPrice()
 	if current.Cmp(limit) >= 0 {
 		return current
@@ -563,7 +563,7 @@ func (pool *TxPool) validateTx(tx *types.Transaction, local bool) error {
 	if !local && tx.GasPriceIntCmp(pool.gasPrice) < 0 {
 		return ErrUnderpriced
 	}
-	// Ensure Opera-specific hard bounds
+	// Ensure Zilionixx-specific hard bounds
 	if pool.chain.MinGasPrice().Cmp(tx.GasPrice()) > 0 {
 		return ErrUnderpriced
 	}
@@ -1064,7 +1064,7 @@ func (pool *TxPool) runReorg(done chan struct{}, reset *txpoolResetRequest, dirt
 	if dirtyAccounts != nil && reset == nil {
 		// Only dirty accounts need to be promoted, unless we're resetting.
 		// For resets, all addresses in the tx queue will be promoted and
-		// the flatten operation can be avoided.
+		// the flatten zilionixxtion can be avoided.
 		promoteAddrs = dirtyAccounts.flatten()
 	}
 	pool.mu.Lock()

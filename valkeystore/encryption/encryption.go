@@ -54,7 +54,7 @@ func (ks Keystore) ReadKey(wantPubkey validatorpk.PubKey, filename, auth string)
 	if err != nil {
 		return nil, err
 	}
-	// Make sure we're really operating on the requested key (no swap attacks)
+	// Make sure we're really zilionixxting on the requested key (no swap attacks)
 	keySecp256k1 := key.Decoded.(*ecdsa.PrivateKey)
 	gotPubkey := crypto.FromECDSAPub(&keySecp256k1.PublicKey)
 	if bytes.Compare(wantPubkey.Raw, gotPubkey) != 0 {

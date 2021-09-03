@@ -5,26 +5,26 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/inter/drivertype"
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesis"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver/drivercall"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver/driverpos"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driverauth"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/netinit"
-	netinitcall "github.com/zilionixx/go-zilionixx/opera/genesis/netinit/netinitcalls"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/sfc"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver/drivercall"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver/driverpos"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driverauth"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/netinit"
+	netinitcall "github.com/zilionixx/go-zilionixx/zilionixx/genesis/netinit/netinitcalls"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/sfc"
 )
 
 const (
@@ -58,7 +58,7 @@ type DriverTxTransactor struct{}
 type DriverTxPreTransactor struct{}
 
 type DriverTxGenesisTransactor struct {
-	g opera.Genesis
+	g zilionixx.Genesis
 }
 
 func NewDriverTxTransactor() *DriverTxTransactor {
@@ -69,7 +69,7 @@ func NewDriverTxPreTransactor() *DriverTxPreTransactor {
 	return &DriverTxPreTransactor{}
 }
 
-func NewDriverTxGenesisTransactor(g opera.Genesis) *DriverTxGenesisTransactor {
+func NewDriverTxGenesisTransactor(g zilionixx.Genesis) *DriverTxGenesisTransactor {
 	return &DriverTxGenesisTransactor{
 		g: g,
 	}
@@ -137,13 +137,13 @@ func (p *DriverTxPreTransactor) PopInternalTxs(block blockproc.BlockCtx, bs bloc
 		for oldValIdx := idx.Validator(0); oldValIdx < es.Validators.Len(); oldValIdx++ {
 			info := bs.ValidatorStates[oldValIdx]
 			// forgive downtime if below BlockMissedSlack
-			missed := opera.BlocksMissed{
+			missed := zilionixx.BlocksMissed{
 				BlocksNum: maxBlockIdx(block.Idx, info.LastBlock) - info.LastBlock,
 				Period:    inter.MaxTimestamp(block.Time, info.LastOnlineTime) - info.LastOnlineTime,
 			}
 			uptime := info.Uptime
 			if missed.BlocksNum <= es.Rules.Economy.BlockMissedSlack {
-				missed = opera.BlocksMissed{}
+				missed = zilionixx.BlocksMissed{}
 				prevOnlineTime := inter.MaxTimestamp(info.LastOnlineTime, es.EpochStart)
 				uptime += inter.MaxTimestamp(block.Time, prevOnlineTime) - prevOnlineTime
 			}
@@ -251,7 +251,7 @@ func (p *DriverTxListener) OnNewLog(l *types.Log) {
 			return
 		}
 
-		p.bs.DirtyRules, err = opera.UpdateRules(p.bs.DirtyRules, diff)
+		p.bs.DirtyRules, err = zilionixx.UpdateRules(p.bs.DirtyRules, diff)
 		if err != nil {
 			log.Warn("Network rules update error", "err", err)
 			return

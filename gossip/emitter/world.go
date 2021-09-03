@@ -13,9 +13,9 @@ import (
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
 	"github.com/zilionixx/go-zilionixx/valkeystore"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 var (
@@ -60,7 +60,7 @@ type Reader interface {
 	GetLastEvent(epoch idx.Epoch, from idx.ValidatorID) *hash.Event
 	GetHeads(idx.Epoch) hash.Events
 	GetGenesisTime() inter.Timestamp
-	GetRules() opera.Rules
+	GetRules() zilionixx.Rules
 }
 
 type TxPool interface {

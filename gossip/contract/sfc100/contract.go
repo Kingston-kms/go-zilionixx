@@ -3019,7 +3019,7 @@ type ContractChangedValidatorStatus struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterChangedValidatorStatus is a free log retrieval operation binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
+// FilterChangedValidatorStatus is a free log retrieval zilionixxtion binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
 //
 // Solidity: event ChangedValidatorStatus(uint256 indexed validatorID, uint256 status)
 func (_Contract *ContractFilterer) FilterChangedValidatorStatus(opts *bind.FilterOpts, validatorID []*big.Int) (*ContractChangedValidatorStatusIterator, error) {
@@ -3036,7 +3036,7 @@ func (_Contract *ContractFilterer) FilterChangedValidatorStatus(opts *bind.Filte
 	return &ContractChangedValidatorStatusIterator{contract: _Contract.contract, event: "ChangedValidatorStatus", logs: logs, sub: sub}, nil
 }
 
-// WatchChangedValidatorStatus is a free log subscription operation binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
+// WatchChangedValidatorStatus is a free log subscription zilionixxtion binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
 //
 // Solidity: event ChangedValidatorStatus(uint256 indexed validatorID, uint256 status)
 func (_Contract *ContractFilterer) WatchChangedValidatorStatus(opts *bind.WatchOpts, sink chan<- *ContractChangedValidatorStatus, validatorID []*big.Int) (event.Subscription, error) {
@@ -3078,7 +3078,7 @@ func (_Contract *ContractFilterer) WatchChangedValidatorStatus(opts *bind.WatchO
 	}), nil
 }
 
-// ParseChangedValidatorStatus is a log parse operation binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
+// ParseChangedValidatorStatus is a log parse zilionixxtion binding the contract event 0xcd35267e7654194727477d6c78b541a553483cff7f92a055d17868d3da6e953e.
 //
 // Solidity: event ChangedValidatorStatus(uint256 indexed validatorID, uint256 status)
 func (_Contract *ContractFilterer) ParseChangedValidatorStatus(log types.Log) (*ContractChangedValidatorStatus, error) {
@@ -3166,7 +3166,7 @@ type ContractClaimedRewards struct {
 	Raw               types.Log // Blockchain specific contextual infos
 }
 
-// FilterClaimedRewards is a free log retrieval operation binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
+// FilterClaimedRewards is a free log retrieval zilionixxtion binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
 //
 // Solidity: event ClaimedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) FilterClaimedRewards(opts *bind.FilterOpts, delegator []common.Address, toValidatorID []*big.Int) (*ContractClaimedRewardsIterator, error) {
@@ -3187,7 +3187,7 @@ func (_Contract *ContractFilterer) FilterClaimedRewards(opts *bind.FilterOpts, d
 	return &ContractClaimedRewardsIterator{contract: _Contract.contract, event: "ClaimedRewards", logs: logs, sub: sub}, nil
 }
 
-// WatchClaimedRewards is a free log subscription operation binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
+// WatchClaimedRewards is a free log subscription zilionixxtion binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
 //
 // Solidity: event ClaimedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) WatchClaimedRewards(opts *bind.WatchOpts, sink chan<- *ContractClaimedRewards, delegator []common.Address, toValidatorID []*big.Int) (event.Subscription, error) {
@@ -3233,7 +3233,7 @@ func (_Contract *ContractFilterer) WatchClaimedRewards(opts *bind.WatchOpts, sin
 	}), nil
 }
 
-// ParseClaimedRewards is a log parse operation binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
+// ParseClaimedRewards is a log parse zilionixxtion binding the contract event 0xc1d8eb6e444b89fb8ff0991c19311c070df704ccb009e210d1462d5b2410bf45.
 //
 // Solidity: event ClaimedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) ParseClaimedRewards(log types.Log) (*ContractClaimedRewards, error) {
@@ -3320,7 +3320,7 @@ type ContractCreatedValidator struct {
 	Raw          types.Log // Blockchain specific contextual infos
 }
 
-// FilterCreatedValidator is a free log retrieval operation binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
+// FilterCreatedValidator is a free log retrieval zilionixxtion binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
 //
 // Solidity: event CreatedValidator(uint256 indexed validatorID, address indexed auth, uint256 createdEpoch, uint256 createdTime)
 func (_Contract *ContractFilterer) FilterCreatedValidator(opts *bind.FilterOpts, validatorID []*big.Int, auth []common.Address) (*ContractCreatedValidatorIterator, error) {
@@ -3341,7 +3341,7 @@ func (_Contract *ContractFilterer) FilterCreatedValidator(opts *bind.FilterOpts,
 	return &ContractCreatedValidatorIterator{contract: _Contract.contract, event: "CreatedValidator", logs: logs, sub: sub}, nil
 }
 
-// WatchCreatedValidator is a free log subscription operation binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
+// WatchCreatedValidator is a free log subscription zilionixxtion binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
 //
 // Solidity: event CreatedValidator(uint256 indexed validatorID, address indexed auth, uint256 createdEpoch, uint256 createdTime)
 func (_Contract *ContractFilterer) WatchCreatedValidator(opts *bind.WatchOpts, sink chan<- *ContractCreatedValidator, validatorID []*big.Int, auth []common.Address) (event.Subscription, error) {
@@ -3387,7 +3387,7 @@ func (_Contract *ContractFilterer) WatchCreatedValidator(opts *bind.WatchOpts, s
 	}), nil
 }
 
-// ParseCreatedValidator is a log parse operation binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
+// ParseCreatedValidator is a log parse zilionixxtion binding the contract event 0x49bca1ed2666922f9f1690c26a569e1299c2a715fe57647d77e81adfabbf25bf.
 //
 // Solidity: event CreatedValidator(uint256 indexed validatorID, address indexed auth, uint256 createdEpoch, uint256 createdTime)
 func (_Contract *ContractFilterer) ParseCreatedValidator(log types.Log) (*ContractCreatedValidator, error) {
@@ -3473,7 +3473,7 @@ type ContractDeactivatedValidator struct {
 	Raw              types.Log // Blockchain specific contextual infos
 }
 
-// FilterDeactivatedValidator is a free log retrieval operation binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
+// FilterDeactivatedValidator is a free log retrieval zilionixxtion binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
 //
 // Solidity: event DeactivatedValidator(uint256 indexed validatorID, uint256 deactivatedEpoch, uint256 deactivatedTime)
 func (_Contract *ContractFilterer) FilterDeactivatedValidator(opts *bind.FilterOpts, validatorID []*big.Int) (*ContractDeactivatedValidatorIterator, error) {
@@ -3490,7 +3490,7 @@ func (_Contract *ContractFilterer) FilterDeactivatedValidator(opts *bind.FilterO
 	return &ContractDeactivatedValidatorIterator{contract: _Contract.contract, event: "DeactivatedValidator", logs: logs, sub: sub}, nil
 }
 
-// WatchDeactivatedValidator is a free log subscription operation binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
+// WatchDeactivatedValidator is a free log subscription zilionixxtion binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
 //
 // Solidity: event DeactivatedValidator(uint256 indexed validatorID, uint256 deactivatedEpoch, uint256 deactivatedTime)
 func (_Contract *ContractFilterer) WatchDeactivatedValidator(opts *bind.WatchOpts, sink chan<- *ContractDeactivatedValidator, validatorID []*big.Int) (event.Subscription, error) {
@@ -3532,7 +3532,7 @@ func (_Contract *ContractFilterer) WatchDeactivatedValidator(opts *bind.WatchOpt
 	}), nil
 }
 
-// ParseDeactivatedValidator is a log parse operation binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
+// ParseDeactivatedValidator is a log parse zilionixxtion binding the contract event 0xac4801c32a6067ff757446524ee4e7a373797278ac3c883eac5c693b4ad72e47.
 //
 // Solidity: event DeactivatedValidator(uint256 indexed validatorID, uint256 deactivatedEpoch, uint256 deactivatedTime)
 func (_Contract *ContractFilterer) ParseDeactivatedValidator(log types.Log) (*ContractDeactivatedValidator, error) {
@@ -3618,7 +3618,7 @@ type ContractDelegated struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterDelegated is a free log retrieval operation binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
+// FilterDelegated is a free log retrieval zilionixxtion binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
 //
 // Solidity: event Delegated(address indexed delegator, uint256 indexed toValidatorID, uint256 amount)
 func (_Contract *ContractFilterer) FilterDelegated(opts *bind.FilterOpts, delegator []common.Address, toValidatorID []*big.Int) (*ContractDelegatedIterator, error) {
@@ -3639,7 +3639,7 @@ func (_Contract *ContractFilterer) FilterDelegated(opts *bind.FilterOpts, delega
 	return &ContractDelegatedIterator{contract: _Contract.contract, event: "Delegated", logs: logs, sub: sub}, nil
 }
 
-// WatchDelegated is a free log subscription operation binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
+// WatchDelegated is a free log subscription zilionixxtion binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
 //
 // Solidity: event Delegated(address indexed delegator, uint256 indexed toValidatorID, uint256 amount)
 func (_Contract *ContractFilterer) WatchDelegated(opts *bind.WatchOpts, sink chan<- *ContractDelegated, delegator []common.Address, toValidatorID []*big.Int) (event.Subscription, error) {
@@ -3685,7 +3685,7 @@ func (_Contract *ContractFilterer) WatchDelegated(opts *bind.WatchOpts, sink cha
 	}), nil
 }
 
-// ParseDelegated is a log parse operation binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
+// ParseDelegated is a log parse zilionixxtion binding the contract event 0x9a8f44850296624dadfd9c246d17e47171d35727a181bd090aa14bbbe00238bb.
 //
 // Solidity: event Delegated(address indexed delegator, uint256 indexed toValidatorID, uint256 amount)
 func (_Contract *ContractFilterer) ParseDelegated(log types.Log) (*ContractDelegated, error) {
@@ -3772,7 +3772,7 @@ type ContractLockedUpStake struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterLockedUpStake is a free log retrieval operation binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
+// FilterLockedUpStake is a free log retrieval zilionixxtion binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
 //
 // Solidity: event LockedUpStake(address indexed delegator, uint256 indexed validatorID, uint256 duration, uint256 amount)
 func (_Contract *ContractFilterer) FilterLockedUpStake(opts *bind.FilterOpts, delegator []common.Address, validatorID []*big.Int) (*ContractLockedUpStakeIterator, error) {
@@ -3793,7 +3793,7 @@ func (_Contract *ContractFilterer) FilterLockedUpStake(opts *bind.FilterOpts, de
 	return &ContractLockedUpStakeIterator{contract: _Contract.contract, event: "LockedUpStake", logs: logs, sub: sub}, nil
 }
 
-// WatchLockedUpStake is a free log subscription operation binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
+// WatchLockedUpStake is a free log subscription zilionixxtion binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
 //
 // Solidity: event LockedUpStake(address indexed delegator, uint256 indexed validatorID, uint256 duration, uint256 amount)
 func (_Contract *ContractFilterer) WatchLockedUpStake(opts *bind.WatchOpts, sink chan<- *ContractLockedUpStake, delegator []common.Address, validatorID []*big.Int) (event.Subscription, error) {
@@ -3839,7 +3839,7 @@ func (_Contract *ContractFilterer) WatchLockedUpStake(opts *bind.WatchOpts, sink
 	}), nil
 }
 
-// ParseLockedUpStake is a log parse operation binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
+// ParseLockedUpStake is a log parse zilionixxtion binding the contract event 0x138940e95abffcd789b497bf6188bba3afa5fbd22fb5c42c2f6018d1bf0f4e78.
 //
 // Solidity: event LockedUpStake(address indexed delegator, uint256 indexed validatorID, uint256 duration, uint256 amount)
 func (_Contract *ContractFilterer) ParseLockedUpStake(log types.Log) (*ContractLockedUpStake, error) {
@@ -3924,7 +3924,7 @@ type ContractOwnershipTransferred struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterOwnershipTransferred is a free log retrieval operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// FilterOwnershipTransferred is a free log retrieval zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []common.Address, newOwner []common.Address) (*ContractOwnershipTransferredIterator, error) {
@@ -3945,7 +3945,7 @@ func (_Contract *ContractFilterer) FilterOwnershipTransferred(opts *bind.FilterO
 	return &ContractOwnershipTransferredIterator{contract: _Contract.contract, event: "OwnershipTransferred", logs: logs, sub: sub}, nil
 }
 
-// WatchOwnershipTransferred is a free log subscription operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// WatchOwnershipTransferred is a free log subscription zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *ContractOwnershipTransferred, previousOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
@@ -3991,7 +3991,7 @@ func (_Contract *ContractFilterer) WatchOwnershipTransferred(opts *bind.WatchOpt
 	}), nil
 }
 
-// ParseOwnershipTransferred is a log parse operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// ParseOwnershipTransferred is a log parse zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) ParseOwnershipTransferred(log types.Log) (*ContractOwnershipTransferred, error) {
@@ -4079,7 +4079,7 @@ type ContractRestakedRewards struct {
 	Raw               types.Log // Blockchain specific contextual infos
 }
 
-// FilterRestakedRewards is a free log retrieval operation binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
+// FilterRestakedRewards is a free log retrieval zilionixxtion binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
 //
 // Solidity: event RestakedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) FilterRestakedRewards(opts *bind.FilterOpts, delegator []common.Address, toValidatorID []*big.Int) (*ContractRestakedRewardsIterator, error) {
@@ -4100,7 +4100,7 @@ func (_Contract *ContractFilterer) FilterRestakedRewards(opts *bind.FilterOpts, 
 	return &ContractRestakedRewardsIterator{contract: _Contract.contract, event: "RestakedRewards", logs: logs, sub: sub}, nil
 }
 
-// WatchRestakedRewards is a free log subscription operation binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
+// WatchRestakedRewards is a free log subscription zilionixxtion binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
 //
 // Solidity: event RestakedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) WatchRestakedRewards(opts *bind.WatchOpts, sink chan<- *ContractRestakedRewards, delegator []common.Address, toValidatorID []*big.Int) (event.Subscription, error) {
@@ -4146,7 +4146,7 @@ func (_Contract *ContractFilterer) WatchRestakedRewards(opts *bind.WatchOpts, si
 	}), nil
 }
 
-// ParseRestakedRewards is a log parse operation binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
+// ParseRestakedRewards is a log parse zilionixxtion binding the contract event 0x4119153d17a36f9597d40e3ab4148d03261a439dddbec4e91799ab7159608e26.
 //
 // Solidity: event RestakedRewards(address indexed delegator, uint256 indexed toValidatorID, uint256 lockupExtraReward, uint256 lockupBaseReward, uint256 unlockedReward)
 func (_Contract *ContractFilterer) ParseRestakedRewards(log types.Log) (*ContractRestakedRewards, error) {
@@ -4233,7 +4233,7 @@ type ContractUndelegated struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterUndelegated is a free log retrieval operation binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
+// FilterUndelegated is a free log retrieval zilionixxtion binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
 //
 // Solidity: event Undelegated(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) FilterUndelegated(opts *bind.FilterOpts, delegator []common.Address, toValidatorID []*big.Int, wrID []*big.Int) (*ContractUndelegatedIterator, error) {
@@ -4258,7 +4258,7 @@ func (_Contract *ContractFilterer) FilterUndelegated(opts *bind.FilterOpts, dele
 	return &ContractUndelegatedIterator{contract: _Contract.contract, event: "Undelegated", logs: logs, sub: sub}, nil
 }
 
-// WatchUndelegated is a free log subscription operation binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
+// WatchUndelegated is a free log subscription zilionixxtion binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
 //
 // Solidity: event Undelegated(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) WatchUndelegated(opts *bind.WatchOpts, sink chan<- *ContractUndelegated, delegator []common.Address, toValidatorID []*big.Int, wrID []*big.Int) (event.Subscription, error) {
@@ -4308,7 +4308,7 @@ func (_Contract *ContractFilterer) WatchUndelegated(opts *bind.WatchOpts, sink c
 	}), nil
 }
 
-// ParseUndelegated is a log parse operation binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
+// ParseUndelegated is a log parse zilionixxtion binding the contract event 0xd3bb4e423fbea695d16b982f9f682dc5f35152e5411646a8a5a79a6b02ba8d57.
 //
 // Solidity: event Undelegated(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) ParseUndelegated(log types.Log) (*ContractUndelegated, error) {
@@ -4395,7 +4395,7 @@ type ContractUnlockedStake struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterUnlockedStake is a free log retrieval operation binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
+// FilterUnlockedStake is a free log retrieval zilionixxtion binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
 //
 // Solidity: event UnlockedStake(address indexed delegator, uint256 indexed validatorID, uint256 amount, uint256 penalty)
 func (_Contract *ContractFilterer) FilterUnlockedStake(opts *bind.FilterOpts, delegator []common.Address, validatorID []*big.Int) (*ContractUnlockedStakeIterator, error) {
@@ -4416,7 +4416,7 @@ func (_Contract *ContractFilterer) FilterUnlockedStake(opts *bind.FilterOpts, de
 	return &ContractUnlockedStakeIterator{contract: _Contract.contract, event: "UnlockedStake", logs: logs, sub: sub}, nil
 }
 
-// WatchUnlockedStake is a free log subscription operation binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
+// WatchUnlockedStake is a free log subscription zilionixxtion binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
 //
 // Solidity: event UnlockedStake(address indexed delegator, uint256 indexed validatorID, uint256 amount, uint256 penalty)
 func (_Contract *ContractFilterer) WatchUnlockedStake(opts *bind.WatchOpts, sink chan<- *ContractUnlockedStake, delegator []common.Address, validatorID []*big.Int) (event.Subscription, error) {
@@ -4462,7 +4462,7 @@ func (_Contract *ContractFilterer) WatchUnlockedStake(opts *bind.WatchOpts, sink
 	}), nil
 }
 
-// ParseUnlockedStake is a log parse operation binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
+// ParseUnlockedStake is a log parse zilionixxtion binding the contract event 0xef6c0c14fe9aa51af36acd791464dec3badbde668b63189b47bfa4e25be9b2b9.
 //
 // Solidity: event UnlockedStake(address indexed delegator, uint256 indexed validatorID, uint256 amount, uint256 penalty)
 func (_Contract *ContractFilterer) ParseUnlockedStake(log types.Log) (*ContractUnlockedStake, error) {
@@ -4546,7 +4546,7 @@ type ContractUpdatedBaseRewardPerSec struct {
 	Raw   types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdatedBaseRewardPerSec is a free log retrieval operation binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
+// FilterUpdatedBaseRewardPerSec is a free log retrieval zilionixxtion binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
 //
 // Solidity: event UpdatedBaseRewardPerSec(uint256 value)
 func (_Contract *ContractFilterer) FilterUpdatedBaseRewardPerSec(opts *bind.FilterOpts) (*ContractUpdatedBaseRewardPerSecIterator, error) {
@@ -4558,7 +4558,7 @@ func (_Contract *ContractFilterer) FilterUpdatedBaseRewardPerSec(opts *bind.Filt
 	return &ContractUpdatedBaseRewardPerSecIterator{contract: _Contract.contract, event: "UpdatedBaseRewardPerSec", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdatedBaseRewardPerSec is a free log subscription operation binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
+// WatchUpdatedBaseRewardPerSec is a free log subscription zilionixxtion binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
 //
 // Solidity: event UpdatedBaseRewardPerSec(uint256 value)
 func (_Contract *ContractFilterer) WatchUpdatedBaseRewardPerSec(opts *bind.WatchOpts, sink chan<- *ContractUpdatedBaseRewardPerSec) (event.Subscription, error) {
@@ -4595,7 +4595,7 @@ func (_Contract *ContractFilterer) WatchUpdatedBaseRewardPerSec(opts *bind.Watch
 	}), nil
 }
 
-// ParseUpdatedBaseRewardPerSec is a log parse operation binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
+// ParseUpdatedBaseRewardPerSec is a log parse zilionixxtion binding the contract event 0x8cd9dae1bbea2bc8a5e80ffce2c224727a25925130a03ae100619a8861ae2396.
 //
 // Solidity: event UpdatedBaseRewardPerSec(uint256 value)
 func (_Contract *ContractFilterer) ParseUpdatedBaseRewardPerSec(log types.Log) (*ContractUpdatedBaseRewardPerSec, error) {
@@ -4680,7 +4680,7 @@ type ContractUpdatedOfflinePenaltyThreshold struct {
 	Raw       types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdatedOfflinePenaltyThreshold is a free log retrieval operation binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
+// FilterUpdatedOfflinePenaltyThreshold is a free log retrieval zilionixxtion binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
 //
 // Solidity: event UpdatedOfflinePenaltyThreshold(uint256 blocksNum, uint256 period)
 func (_Contract *ContractFilterer) FilterUpdatedOfflinePenaltyThreshold(opts *bind.FilterOpts) (*ContractUpdatedOfflinePenaltyThresholdIterator, error) {
@@ -4692,7 +4692,7 @@ func (_Contract *ContractFilterer) FilterUpdatedOfflinePenaltyThreshold(opts *bi
 	return &ContractUpdatedOfflinePenaltyThresholdIterator{contract: _Contract.contract, event: "UpdatedOfflinePenaltyThreshold", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdatedOfflinePenaltyThreshold is a free log subscription operation binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
+// WatchUpdatedOfflinePenaltyThreshold is a free log subscription zilionixxtion binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
 //
 // Solidity: event UpdatedOfflinePenaltyThreshold(uint256 blocksNum, uint256 period)
 func (_Contract *ContractFilterer) WatchUpdatedOfflinePenaltyThreshold(opts *bind.WatchOpts, sink chan<- *ContractUpdatedOfflinePenaltyThreshold) (event.Subscription, error) {
@@ -4729,7 +4729,7 @@ func (_Contract *ContractFilterer) WatchUpdatedOfflinePenaltyThreshold(opts *bin
 	}), nil
 }
 
-// ParseUpdatedOfflinePenaltyThreshold is a log parse operation binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
+// ParseUpdatedOfflinePenaltyThreshold is a log parse zilionixxtion binding the contract event 0x702756a07c05d0bbfd06fc17b67951a5f4deb7bb6b088407e68a58969daf2a34.
 //
 // Solidity: event UpdatedOfflinePenaltyThreshold(uint256 blocksNum, uint256 period)
 func (_Contract *ContractFilterer) ParseUpdatedOfflinePenaltyThreshold(log types.Log) (*ContractUpdatedOfflinePenaltyThreshold, error) {
@@ -4814,7 +4814,7 @@ type ContractUpdatedSlashingRefundRatio struct {
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdatedSlashingRefundRatio is a free log retrieval operation binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
+// FilterUpdatedSlashingRefundRatio is a free log retrieval zilionixxtion binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
 //
 // Solidity: event UpdatedSlashingRefundRatio(uint256 indexed validatorID, uint256 refundRatio)
 func (_Contract *ContractFilterer) FilterUpdatedSlashingRefundRatio(opts *bind.FilterOpts, validatorID []*big.Int) (*ContractUpdatedSlashingRefundRatioIterator, error) {
@@ -4831,7 +4831,7 @@ func (_Contract *ContractFilterer) FilterUpdatedSlashingRefundRatio(opts *bind.F
 	return &ContractUpdatedSlashingRefundRatioIterator{contract: _Contract.contract, event: "UpdatedSlashingRefundRatio", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdatedSlashingRefundRatio is a free log subscription operation binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
+// WatchUpdatedSlashingRefundRatio is a free log subscription zilionixxtion binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
 //
 // Solidity: event UpdatedSlashingRefundRatio(uint256 indexed validatorID, uint256 refundRatio)
 func (_Contract *ContractFilterer) WatchUpdatedSlashingRefundRatio(opts *bind.WatchOpts, sink chan<- *ContractUpdatedSlashingRefundRatio, validatorID []*big.Int) (event.Subscription, error) {
@@ -4873,7 +4873,7 @@ func (_Contract *ContractFilterer) WatchUpdatedSlashingRefundRatio(opts *bind.Wa
 	}), nil
 }
 
-// ParseUpdatedSlashingRefundRatio is a log parse operation binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
+// ParseUpdatedSlashingRefundRatio is a log parse zilionixxtion binding the contract event 0x047575f43f09a7a093d94ec483064acfc61b7e25c0de28017da442abf99cb917.
 //
 // Solidity: event UpdatedSlashingRefundRatio(uint256 indexed validatorID, uint256 refundRatio)
 func (_Contract *ContractFilterer) ParseUpdatedSlashingRefundRatio(log types.Log) (*ContractUpdatedSlashingRefundRatio, error) {
@@ -4960,7 +4960,7 @@ type ContractWithdrawn struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterWithdrawn is a free log retrieval operation binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
+// FilterWithdrawn is a free log retrieval zilionixxtion binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
 //
 // Solidity: event Withdrawn(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) FilterWithdrawn(opts *bind.FilterOpts, delegator []common.Address, toValidatorID []*big.Int, wrID []*big.Int) (*ContractWithdrawnIterator, error) {
@@ -4985,7 +4985,7 @@ func (_Contract *ContractFilterer) FilterWithdrawn(opts *bind.FilterOpts, delega
 	return &ContractWithdrawnIterator{contract: _Contract.contract, event: "Withdrawn", logs: logs, sub: sub}, nil
 }
 
-// WatchWithdrawn is a free log subscription operation binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
+// WatchWithdrawn is a free log subscription zilionixxtion binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
 //
 // Solidity: event Withdrawn(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) WatchWithdrawn(opts *bind.WatchOpts, sink chan<- *ContractWithdrawn, delegator []common.Address, toValidatorID []*big.Int, wrID []*big.Int) (event.Subscription, error) {
@@ -5035,7 +5035,7 @@ func (_Contract *ContractFilterer) WatchWithdrawn(opts *bind.WatchOpts, sink cha
 	}), nil
 }
 
-// ParseWithdrawn is a log parse operation binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
+// ParseWithdrawn is a log parse zilionixxtion binding the contract event 0x75e161b3e824b114fc1a33274bd7091918dd4e639cede50b78b15a4eea956a21.
 //
 // Solidity: event Withdrawn(address indexed delegator, uint256 indexed toValidatorID, uint256 indexed wrID, uint256 amount)
 func (_Contract *ContractFilterer) ParseWithdrawn(log types.Log) (*ContractWithdrawn, error) {

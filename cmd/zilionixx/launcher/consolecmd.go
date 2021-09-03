@@ -41,7 +41,7 @@ var (
 		Flags:    append(append(append(nodeFlags, rpcFlags...), consoleFlags...), testFlags...),
 		Category: "CONSOLE COMMANDS",
 		Description: `
-The opera console is an interactive shell for the JavaScript runtime environment
+The zilionixx console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
 See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.`,
 	}
@@ -54,10 +54,10 @@ See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.`,
 		Flags:     append(consoleFlags, utils.DataDirFlag),
 		Category:  "CONSOLE COMMANDS",
 		Description: `
-The opera console is an interactive shell for the JavaScript runtime environment
+The zilionixx console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
 See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.
-This command allows to open a console on a running opera node.`,
+This command allows to open a console on a running zilionixx node.`,
 	}
 
 	javascriptCommand = cli.Command{
@@ -73,12 +73,12 @@ JavaScript API. See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Cons
 	}
 )
 
-// localConsole starts a new opera node, attaching a JavaScript console to it at the
+// localConsole starts a new zilionixx node, attaching a JavaScript console to it at the
 // same time.
 func localConsole(ctx *cli.Context) error {
 	// Create and start the node based on the CLI flags
 	cfg := makeAllConfigs(ctx)
-	genesis := getOperaGenesis(ctx)
+	genesis := getZilionixxGenesis(ctx)
 	node, _, nodeClose := makeNode(ctx, cfg, genesis)
 	startNode(ctx, node)
 	defer nodeClose()
@@ -86,7 +86,7 @@ func localConsole(ctx *cli.Context) error {
 	// Attach to the newly started node and start the JavaScript console
 	client, err := node.Attach()
 	if err != nil {
-		utils.Fatalf("Failed to attach to the inproc opera: %v", err)
+		utils.Fatalf("Failed to attach to the inproc zilionixx: %v", err)
 	}
 	config := console.Config{
 		DataDir: utils.MakeDataDir(ctx),
@@ -113,10 +113,10 @@ func localConsole(ctx *cli.Context) error {
 	return nil
 }
 
-// remoteConsole will connect to a remote opera instance, attaching a JavaScript
+// remoteConsole will connect to a remote zilionixx instance, attaching a JavaScript
 // console to it.
 func remoteConsole(ctx *cli.Context) error {
-	// Attach to a remotely running opera instance and start the JavaScript console
+	// Attach to a remotely running zilionixx instance and start the JavaScript console
 	endpoint := ctx.Args().First()
 	if endpoint == "" {
 		path := DefaultDataDir()
@@ -130,11 +130,11 @@ func remoteConsole(ctx *cli.Context) error {
 				path = filepath.Join(path, "rinkeby")
 			}
 		}
-		endpoint = fmt.Sprintf("%s/opera.ipc", path)
+		endpoint = fmt.Sprintf("%s/zilionixx.ipc", path)
 	}
 	client, err := dialRPC(endpoint)
 	if err != nil {
-		utils.Fatalf("Unable to attach to remote opera: %v", err)
+		utils.Fatalf("Unable to attach to remote zilionixx: %v", err)
 	}
 	config := console.Config{
 		DataDir: utils.MakeDataDir(ctx),
@@ -163,7 +163,7 @@ func remoteConsole(ctx *cli.Context) error {
 
 // dialRPC returns a RPC client which connects to the given endpoint.
 // The check for empty endpoint implements the defaulting logic
-// for "opera attach" and "opera monitor" with no argument.
+// for "zilionixx attach" and "zilionixx monitor" with no argument.
 func dialRPC(endpoint string) (*rpc.Client, error) {
 	if endpoint == "" {
 		endpoint = node.DefaultIPCEndpoint(clientIdentifier)
@@ -174,13 +174,13 @@ func dialRPC(endpoint string) (*rpc.Client, error) {
 	return rpc.Dial(endpoint)
 }
 
-// ephemeralConsole starts a new opera node, attaches an ephemeral JavaScript
+// ephemeralConsole starts a new zilionixx node, attaches an ephemeral JavaScript
 // console to it, executes each of the files specified as arguments and tears
 // everything down.
 func ephemeralConsole(ctx *cli.Context) error {
 	// Create and start the node based on the CLI flags
 	cfg := makeAllConfigs(ctx)
-	genesis := getOperaGenesis(ctx)
+	genesis := getZilionixxGenesis(ctx)
 	node, _, nodeClose := makeNode(ctx, cfg, genesis)
 	startNode(ctx, node)
 	defer nodeClose()
@@ -188,7 +188,7 @@ func ephemeralConsole(ctx *cli.Context) error {
 	// Attach to the newly started node and start the JavaScript console
 	client, err := node.Attach()
 	if err != nil {
-		utils.Fatalf("Failed to attach to the inproc opera: %v", err)
+		utils.Fatalf("Failed to attach to the inproc zilionixx: %v", err)
 	}
 	config := console.Config{
 		DataDir: utils.MakeDataDir(ctx),

@@ -39,7 +39,7 @@ Note that exporting your key in unencrypted format is NOT supported.
 
 Keys are stored under <DATADIR>/keystore/validator.
 It is safe to transfer the entire directory or the individual keys therein
-between Opera nodes by simply copying.
+between Zilionixx nodes by simply copying.
 
 Make sure you backup your keys regularly.`,
 		Subcommands: []cli.Command{
@@ -53,7 +53,7 @@ Make sure you backup your keys regularly.`,
 					utils.PasswordFileFlag,
 				},
 				Description: `
-    opera validator new
+    zilionixx validator new
 
 Creates a new validator private key and prints the public key.
 
@@ -77,7 +77,7 @@ password to file or expose in any other way.
 				},
 				ArgsUsage: "<account address> <validator pubkey>",
 				Description: `
-    opera validator convert
+    zilionixx validator convert
 
 Converts an account private key to a validator private key and saves in the validator keystore.
 `,
@@ -121,7 +121,7 @@ func validatorKeyCreate(ctx *cli.Context) error {
 	fmt.Printf("Path of the secret key file: %s\n\n", valKeystore.PathOf(publicKey))
 	fmt.Printf("- You can share your public key with anyone. Others need it to validate messages from you.\n")
 	fmt.Printf("- You must NEVER share the secret key with anyone! The key controls access to your validator!\n")
-	fmt.Printf("- You must BACKUP your key file! Without the key, it's impossible to operate the validator!\n")
+	fmt.Printf("- You must BACKUP your key file! Without the key, it's impossible to zilionixxte the validator!\n")
 	fmt.Printf("- You must REMEMBER your password! Without the password, it's impossible to decrypt the key!\n\n")
 	return nil
 }

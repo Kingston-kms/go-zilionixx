@@ -1,22 +1,22 @@
 .PHONY: all
-all: opera
+all: zilionixx
 
-.PHONY: opera
-opera:
+.PHONY: zilionixx
+zilionixx:
 	GIT_COMMIT=`git rev-list -1 HEAD 2>/dev/null || echo ""` && \
 	GIT_DATE=`git log -1 --date=short --pretty=format:%ct 2>/dev/null || echo ""` && \
 	go build \
-	    -ldflags "-s -w -X github.com/zilionixx/go-zilionixx/cmd/opera/launcher.gitCommit=$${GIT_COMMIT} -X github.com/zilionixx/go-zilionixx/cmd/opera/launcher.gitDate=$${GIT_DATE}" \
-	    -o build/opera \
-	    ./cmd/opera
+	    -ldflags "-s -w -X github.com/zilionixx/go-zilionixx/cmd/zilionixx/launcher.gitCommit=$${GIT_COMMIT} -X github.com/zilionixx/go-zilionixx/cmd/zilionixx/launcher.gitDate=$${GIT_DATE}" \
+	    -o build/zilionixx \
+	    ./cmd/zilionixx
 
 TAG ?= "latest"
-.PHONY: opera-image
-opera-image:
+.PHONY: zilionixx-image
+zilionixx-image:
 	docker build \
     	    --network=host \
     	    --build-arg GOPROXY=$(GOPROXY) \
-    	    -f ./docker/Dockerfile.opera -t "opera:$(TAG)" .
+    	    -f ./docker/Dockerfile.zilionixx -t "zilionixx:$(TAG)" .
 
 .PHONY: test
 test:

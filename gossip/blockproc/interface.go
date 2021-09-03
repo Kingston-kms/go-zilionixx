@@ -7,7 +7,7 @@ import (
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type TxListener interface {
@@ -50,5 +50,5 @@ type EVMProcessor interface {
 }
 
 type EVM interface {
-	Start(block BlockCtx, statedb *state.StateDB, reader evmcore.DummyChain, onNewLog func(*types.Log), net opera.Rules) EVMProcessor
+	Start(block BlockCtx, statedb *state.StateDB, reader evmcore.DummyChain, onNewLog func(*types.Log), net zilionixx.Rules) EVMProcessor
 }

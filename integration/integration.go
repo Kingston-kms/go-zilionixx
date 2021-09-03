@@ -24,8 +24,8 @@ var (
 func NewIntegration(ctx *adapters.ServiceContext, genesis InputGenesis, stack *node.Node) *gossip.Service {
 	gossipCfg := gossip.FakeConfig(1)
 	cfg := Configs{
-		Opera:         gossipCfg,
-		OperaStore:    gossip.DefaultStoreConfig(),
+		Zilionixx:         gossipCfg,
+		ZilionixxStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
 		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),

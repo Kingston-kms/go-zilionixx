@@ -11,7 +11,7 @@ import (
 	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type ValidatorBlockState struct {
@@ -46,7 +46,7 @@ type BlockState struct {
 	ValidatorStates       []ValidatorBlockState
 	NextValidatorProfiles ValidatorProfiles
 
-	DirtyRules opera.Rules
+	DirtyRules zilionixx.Rules
 
 	AdvanceEpochs idx.Epoch
 }
@@ -81,7 +81,7 @@ type EpochState struct {
 	ValidatorStates   []ValidatorEpochState
 	ValidatorProfiles ValidatorProfiles
 
-	Rules opera.Rules
+	Rules zilionixx.Rules
 }
 
 func (es *EpochState) GetValidatorState(id idx.ValidatorID, validators *pos.Validators) *ValidatorEpochState {

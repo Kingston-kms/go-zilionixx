@@ -23,7 +23,7 @@ func Enabled() bool {
 	return enabled
 }
 
-func StartTx(tx common.Hash, operation string) {
+func StartTx(tx common.Hash, zilionixxtion string) {
 	if !enabled {
 		return
 	}
@@ -37,11 +37,11 @@ func StartTx(tx common.Hash, operation string) {
 
 	span := opentracing.StartSpan("lifecycle")
 	span.SetTag("txhash", tx.String())
-	span.SetTag("enter", operation)
+	span.SetTag("enter", zilionixxtion)
 	txSpans[tx] = span
 }
 
-func FinishTx(tx common.Hash, operation string) {
+func FinishTx(tx common.Hash, zilionixxtion string) {
 	if !enabled {
 		return
 	}
@@ -54,12 +54,12 @@ func FinishTx(tx common.Hash, operation string) {
 		return
 	}
 
-	span.SetTag("exit", operation)
+	span.SetTag("exit", zilionixxtion)
 	span.Finish()
 	delete(txSpans, tx)
 }
 
-func CheckTx(tx common.Hash, operation string) opentracing.Span {
+func CheckTx(tx common.Hash, zilionixxtion string) opentracing.Span {
 	if !enabled {
 		return noopSpan
 	}
@@ -74,7 +74,7 @@ func CheckTx(tx common.Hash, operation string) opentracing.Span {
 	}
 
 	return opentracing.GlobalTracer().StartSpan(
-		operation,
+		zilionixxtion,
 		opentracing.ChildOf(span.Context()),
 	)
 }

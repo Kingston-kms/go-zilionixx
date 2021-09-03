@@ -17,7 +17,7 @@ SECURITY:
 FEATURES:
 
 - proxy: Introduced in-memory proxy.
-- cmd: Enable reading config from file (zilionbft.toml, .json, or .yaml)
+- cmd: Enable reading config from file (zilionixx.toml, .json, or .yaml)
 
 IMPROVEMENTS:
 

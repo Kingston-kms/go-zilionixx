@@ -80,12 +80,12 @@ func importEvents(ctx *cli.Context) error {
 	}
 
 	// avoid P2P interaction, API calls and events emitting
-	genesis := getOperaGenesis(ctx)
+	genesis := getZilionixxGenesis(ctx)
 	cfg := makeAllConfigs(ctx)
-	cfg.Opera.Protocol.EventsSemaphoreLimit.Size = math.MaxUint32
-	cfg.Opera.Protocol.EventsSemaphoreLimit.Num = math.MaxUint32
-	cfg.Opera.Emitter.Validator = emitter.ValidatorConfig{}
-	cfg.Opera.TxPool.Journal = ""
+	cfg.Zilionixx.Protocol.EventsSemaphoreLimit.Size = math.MaxUint32
+	cfg.Zilionixx.Protocol.EventsSemaphoreLimit.Num = math.MaxUint32
+	cfg.Zilionixx.Emitter.Validator = emitter.ValidatorConfig{}
+	cfg.Zilionixx.TxPool.Journal = ""
 	cfg.Node.IPCPath = ""
 	cfg.Node.HTTPHost = ""
 	cfg.Node.WSHost = ""

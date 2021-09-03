@@ -16,8 +16,8 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/emitter/mock"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 //go:generate go run github.com/golang/mock/mockgen -package=mock -destination=mock/world.go github.com/zilionixx/go-zilionixx/gossip/emitter External,TxPool,TxSigner,Signer
@@ -61,7 +61,7 @@ func TestEmitter(t *testing.T) {
 
 	t.Run("init", func(t *testing.T) {
 		external.EXPECT().GetRules().
-			Return(opera.FakeNetRules()).
+			Return(zilionixx.FakeNetRules()).
 			AnyTimes()
 
 		external.EXPECT().GetEpochValidators().

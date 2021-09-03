@@ -8,7 +8,7 @@ import (
 	evmcore "github.com/zilionixx/go-zilionixx/evmcore"
 	inter "github.com/zilionixx/go-zilionixx/inter"
 	validatorpk "github.com/zilionixx/go-zilionixx/inter/validatorpk"
-	opera "github.com/zilionixx/go-zilionixx/opera"
+	zilionixx "github.com/zilionixx/go-zilionixx/zilionixx"
 	vecmt "github.com/zilionixx/go-zilionixx/vecmt"
 	hash "github.com/zilionixx/zilion-base/hash"
 	idx "github.com/zilionixx/zilion-base/inter/idx"
@@ -178,9 +178,9 @@ func (mr *MockExternalMockRecorder) GetLatestBlockIndex() *gomock.Call {
 }
 
 // GetRules mocks base method
-func (m *MockExternal) GetRules() opera.Rules {
+func (m *MockExternal) GetRules() zilionixx.Rules {
 	ret := m.ctrl.Call(m, "GetRules")
-	ret0, _ := ret[0].(opera.Rules)
+	ret0, _ := ret[0].(zilionixx.Rules)
 	return ret0
 }
 

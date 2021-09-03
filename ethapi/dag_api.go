@@ -12,7 +12,7 @@ import (
 )
 
 // PublicDAGChainAPI provides an API to access the directed acyclic graph chain.
-// It offers only methods that operate on public data that is freely available to anyone.
+// It offers only methods that zilionixxte on public data that is freely available to anyone.
 type PublicDAGChainAPI struct {
 	b Backend
 }

@@ -7,26 +7,26 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/status-im/keycard-go/hexutils"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesis"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driverauth"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/netinit"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/sfc"
-	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driverauth"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/gpos"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/netinit"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/sfc"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesisstore"
 )
 
 var (
@@ -48,7 +48,7 @@ func FakeKey(n int) *ecdsa.PrivateKey {
 
 func FakeGenesisStore(num int, balance, stake *big.Int) *genesisstore.Store {
 	genStore := genesisstore.NewMemStore()
-	genStore.SetRules(opera.FakeNetRules())
+	genStore.SetRules(zilionixx.FakeNetRules())
 
 	validators := GetFakeValidators(num)
 
@@ -129,7 +129,7 @@ func FakeGenesisStore(num int, balance, stake *big.Int) *genesisstore.Store {
 
 func MainnetGenesisStore(balance, stake *big.Int) *genesisstore.Store {
 	genStore := genesisstore.NewMemStore()
-	genStore.SetRules(opera.MainNetRules())
+	genStore.SetRules(zilionixx.MainNetRules())
 
 	validators := GetMainnetValidators()
 

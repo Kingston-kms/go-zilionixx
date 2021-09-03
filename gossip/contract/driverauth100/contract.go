@@ -650,7 +650,7 @@ type ContractOwnershipTransferred struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterOwnershipTransferred is a free log retrieval operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// FilterOwnershipTransferred is a free log retrieval zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []common.Address, newOwner []common.Address) (*ContractOwnershipTransferredIterator, error) {
@@ -671,7 +671,7 @@ func (_Contract *ContractFilterer) FilterOwnershipTransferred(opts *bind.FilterO
 	return &ContractOwnershipTransferredIterator{contract: _Contract.contract, event: "OwnershipTransferred", logs: logs, sub: sub}, nil
 }
 
-// WatchOwnershipTransferred is a free log subscription operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// WatchOwnershipTransferred is a free log subscription zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *ContractOwnershipTransferred, previousOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
@@ -717,7 +717,7 @@ func (_Contract *ContractFilterer) WatchOwnershipTransferred(opts *bind.WatchOpt
 	}), nil
 }
 
-// ParseOwnershipTransferred is a log parse operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
+// ParseOwnershipTransferred is a log parse zilionixxtion binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
 func (_Contract *ContractFilterer) ParseOwnershipTransferred(log types.Log) (*ContractOwnershipTransferred, error) {

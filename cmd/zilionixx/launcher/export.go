@@ -118,7 +118,7 @@ func makeRawGossipStore(dataDir string, cfg *config) (*gossip.Store, error) {
 		return nil, err
 	}
 	dbs := &integration.DummyFlushableProducer{rawProducer}
-	gdb := gossip.NewStore(dbs, cfg.OperaStore)
+	gdb := gossip.NewStore(dbs, cfg.ZilionixxStore)
 	gdb.SetName("gossip-db")
 	return gdb, nil
 }

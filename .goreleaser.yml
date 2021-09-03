@@ -2,8 +2,8 @@ before:
   hooks:
     - make clean proto vendor
 builds:
-  - main: ./cmd/opera/main.go
-    binary: go-opera
+  - main: ./cmd/zilionixx/main.go
+    binary: go-zilionixx
     ldflags:
       - -linkmode external -extldflags -static -s -w
       - -X main.gitCommit={{ .ShortCommit }}
@@ -21,15 +21,15 @@ archive:
     386: i386
     amd64: x86_64
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - "^docs:"
+      - "^test:"
 nfpm:
   name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
   replacements:
@@ -49,10 +49,10 @@ nfpm:
     - rpm
 
   empty_folders:
-    - /var/log/go-opera
+    - /var/log/go-zilionixx
 
   files:
-    "scripts/daemon/go-opera.service": "/lib/systemd/system/go-opera.service"
+    "scripts/daemon/go-zilionixx.service": "/lib/systemd/system/go-zilionixx.service"
 
   # scripts:
   #   preinstall: "scripts/preinstall.bash"

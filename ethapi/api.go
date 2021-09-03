@@ -47,7 +47,7 @@ import (
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 var (
@@ -55,7 +55,7 @@ var (
 )
 
 // PublicEthereumAPI provides an API to access Ethereum related information.
-// It offers only methods that operate on public data that is freely available to anyone.
+// It offers only methods that zilionixxte on public data that is freely available to anyone.
 type PublicEthereumAPI struct {
 	b Backend
 }
@@ -97,7 +97,7 @@ func (s *PublicEthereumAPI) Syncing() (interface{}, error) {
 	}, nil
 }
 
-// PublicTxPoolAPI offers and API for the transaction pool. It only operates on data that is non confidential.
+// PublicTxPoolAPI offers and API for the transaction pool. It only zilionixxtes on data that is non confidential.
 type PublicTxPoolAPI struct {
 	b Backend
 }
@@ -528,7 +528,7 @@ func (s *PrivateAccountAPI) Unpair(ctx context.Context, url string, pin string) 
 }
 
 // PublicBlockChainAPI provides an API to access the Ethereum blockchain.
-// It offers only methods that operate on public data that is freely available to anyone.
+// It offers only methods that zilionixxte on public data that is freely available to anyone.
 type PublicBlockChainAPI struct {
 	b Backend
 }
@@ -947,7 +947,7 @@ func (s *PublicBlockChainAPI) Call(ctx context.Context, args CallArgs, blockNrOr
 	if overrides != nil {
 		accounts = *overrides
 	}
-	result, err := DoCall(ctx, s.b, args, blockNrOrHash, accounts, opera.DefaultVMConfig, 5*time.Second, s.b.RPCGasCap())
+	result, err := DoCall(ctx, s.b, args, blockNrOrHash, accounts, zilionixx.DefaultVMConfig, 5*time.Second, s.b.RPCGasCap())
 	if err != nil {
 		return nil, err
 	}
@@ -1014,7 +1014,7 @@ func DoEstimateGas(ctx context.Context, b Backend, args CallArgs, blockNrOrHash 
 	executable := func(gas uint64) (bool, *evmcore.ExecutionResult, error) {
 		args.Gas = (*hexutil.Uint64)(&gas)
 
-		result, err := DoCall(ctx, b, args, blockNrOrHash, nil, opera.DefaultVMConfig, 0, gasCap)
+		result, err := DoCall(ctx, b, args, blockNrOrHash, nil, zilionixx.DefaultVMConfig, 0, gasCap)
 		if err != nil {
 			if errors.Is(err, evmcore.ErrIntrinsicGas) {
 				return true, nil, nil // Special case, raise gas limit
@@ -1988,7 +1988,7 @@ func (api *PrivateDebugAPI) ChaindbCompact() error {
 
 // SetHead rewinds the head of the blockchain to a previous block.
 func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) error {
-	return errors.New("zilionbft cannot rewind blocks due to the BFT algorithm")
+	return errors.New("zilionixx cannot rewind blocks due to the BFT algorithm")
 }
 
 // PublicNetAPI offers network related RPC methods

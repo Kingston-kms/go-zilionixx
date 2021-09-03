@@ -34,7 +34,7 @@ glide.lock
 *.tgz
 *.zip
 
-# opera project specific
+# zilionixx project specific
 scripts/certs
 scripts/nodes
 scripts/peers.json
@@ -42,7 +42,7 @@ scripts/docker/upx
 nodes
 peers.json
 certs
-zilionbft_*
+zilionixx_*
 !*.go
 *.log
 *.graph

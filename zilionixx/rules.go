@@ -1,17 +1,17 @@
-package opera
+package zilionixx
 
 import (
 	"encoding/json"
 	"math/big"
 	"time"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/vm"
 	ethparams "github.com/ethereum/go-ethereum/params"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/evmwriter"
 )
 
 const (
@@ -27,7 +27,7 @@ var DefaultVMConfig = vm.Config{
 	},
 }
 
-// Rules describes opera net.
+// Rules describes zilionixx net.
 // Note keep track of all the non-copiable variables in Copy()
 type Rules struct {
 	Name      string

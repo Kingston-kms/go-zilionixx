@@ -41,10 +41,10 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/logger"
-	"github.com/zilionixx/go-zilionixx/opera"
 	"github.com/zilionixx/go-zilionixx/utils/wgmutex"
 	"github.com/zilionixx/go-zilionixx/valkeystore"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type ServiceFeed struct {
@@ -88,7 +88,7 @@ type BlockProc struct {
 	EVMModule           blockproc.EVM
 }
 
-func DefaultBlockProc(g opera.Genesis) BlockProc {
+func DefaultBlockProc(g zilionixx.Genesis) BlockProc {
 	return BlockProc{
 		SealerModule:        sealmodule.New(),
 		TxListenerModule:    drivermodule.NewDriverTxListenerModule(),
@@ -304,7 +304,7 @@ func (s *Service) APIs() []rpc.API {
 // Start method invoked when the node is ready to start the service.
 func (s *Service) Start() error {
 	genesis := *s.store.GetGenesisHash()
-	s.Topic = discv5.Topic("opera@" + genesis.Hex())
+	s.Topic = discv5.Topic("zilionixx@" + genesis.Hex())
 
 	if s.p2pServer.DiscV5 != nil {
 		go func(topic discv5.Topic) {

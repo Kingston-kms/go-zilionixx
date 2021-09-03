@@ -7,7 +7,7 @@ import (
 	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 // Reader returns currents epoch and its validators group.
 type Reader interface {
 	base.Reader
-	GetEpochRules() (opera.Rules, idx.Epoch)
+	GetEpochRules() (zilionixx.Rules, idx.Epoch)
 }
 
 // Checker which require only current epoch info
@@ -39,7 +39,7 @@ func New(reader Reader) *Checker {
 	}
 }
 
-func CalcGasPowerUsed(e inter.EventPayloadI, rules opera.Rules) uint64 {
+func CalcGasPowerUsed(e inter.EventPayloadI, rules zilionixx.Rules) uint64 {
 	txsGas := uint64(0)
 	for _, tx := range e.Txs() {
 		txsGas += tx.Gas()
@@ -54,7 +54,7 @@ func CalcGasPowerUsed(e inter.EventPayloadI, rules opera.Rules) uint64 {
 	return txsGas + parentsGas + extraGas + rules.Economy.Gas.EventGas
 }
 
-func (v *Checker) checkGas(e inter.EventPayloadI, rules opera.Rules) error {
+func (v *Checker) checkGas(e inter.EventPayloadI, rules zilionixx.Rules) error {
 	if e.GasPowerUsed() > rules.Economy.Gas.MaxEventGas {
 		return ErrTooBigGasUsed
 	}

@@ -9,10 +9,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/zilionixx/go-zilionixx/logger"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver/driverpos"
 	"github.com/zilionixx/go-zilionixx/utils/errlock"
 	"github.com/zilionixx/go-zilionixx/version"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver/driverpos"
 )
 
 type VerWarcher struct {

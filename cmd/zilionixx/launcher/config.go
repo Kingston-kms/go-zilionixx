@@ -27,9 +27,9 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 	"github.com/zilionixx/go-zilionixx/integration"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
-	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
 	futils "github.com/zilionixx/go-zilionixx/utils"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesisstore"
 )
 
 var (
@@ -86,8 +86,8 @@ var tomlSettings = toml.Config{
 
 type config struct {
 	Node          node.Config
-	Opera         gossip.Config
-	OperaStore    gossip.StoreConfig
+	Zilionixx         gossip.Config
+	ZilionixxStore    gossip.StoreConfig
 	Lachesis      abft.Config
 	LachesisStore abft.StoreConfig
 	VectorClock   vecmt.IndexConfig
@@ -95,8 +95,8 @@ type config struct {
 
 func (c *config) AppConfigs() integration.Configs {
 	return integration.Configs{
-		Opera:         c.Opera,
-		OperaStore:    c.OperaStore,
+		Zilionixx:         c.Zilionixx,
+		ZilionixxStore:    c.ZilionixxStore,
 		Lachesis:      c.Lachesis,
 		LachesisStore: c.LachesisStore,
 		VectorClock:   c.VectorClock,
@@ -123,7 +123,7 @@ func loadAllConfigs(file string, cfg *config) error {
 	return err
 }
 
-func getOperaGenesis(ctx *cli.Context) integration.InputGenesis {
+func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {
 
 	var genesis integration.InputGenesis
 	switch {
@@ -350,25 +350,25 @@ func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 	// Defaults (low priority)
 	cfg := config{
 		Node:          defaultNodeConfig(),
-		Opera:         gossip.DefaultConfig(),
-		OperaStore:    gossip.DefaultStoreConfig(),
+		Zilionixx:         gossip.DefaultConfig(),
+		ZilionixxStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
 		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),
 	}
 	if ctx.GlobalIsSet(FakeNetFlag.Name) {
 		_, num, _ := parseFakeGen(ctx.GlobalString(FakeNetFlag.Name))
-		cfg.Opera = gossip.FakeConfig(num)
+		cfg.Zilionixx = gossip.FakeConfig(num)
 	}
 
 	if ctx.GlobalIsSet(validatorIDFlag.Name) {
 		num := ctx.GlobalInt(validatorIDFlag.Name)
-		cfg.Opera.Emitter.EmitIntervals.Max = 10 * time.Second
-		cfg.Opera.Emitter.EmitIntervals.DoublesignProtection = 5 * time.Second
+		cfg.Zilionixx.Emitter.EmitIntervals.Max = 10 * time.Second
+		cfg.Zilionixx.Emitter.EmitIntervals.DoublesignProtection = 5 * time.Second
 
 		if num == 1 {
 			log.Info("DoubleSignProtection SET", "******", 0)
-			cfg.Opera.Emitter.EmitIntervals.DoublesignProtection = 0
+			cfg.Zilionixx.Emitter.EmitIntervals.DoublesignProtection = 0
 		}
 	}
 
@@ -381,13 +381,13 @@ func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 
 	// Apply flags (high priority)
 	var err error
-	cfg.Opera, err = gossipConfigWithFlags(ctx, cfg.Opera)
+	cfg.Zilionixx, err = gossipConfigWithFlags(ctx, cfg.Zilionixx)
 	if err != nil {
 		return nil, err
 	}
 	cfg.Node = nodeConfigWithFlags(ctx, cfg.Node)
 
-	if err := cfg.Opera.Validate(); err != nil {
+	if err := cfg.Zilionixx.Validate(); err != nil {
 		return nil, err
 	}
 
@@ -406,9 +406,9 @@ func defaultNodeConfig() node.Config {
 	cfg := NodeDefaultConfig
 	cfg.Name = clientIdentifier
 	cfg.Version = params.VersionWithCommit(gitCommit, gitDate)
-	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
-	cfg.WSModules = append(cfg.WSModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
-	cfg.IPCPath = "opera.ipc"
+	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "znx", "dag", "sfc", "abft", "web3")
+	cfg.WSModules = append(cfg.WSModules, "eth", "znx", "dag", "sfc", "abft", "web3")
+	cfg.IPCPath = "zilionixx.ipc"
 	cfg.DataDir = DefaultDataDir()
 	return cfg
 }

@@ -99,7 +99,7 @@ func (m *txSortedMap) Forward(threshold uint64) types.Transactions {
 
 // Filter iterates over the list of transactions and removes all of them for which
 // the specified function evaluates to true.
-// Filter, as opposed to 'filter', re-initialises the heap after the operation is done.
+// Filter, as opposed to 'filter', re-initialises the heap after the zilionixxtion is done.
 // If you want to do several consecutive filterings, it's therefore better to first
 // do a .filter(func1) followed by .Filter(func2) or reheap()
 func (m *txSortedMap) Filter(filter func(*types.Transaction) bool) types.Transactions {
@@ -437,7 +437,7 @@ func (h *priceHeap) Pop() interface{} {
 	return x
 }
 
-// txPricedList is a price-sorted heap to allow operating on transactions pool
+// txPricedList is a price-sorted heap to allow zilionixxting on transactions pool
 // contents in a price-incrementing way.
 type txPricedList struct {
 	all    *txLookup  // Pointer to the map of all transactions

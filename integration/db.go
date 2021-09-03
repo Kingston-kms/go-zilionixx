@@ -33,8 +33,8 @@ func CheckDBList(names []string) error {
 	if !namesMap["gossip"] {
 		return errors.New("gossip DB is not found")
 	}
-	if !namesMap["zilionbft"] {
-		return errors.New("zilionbft DB is not found")
+	if !namesMap["zilionixx"] {
+		return errors.New("zilionixx DB is not found")
 	}
 	if !namesMap["genesis"] {
 		return errors.New("genesis DB is not found")
@@ -46,10 +46,10 @@ func dbCacheSize(name string) int {
 	if name == "gossip" {
 		return 64 * opt.MiB
 	}
-	if name == "zilionbft" {
+	if name == "zilionixx" {
 		return 4 * opt.MiB
 	}
-	if strings.HasPrefix(name, "zilionbft-") {
+	if strings.HasPrefix(name, "zilionixx-") {
 		return 8 * opt.MiB
 	}
 	if strings.HasPrefix(name, "gossip-") {

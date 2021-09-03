@@ -6,7 +6,7 @@ import (
 	"github.com/zilionixx/zilion-base/kvdb"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 func (s *Store) applyRawEvmItems(db kvdb.Iteratee) (err error) {
@@ -31,7 +31,7 @@ func (s *Store) applyRawEvmItems(db kvdb.Iteratee) (err error) {
 }
 
 // ApplyGenesis writes initial state.
-func (s *Store) ApplyGenesis(g opera.Genesis, startingRoot hash.Hash) (evmBlock *evmcore.EvmBlock, err error) {
+func (s *Store) ApplyGenesis(g zilionixx.Genesis, startingRoot hash.Hash) (evmBlock *evmcore.EvmBlock, err error) {
 	// apply raw EVM storage
 	err = s.applyRawEvmItems(g.RawEvmItems)
 	if err != nil {

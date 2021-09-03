@@ -13,9 +13,9 @@ import (
 	"github.com/zilionixx/zilion-base/kvdb"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesis"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/gpos"
 )
 
 type (
@@ -132,18 +132,18 @@ func (s *Store) SetMetadata(metadata Metadata) {
 	s.rlp.Set(s.table.Metadata, []byte("m"), &metadata)
 }
 
-func (s *Store) GetRules() opera.Rules {
-	cfg := s.rlp.Get(s.table.Rules, []byte("c"), &opera.Rules{}).(*opera.Rules)
+func (s *Store) GetRules() zilionixx.Rules {
+	cfg := s.rlp.Get(s.table.Rules, []byte("c"), &zilionixx.Rules{}).(*zilionixx.Rules)
 	return *cfg
 }
 
-func (s *Store) SetRules(cfg opera.Rules) {
+func (s *Store) SetRules(cfg zilionixx.Rules) {
 	s.rlp.Set(s.table.Rules, []byte("c"), &cfg)
 }
 
-func (s *Store) GetGenesis() opera.Genesis {
+func (s *Store) GetGenesis() zilionixx.Genesis {
 	meatadata := s.GetMetadata()
-	return opera.Genesis{
+	return zilionixx.Genesis{
 		Accounts:      s.EvmAccounts(),
 		Storage:       s.EvmStorage(),
 		Delegations:   s.Delegations(),

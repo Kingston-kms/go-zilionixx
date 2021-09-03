@@ -18,9 +18,9 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
 	"github.com/zilionixx/go-zilionixx/utils"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesisstore"
 )
 
 func BenchmarkFlushDBs(b *testing.B) {
@@ -41,8 +41,8 @@ func BenchmarkFlushDBs(b *testing.B) {
 			return nil
 		},
 	}, Configs{
-		Opera:         gossip.DefaultConfig(),
-		OperaStore:    gossip.DefaultStoreConfig(),
+		Zilionixx:         gossip.DefaultConfig(),
+		ZilionixxStore:    gossip.DefaultStoreConfig(),
 		Lachesis:      abft.DefaultConfig(),
 		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(),

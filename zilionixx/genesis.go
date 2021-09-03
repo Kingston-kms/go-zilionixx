@@ -1,4 +1,4 @@
-package opera
+package zilionixx
 
 import (
 	"math/big"
@@ -8,8 +8,8 @@ import (
 	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera/genesis"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/gpos"
 )
 
 type Genesis struct {

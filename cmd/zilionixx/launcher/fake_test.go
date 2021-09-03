@@ -15,7 +15,7 @@ import (
 )
 
 func TestFakeNetFlag_NonValidator(t *testing.T) {
-	// Start a opera console, make sure it's cleaned up and terminate the console
+	// Start a zilionixx console, make sure it's cleaned up and terminate the console
 	cli := exec(t,
 		"--fakenet", "0/3",
 		"--port", "0", "--maxpeers", "0", "--nodiscover", "--nat", "none",
@@ -29,13 +29,13 @@ func TestFakeNetFlag_NonValidator(t *testing.T) {
 	cli.SetTemplateFunc("niltime", genesisStart)
 	cli.SetTemplateFunc("apis", func() string { return ipcAPIs })
 
-	waitForEndpoint(t, filepath.Join(cli.Datadir, "opera.ipc"), 60*time.Second)
+	waitForEndpoint(t, filepath.Join(cli.Datadir, "zilionixx.ipc"), 60*time.Second)
 
 	// Verify the actual welcome message to the required template
 	cli.Expect(`
 Welcome to the Lachesis JavaScript console!
 
-instance: go-opera/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
+instance: go-zilionixx/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
 coinbase: {{.Coinbase}}
 at block: 1 ({{niltime}})
  datadir: {{.Datadir}}
@@ -56,7 +56,7 @@ at block: 1 ({{niltime}})
 }
 
 func TestFakeNetFlag_Validator(t *testing.T) {
-	// Start a opera console, make sure it's cleaned up and terminate the console
+	// Start a zilionixx console, make sure it's cleaned up and terminate the console
 	cli := exec(t,
 		"--fakenet", "3/3",
 		"--port", "0", "--maxpeers", "0", "--nodiscover", "--nat", "none",
@@ -72,13 +72,13 @@ func TestFakeNetFlag_Validator(t *testing.T) {
 	cli.SetTemplateFunc("niltime", genesisStart)
 	cli.SetTemplateFunc("apis", func() string { return ipcAPIs })
 
-	waitForEndpoint(t, filepath.Join(cli.Datadir, "opera.ipc"), 60*time.Second)
+	waitForEndpoint(t, filepath.Join(cli.Datadir, "zilionixx.ipc"), 60*time.Second)
 
 	// Verify the actual welcome message to the required template
 	cli.Expect(`
 Welcome to the Lachesis JavaScript console!
 
-instance: go-opera/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
+instance: go-zilionixx/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
 coinbase: {{.Coinbase}}
 at block: 1 ({{niltime}})
  datadir: {{.Datadir}}

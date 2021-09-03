@@ -120,7 +120,7 @@ ok  	github.com/zilionixx/go-zilionixx/integration	21.640s
 
 Also it is tested with [fuzzing](./FUZZING.md).
 
-### Operating a private network (fakenet)
+### Zilionixxting a private network (fakenet)
 
 Fakenet is a private network optimized for your private testing.
 It'll generate a genesis containing N validators with equal stakes.

@@ -30,9 +30,9 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/inter/drivertype"
-	"github.com/zilionixx/go-zilionixx/opera"
 	"github.com/zilionixx/go-zilionixx/topicsdb"
 	"github.com/zilionixx/go-zilionixx/tracing"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 // EthAPIBackend implements ethapi.Backend.
@@ -301,7 +301,7 @@ func (b *EthAPIBackend) GetEVM(ctx context.Context, msg evmcore.Message, state *
 
 	context := evmcore.NewEVMContext(msg, header, b.state, nil)
 	config := b.ChainConfig()
-	return vm.NewEVM(context, state, config, opera.DefaultVMConfig), vmError, nil
+	return vm.NewEVM(context, state, config, zilionixx.DefaultVMConfig), vmError, nil
 }
 
 func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction) error {

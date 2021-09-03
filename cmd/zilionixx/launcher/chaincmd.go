@@ -16,7 +16,7 @@ var (
 		ArgsUsage: "<filename> (<filename 2> ... <filename N>) [check=false]",
 		Category:  "MISCELLANEOUS COMMANDS",
 		Description: `
-    opera import events
+	zilionixx import events
 
 The import command imports events from an RLP-encoded files.
 Events are fully verified by default, unless overridden by check=false flag.`,
@@ -45,7 +45,7 @@ Events are fully verified by default, unless overridden by --check=false flag.`,
 					EventsCheckFlag,
 				},
 				Description: `
-    opera import evm
+    zilionixx import evm
 
 The import command imports EVM storage (trie nodes, code, preimages) from files.`,
 			},
@@ -66,7 +66,7 @@ The import command imports EVM storage (trie nodes, code, preimages) from files.
 					DataDirFlag,
 				},
 				Description: `
-    opera export events
+    zilionixx export events
 
 Requires a first argument of the file to write to.
 Optional second and third arguments control the first and
@@ -90,7 +90,7 @@ be gzipped
 					DataDirFlag,
 				},
 				Description: `
-    opera check evm
+    zilionixx check evm
 
 Checks EVM storage roots and code hashes
 `,

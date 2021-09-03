@@ -12,8 +12,8 @@ import (
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
 	"github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type EVMModule struct{}
@@ -22,12 +22,12 @@ func New() *EVMModule {
 	return &EVMModule{}
 }
 
-func (p *EVMModule) Start(block blockproc.BlockCtx, statedb *state.StateDB, reader evmcore.DummyChain, onNewLog func(*types.Log), net opera.Rules) blockproc.EVMProcessor {
+func (p *EVMModule) Start(block blockproc.BlockCtx, statedb *state.StateDB, reader evmcore.DummyChain, onNewLog func(*types.Log), net zilionixx.Rules) blockproc.EVMProcessor {
 	var prevBlockHash common.Hash
 	if block.Idx != 0 {
 		prevBlockHash = reader.GetHeader(common.Hash{}, uint64(block.Idx-1)).Hash
 	}
-	return &OperaEVMProcessor{
+	return &ZilionixxEVMProcessor{
 		block:         block,
 		reader:        reader,
 		statedb:       statedb,
@@ -38,12 +38,12 @@ func (p *EVMModule) Start(block blockproc.BlockCtx, statedb *state.StateDB, read
 	}
 }
 
-type OperaEVMProcessor struct {
+type ZilionixxEVMProcessor struct {
 	block    blockproc.BlockCtx
 	reader   evmcore.DummyChain
 	statedb  *state.StateDB
 	onNewLog func(*types.Log)
-	net      opera.Rules
+	net      zilionixx.Rules
 
 	blockIdx      *big.Int
 	prevBlockHash common.Hash
@@ -55,7 +55,7 @@ type OperaEVMProcessor struct {
 	receipts    types.Receipts
 }
 
-func (p *OperaEVMProcessor) evmBlockWith(txs types.Transactions) *evmcore.EvmBlock {
+func (p *ZilionixxEVMProcessor) evmBlockWith(txs types.Transactions) *evmcore.EvmBlock {
 	return &evmcore.EvmBlock{
 		EvmHeader: evmcore.EvmHeader{
 			Number:     p.blockIdx,
@@ -72,12 +72,12 @@ func (p *OperaEVMProcessor) evmBlockWith(txs types.Transactions) *evmcore.EvmBlo
 	}
 }
 
-func (p *OperaEVMProcessor) Execute(txs types.Transactions, internal bool) types.Receipts {
+func (p *ZilionixxEVMProcessor) Execute(txs types.Transactions, internal bool) types.Receipts {
 	evmProcessor := evmcore.NewStateProcessor(p.net.EvmChainConfig(), p.reader)
 
 	// Process txs
 	evmBlock := p.evmBlockWith(txs)
-	receipts, _, gasUsed, skipped, err := evmProcessor.Process(evmBlock, p.statedb, opera.DefaultVMConfig, internal, func(log *types.Log, _ *state.StateDB) {
+	receipts, _, gasUsed, skipped, err := evmProcessor.Process(evmBlock, p.statedb, zilionixx.DefaultVMConfig, internal, func(log *types.Log, _ *state.StateDB) {
 		p.onNewLog(log)
 	})
 	if err != nil {
@@ -99,7 +99,7 @@ func (p *OperaEVMProcessor) Execute(txs types.Transactions, internal bool) types
 	return receipts
 }
 
-func (p *OperaEVMProcessor) Finalize() (evmBlock *evmcore.EvmBlock, skippedTxs []uint32, receipts types.Receipts) {
+func (p *ZilionixxEVMProcessor) Finalize() (evmBlock *evmcore.EvmBlock, skippedTxs []uint32, receipts types.Receipts) {
 	evmBlock = p.evmBlockWith(
 		// Filter skipped transactions. Receipts are filtered already
 		inter.FilterSkippedTxs(p.incomingTxs, p.skippedTxs),

@@ -25,9 +25,9 @@ import (
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/gpos"
 	"github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/gpos"
 )
 
 const (
@@ -299,7 +299,7 @@ func (env *testEnv) callContract(
 	evmContext := evmcore.NewEVMContext(msg, block.Header(), env.GetEvmStateReader(), &call.From)
 	// Create a new environment which holds all relevant information
 	// about the transaction and calling mechanisms.
-	vmenv := vm.NewEVM(evmContext, statedb, env.store.GetRules().EvmChainConfig(), opera.DefaultVMConfig)
+	vmenv := vm.NewEVM(evmContext, statedb, env.store.GetRules().EvmChainConfig(), zilionixx.DefaultVMConfig)
 	gaspool := new(evmcore.GasPool).AddGas(math.MaxUint64)
 	res, err := evmcore.NewStateTransition(vmenv, msg, gaspool).TransitionDb()
 
@@ -353,14 +353,14 @@ func (env *testEnv) SendTransaction(ctx context.Context, tx *types.Transaction) 
  *  bind.ContractFilterer interface
  */
 
-// FilterLogs executes a log filter operation, blocking during execution and
+// FilterLogs executes a log filter zilionixxtion, blocking during execution and
 // returning all the results in one batch.
 func (env *testEnv) FilterLogs(ctx context.Context, query ethereum.FilterQuery) ([]types.Log, error) {
 	panic("not implemented yet")
 	return nil, nil
 }
 
-// SubscribeFilterLogs creates a background log filtering operation, returning
+// SubscribeFilterLogs creates a background log filtering zilionixxtion, returning
 // a subscription immediately, which can be used to stream the found events.
 func (env *testEnv) SubscribeFilterLogs(ctx context.Context, query ethereum.FilterQuery, ch chan<- types.Log) (ethereum.Subscription, error) {
 	panic("not implemented yet")

@@ -13,17 +13,17 @@ import (
 
 // Constants to match up protocol versions and messages
 const (
-	zilionbft62 = 62 // derived from eth62
+	zilionixx62 = 62 // derived from eth62
 )
 
 // protocolName is the official short name of the protocol used during capability negotiation.
-const protocolName = "opera"
+const protocolName = "zilionixx"
 
 // ProtocolVersions are the supported versions of the protocol (first is primary).
-var ProtocolVersions = []uint{zilionbft62}
+var ProtocolVersions = []uint{zilionixx62}
 
 // protocolLengths are the number of implemented message corresponding to different protocol versions.
-var protocolLengths = map[uint]uint64{zilionbft62: EventsStreamResponse + 1}
+var protocolLengths = map[uint]uint64{zilionixx62: EventsStreamResponse + 1}
 
 const protocolMaxMsgSize = 10 * 1024 * 1024 // Maximum cap on the size of a protocol message
 

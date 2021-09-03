@@ -17,10 +17,10 @@ import (
 	"github.com/zilionixx/zilion-base/kvdb/flushable"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesisstore"
 	"github.com/zilionixx/go-zilionixx/utils/adapters/vecmt2dagidx"
 	"github.com/zilionixx/go-zilionixx/vecmt"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesisstore"
 )
 
 // GenesisMismatchError is raised when trying to overwrite an existing
@@ -35,8 +35,8 @@ func (e *GenesisMismatchError) Error() string {
 }
 
 type Configs struct {
-	Opera         gossip.Config
-	OperaStore    gossip.StoreConfig
+	Zilionixx         gossip.Config
+	ZilionixxStore    gossip.StoreConfig
 	Lachesis      abft.Config
 	LachesisStore abft.StoreConfig
 	VectorClock   vecmt.IndexConfig
@@ -63,23 +63,23 @@ func mustOpenDB(producer kvdb.DBProducer, name string) kvdb.DropableStore {
 }
 
 func getStores(producer kvdb.FlushableDBProducer, cfg Configs) (*gossip.Store, *abft.Store, *genesisstore.Store) {
-	gdb := gossip.NewStore(producer, cfg.OperaStore)
+	gdb := gossip.NewStore(producer, cfg.ZilionixxStore)
 
-	cMainDb := mustOpenDB(producer, "zilionbft")
+	cMainDb := mustOpenDB(producer, "zilionixx")
 	cGetEpochDB := func(epoch idx.Epoch) kvdb.DropableStore {
-		return mustOpenDB(producer, fmt.Sprintf("zilionbft-%d", epoch))
+		return mustOpenDB(producer, fmt.Sprintf("zilionixx-%d", epoch))
 	}
 	cdb := abft.NewStore(cMainDb, cGetEpochDB, panics("Lachesis store"), cfg.LachesisStore)
 	genesisStore := genesisstore.NewStore(mustOpenDB(producer, "genesis"))
 	return gdb, cdb, genesisStore
 }
 
-func rawApplyGenesis(gdb *gossip.Store, cdb *abft.Store, g opera.Genesis, cfg Configs) error {
+func rawApplyGenesis(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cfg Configs) error {
 	_, _, _, err := rawMakeEngine(gdb, cdb, g, cfg, true)
 	return err
 }
 
-func rawMakeEngine(gdb *gossip.Store, cdb *abft.Store, g opera.Genesis, cfg Configs, applyGenesis bool) (*abft.ZilionBFT, *vecmt.Index, gossip.BlockProc, error) {
+func rawMakeEngine(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cfg Configs, applyGenesis bool) (*abft.ZilionBFT, *vecmt.Index, gossip.BlockProc, error) {
 	blockProc := gossip.DefaultBlockProc(g)
 
 	err := gdb.Migrate()

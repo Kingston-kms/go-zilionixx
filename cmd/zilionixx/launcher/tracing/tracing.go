@@ -28,7 +28,7 @@ func Start(ctx *cli.Context) (stop func(), err error) {
 		return
 	}
 
-	cfg.ServiceName = "opera"
+	cfg.ServiceName = "zilionixx"
 
 	tracer, closer, err := cfg.NewTracer(
 		jaegercfg.Logger(jaegerlog.StdLogger),

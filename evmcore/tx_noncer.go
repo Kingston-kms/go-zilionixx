@@ -43,7 +43,7 @@ func newTxNoncer(statedb *state.StateDB) *txNoncer {
 // get returns the current nonce of an account, falling back to a real state
 // database if the account is unknown.
 func (txn *txNoncer) get(addr common.Address) uint64 {
-	// We use mutex for get operation is the underlying
+	// We use mutex for get zilionixxtion is the underlying
 	// state will mutate db even for read access.
 	txn.lock.Lock()
 	defer txn.lock.Unlock()

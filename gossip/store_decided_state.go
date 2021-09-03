@@ -6,7 +6,7 @@ import (
 	"github.com/zilionixx/zilion-base/inter/pos"
 
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
-	"github.com/zilionixx/go-zilionixx/opera"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 const sKey = "s"
@@ -76,12 +76,12 @@ func (s *Store) GetLatestBlockIndex() idx.Block {
 }
 
 // GetRules retrieves current network rules
-func (s *Store) GetRules() opera.Rules {
+func (s *Store) GetRules() zilionixx.Rules {
 	return s.GetEpochState().Rules
 }
 
 // GetEpochRules retrieves current network rules and epoch atomically
-func (s *Store) GetEpochRules() (opera.Rules, idx.Epoch) {
+func (s *Store) GetEpochRules() (zilionixx.Rules, idx.Epoch) {
 	es := s.GetEpochState()
 	return es.Rules, es.Epoch
 }

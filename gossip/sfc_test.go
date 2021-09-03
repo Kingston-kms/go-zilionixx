@@ -1,12 +1,12 @@
 package gossip
 
 // compile SFC with truffle
-//go:generate bash -c "cd ../../opera-sfc && git checkout c1d33c81f74abf82c0e22807f16e609578e10ad8"
-//go:generate bash -c "docker run --name go-opera-sfc-compiler -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../opera-sfc:/src -w /src node:10.5.0 bash -c 'export NPM_CONFIG_PREFIX=~; npm install --no-save; npm install --no-save truffle@5.1.4' && docker commit go-opera-sfc-compiler go-opera-sfc-compiler-image && docker rm go-opera-sfc-compiler"
-//go:generate bash -c "docker run --rm -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../opera-sfc:/src -w /src go-opera-sfc-compiler-image bash -c 'export NPM_CONFIG_PREFIX=~; rm -f /src/build/contracts/*json; npm run build'"
+//go:generate bash -c "cd ../../zilionixx-sfc && git checkout c1d33c81f74abf82c0e22807f16e609578e10ad8"
+//go:generate bash -c "docker run --name go-zilionixx-sfc-compiler -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../zilionixx-sfc:/src -w /src node:10.5.0 bash -c 'export NPM_CONFIG_PREFIX=~; npm install --no-save; npm install --no-save truffle@5.1.4' && docker commit go-zilionixx-sfc-compiler go-zilionixx-sfc-compiler-image && docker rm go-zilionixx-sfc-compiler"
+//go:generate bash -c "docker run --rm -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../zilionixx-sfc:/src -w /src go-zilionixx-sfc-compiler-image bash -c 'export NPM_CONFIG_PREFIX=~; rm -f /src/build/contracts/*json; npm run build'"
 //go:generate bash -c "cd ./contract/solc && for f in LegacySfcWrapper.json; do jq -j .bytecode $DOLLAR{f} > $DOLLAR{f%.json}.bin; jq -j .deployedBytecode $DOLLAR{f} > $DOLLAR{f%.json}.bin-runtime; jq -c .abi $DOLLAR{f} > $DOLLAR{f%.json}.abi; done"
-//go:generate bash -c "docker run --rm -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../opera-sfc:/src -w /src go-opera-sfc-compiler-image bash -c 'export NPM_CONFIG_PREFIX=~; sed -i s/runs:\\ 200,/runs:\\ 10000,/ /src/truffle-config.js; rm -f /src/build/contracts/*json; npm run build'"
-//go:generate bash -c "cd ../../opera-sfc && git checkout -- truffle-config.js; docker rmi go-opera-sfc-compiler-image"
+//go:generate bash -c "docker run --rm -v $(pwd)/contract/solc:/src/build/contracts -v $(pwd)/../../zilionixx-sfc:/src -w /src go-zilionixx-sfc-compiler-image bash -c 'export NPM_CONFIG_PREFIX=~; sed -i s/runs:\\ 200,/runs:\\ 10000,/ /src/truffle-config.js; rm -f /src/build/contracts/*json; npm run build'"
+//go:generate bash -c "cd ../../zilionixx-sfc && git checkout -- truffle-config.js; docker rmi go-zilionixx-sfc-compiler-image"
 //go:generate bash -c "cd ./contract/solc && for f in NetworkInitializer.json NodeDriver.json NodeDriverAuth.json; do jq -j .bytecode $DOLLAR{f} > $DOLLAR{f%.json}.bin; jq -j .deployedBytecode $DOLLAR{f} > $DOLLAR{f%.json}.bin-runtime; jq -c .abi $DOLLAR{f} > $DOLLAR{f%.json}.abi; done"
 
 // wrap LegacySfcWrapper with golang
@@ -40,12 +40,12 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/contract/netinit100"
 	"github.com/zilionixx/go-zilionixx/gossip/contract/sfc100"
 	"github.com/zilionixx/go-zilionixx/logger"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driver"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/driverauth"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/evmwriter"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/netinit"
-	"github.com/zilionixx/go-zilionixx/opera/genesis/sfc"
 	"github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driver"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/driverauth"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/evmwriter"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/netinit"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/sfc"
 )
 
 func TestSFC(t *testing.T) {

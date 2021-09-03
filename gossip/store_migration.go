@@ -24,5 +24,5 @@ func (s *Store) Migrate() error {
 
 func (s *Store) migrations() *migration.Migration {
 	return migration.
-		Begin("opera-gossip-store")
+		Begin("zilionixx-gossip-store")
 }

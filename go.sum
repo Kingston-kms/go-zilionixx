@@ -324,8 +324,8 @@ github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhe
 github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0HrGL1Y=
 github.com/xtaci/kcp-go v5.4.5+incompatible/go.mod h1:bN6vIwHQbfHaHtFpEssmWsN45a+AZwO7eyRCmEIbtvE=
 github.com/xtaci/lossyconn v0.0.0-20190602105132-8df528c0c9ae/go.mod h1:gXtu8J62kEgmN++bm9BVICuT/e8yiLI2KFobd/TRFsE=
-github.com/zilionixx/go-ethereum v1.9.8-zilion-0.2 h1:p1KseUcZQYc0eJ25ko2fjkP2Nt8zhNkHmfi+3WT6pq0=
-github.com/zilionixx/go-ethereum v1.9.8-zilion-0.2/go.mod h1:27ZY0H7YdbxCL0E/d23qHo9WCkjqnmFKHQl9UaUSw8s=
+github.com/zilionixx/go-ethereum v1.9.25-zilion-0.5 h1:lnSZsF34//nc+6NaEKoWoSODJk6vTeU0d5HbWkDEyk0=
+github.com/zilionixx/go-ethereum v1.9.25-zilion-0.5/go.mod h1:27ZY0H7YdbxCL0E/d23qHo9WCkjqnmFKHQl9UaUSw8s=
 github.com/zilionixx/zilion-base v0.1.0 h1:3yskr73ATyG6evbuN9DfVkMdCevp8B0RPyq+/Sbe0/s=
 github.com/zilionixx/zilion-base v0.1.0/go.mod h1:I6XXzaIqC80PndB4T99SFt9TMzq6lZbhqRum3E5ijrs=
 go.uber.org/atomic v1.5.1 h1:rsqfU5vBkVknbhUGbAUwQKR2H4ItV8tjJ+6kJX4cxHM=

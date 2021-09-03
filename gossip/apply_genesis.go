@@ -16,12 +16,12 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/inter/drivertype"
-	"github.com/zilionixx/go-zilionixx/opera"
-	"github.com/zilionixx/go-zilionixx/opera/genesis"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
 )
 
 // ApplyGenesis writes initial state.
-func (s *Store) ApplyGenesis(blockProc BlockProc, g opera.Genesis) (genesisHash hash.Hash, err error) {
+func (s *Store) ApplyGenesis(blockProc BlockProc, g zilionixx.Genesis) (genesisHash hash.Hash, err error) {
 	// if we'here, then it's first time genesis is applied
 	err = s.applyEpoch1Genesis(blockProc, g)
 	if err != nil {
@@ -33,7 +33,7 @@ func (s *Store) ApplyGenesis(blockProc BlockProc, g opera.Genesis) (genesisHash 
 	return genesisHash, err
 }
 
-func (s *Store) applyEpoch0Genesis(g opera.Genesis) (evmBlock *evmcore.EvmBlock, err error) {
+func (s *Store) applyEpoch0Genesis(g zilionixx.Genesis) (evmBlock *evmcore.EvmBlock, err error) {
 	// write genesis blocks
 	var highestBlock blockproc.BlockCtx
 	var startingRoot hash.Hash
@@ -120,7 +120,7 @@ func (s *Store) applyEpoch0Genesis(g opera.Genesis) (evmBlock *evmcore.EvmBlock,
 	return evmBlock, nil
 }
 
-func (s *Store) applyEpoch1Genesis(blockProc BlockProc, g opera.Genesis) (err error) {
+func (s *Store) applyEpoch1Genesis(blockProc BlockProc, g zilionixx.Genesis) (err error) {
 	evmBlock0, err := s.applyEpoch0Genesis(g)
 	if err != nil {
 		return err
@@ -183,7 +183,7 @@ func (s *Store) applyEpoch1Genesis(blockProc BlockProc, g opera.Genesis) (err er
 	bs.LastBlock = blockCtx
 	s.SetBlockEpochState(bs, es)
 
-	prettyHash := func(root common.Hash, g opera.Genesis) hash.Event {
+	prettyHash := func(root common.Hash, g zilionixx.Genesis) hash.Event {
 		e := inter.MutableEventPayload{}
 		// for nice-looking ID
 		e.SetEpoch(g.FirstEpoch - 1)

@@ -12,7 +12,7 @@ import (
 )
 
 // PublicSfcAPI provides an API to access SFC related information.
-// It offers only methods that operate on public data that is freely available to anyone.
+// It offers only methods that zilionixxte on public data that is freely available to anyone.
 type PublicSfcAPI struct {
 	b Backend
 }
