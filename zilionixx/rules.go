@@ -7,11 +7,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/vm"
 	ethparams "github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/evmwriter"
@@ -73,7 +73,7 @@ type EpochsRules struct {
 	MaxEpochDuration inter.Timestamp
 }
 
-// DagRules of Lachesis DAG (directed acyclic graph).
+// DagRules of ZilionBFT DAG (directed acyclic graph).
 type DagRules struct {
 	MaxParents     idx.Event
 	MaxFreeParents idx.Event // maximum number of parents with no gas cost

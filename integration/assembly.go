@@ -5,17 +5,17 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/flushable"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/flushable"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
 	"github.com/zilionixx/go-zilionixx/utils/adapters/vecmt2dagidx"
@@ -37,8 +37,8 @@ func (e *GenesisMismatchError) Error() string {
 type Configs struct {
 	Zilionixx          gossip.Config
 	ZilionixxStore     gossip.StoreConfig
-	Lachesis       abft.Config
-	LachesisStore  abft.StoreConfig
+	ZilionBFT       abft.Config
+	ZilionBFTStore  abft.StoreConfig
 	VectorClock    vecmt.IndexConfig
 	AllowedGenesis map[uint64]hash.Hash
 }
@@ -66,11 +66,11 @@ func mustOpenDB(producer kvdb.DBProducer, name string) kvdb.DropableStore {
 func getStores(producer kvdb.FlushableDBProducer, cfg Configs) (*gossip.Store, *abft.Store, *genesisstore.Store) {
 	gdb := gossip.NewStore(producer, cfg.ZilionixxStore)
 
-	cMainDb := mustOpenDB(producer, "lachesis")
+	cMainDb := mustOpenDB(producer, "zilionbft")
 	cGetEpochDB := func(epoch idx.Epoch) kvdb.DropableStore {
-		return mustOpenDB(producer, fmt.Sprintf("lachesis-%d", epoch))
+		return mustOpenDB(producer, fmt.Sprintf("zilionbft-%d", epoch))
 	}
-	cdb := abft.NewStore(cMainDb, cGetEpochDB, panics("Lachesis store"), cfg.LachesisStore)
+	cdb := abft.NewStore(cMainDb, cGetEpochDB, panics("zilionbft store"), cfg.ZilionBFTStore)
 	genesisStore := genesisstore.NewStore(mustOpenDB(producer, "genesis"))
 	return gdb, cdb, genesisStore
 }
@@ -80,7 +80,7 @@ func rawApplyGenesis(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cf
 	return err
 }
 
-func rawMakeEngine(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cfg Configs, applyGenesis bool) (*abft.Lachesis, *vecmt.Index, gossip.BlockProc, error) {
+func rawMakeEngine(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cfg Configs, applyGenesis bool) (*abft.ZilionBFT, *vecmt.Index, gossip.BlockProc, error) {
 	blockProc := gossip.DefaultBlockProc(g)
 
 	if applyGenesis {
@@ -94,13 +94,13 @@ func rawMakeEngine(gdb *gossip.Store, cdb *abft.Store, g zilionixx.Genesis, cfg 
 			Validators: gdb.GetValidators(),
 		})
 		if err != nil {
-			return nil, nil, blockProc, fmt.Errorf("failed to write Lachesis genesis state: %v", err)
+			return nil, nil, blockProc, fmt.Errorf("failed to write ZilionBFT genesis state: %v", err)
 		}
 	}
 
 	// create consensus
 	vecClock := vecmt.NewIndex(panics("Vector clock"), cfg.VectorClock)
-	engine := abft.NewLachesis(cdb, &GossipStoreAdapter{gdb}, vecmt2dagidx.Wrap(vecClock), panics("Lachesis"), cfg.Lachesis)
+	engine := abft.NewZilionBFT(cdb, &GossipStoreAdapter{gdb}, vecmt2dagidx.Wrap(vecClock), panics("ZilionBFT"), cfg.ZilionBFT)
 	return engine, vecClock, blockProc, nil
 }
 
@@ -145,7 +145,7 @@ func applyGenesis(rawProducer kvdb.DBProducer, inputGenesis InputGenesis, cfg Co
 	return nil
 }
 
-func makeEngine(rawProducer kvdb.IterableDBProducer, inputGenesis InputGenesis, emptyStart bool, cfg Configs) (*abft.Lachesis, *vecmt.Index, *gossip.Store, *abft.Store, *genesisstore.Store, gossip.BlockProc, error) {
+func makeEngine(rawProducer kvdb.IterableDBProducer, inputGenesis InputGenesis, emptyStart bool, cfg Configs) (*abft.ZilionBFT, *vecmt.Index, *gossip.Store, *abft.Store, *genesisstore.Store, gossip.BlockProc, error) {
 	dbs, err := makeFlushableProducer(rawProducer)
 	if err != nil {
 		return nil, nil, nil, nil, nil, gossip.BlockProc{}, err
@@ -212,7 +212,7 @@ func makeEngine(rawProducer kvdb.IterableDBProducer, inputGenesis InputGenesis, 
 }
 
 // MakeEngine makes consensus engine from config.
-func MakeEngine(rawProducer kvdb.IterableDBProducer, genesis InputGenesis, cfg Configs) (*abft.Lachesis, *vecmt.Index, *gossip.Store, *abft.Store, *genesisstore.Store, gossip.BlockProc) {
+func MakeEngine(rawProducer kvdb.IterableDBProducer, genesis InputGenesis, cfg Configs) (*abft.ZilionBFT, *vecmt.Index, *gossip.Store, *abft.Store, *genesisstore.Store, gossip.BlockProc) {
 	dropAllDBsIfInterrupted(rawProducer)
 	existingDBs := rawProducer.Names()
 

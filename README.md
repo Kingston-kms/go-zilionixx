@@ -1,6 +1,6 @@
 # Zilionixx
 
-EVM-compatible chain secured by the Lachesis consensus algorithm.
+EVM-compatible chain secured by the ZilionBFT consensus algorithm.
 
 ## Building the source
 
@@ -86,7 +86,7 @@ $ zilionixx --datadir /path/to/datadir attach # attach to IPC
 
 ### Testing
 
-Lachesis has extensive unit-testing. Use the Go tool to run tests:
+ZilionBFT has extensive unit-testing. Use the Go tool to run tests:
 
 ```shell
 go test ./...

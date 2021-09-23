@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/skiperrors"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/skiperrors"
+	"github.com/zilionixx/zilion-base/kvdb/table"
 
 	"github.com/zilionixx/go-zilionixx/logger"
 )

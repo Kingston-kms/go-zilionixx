@@ -3,8 +3,8 @@ package vecmt
 import (
 	"encoding/binary"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/vecfc"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/vecfc"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )

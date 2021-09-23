@@ -9,10 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
-	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -21,6 +17,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/utils/workers"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
@@ -121,7 +121,7 @@ func (env *testEnv) GetEvmStateReader() *EvmStateReader {
 // Note that onBlockEnd would be run async.
 func (env *testEnv) consensusCallbackBeginBlockFn(
 	onBlockEnd func(block *inter.Block, preInternalReceipts, internalReceipts, externalReceipts types.Receipts),
-) lachesis.BeginBlockFn {
+) zilionbft.BeginBlockFn {
 	const txIndex = true
 	callback := consensusCallbackBeginBlockFn(
 		env.blockProcTasks,
@@ -157,7 +157,7 @@ func (env *testEnv) ApplyBlock(spent time.Duration, txs ...*types.Transaction) (
 	}
 
 	beginBlock := env.consensusCallbackBeginBlockFn(onBlockEnd)
-	process := beginBlock(&lachesis.Block{
+	process := beginBlock(&zilionbft.Block{
 		Atropos: event.ID(),
 	})
 

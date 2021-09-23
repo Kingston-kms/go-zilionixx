@@ -3,8 +3,8 @@ package emitter
 import (
 	"math"
 
-	"github.com/Fantom-foundation/lachesis-base/emitter/ancestor"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/zilionixx/zilion-base/emitter/ancestor"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/utils/piecefunc"
 )

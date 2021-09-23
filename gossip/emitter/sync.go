@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/emitter/doublesign"
-	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/zilionixx/zilion-base/emitter/doublesign"
+	"github.com/zilionixx/zilion-base/hash"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/utils/errlock"

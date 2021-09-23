@@ -42,7 +42,7 @@ scripts/docker/upx
 nodes
 peers.json
 certs
-lachesis_*
+zilionbft_*
 !*.go
 *.log
 *.graph

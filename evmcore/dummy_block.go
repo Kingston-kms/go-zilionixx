@@ -20,11 +20,11 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/trie"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )
@@ -79,7 +79,7 @@ func ToEvmHeader(block *inter.Block, index idx.Block, prevHash hash.Event) *EvmH
 	}
 }
 
-// ConvertFromEthHeader converts ETH-formatted header to Lachesis EVM header
+// ConvertFromEthHeader converts ETH-formatted header to ZilionBFT EVM header
 func ConvertFromEthHeader(h *types.Header) *EvmHeader {
 	// NOTE: incomplete conversion
 	return &EvmHeader{

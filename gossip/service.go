@@ -6,11 +6,6 @@ import (
 	"math/rand"
 	"sync"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
-	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -23,6 +18,11 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/enr"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/utils/workers"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/ethapi"
 	"github.com/zilionixx/go-zilionixx/eventcheck"
@@ -117,7 +117,7 @@ type Service struct {
 
 	// application
 	store               *Store
-	engine              lachesis.Consensus
+	engine              zilionbft.Consensus
 	dagIndexer          *vecmt.Index
 	engineMu            *sync.RWMutex
 	emitter             *emitter.Emitter
@@ -155,7 +155,7 @@ type Service struct {
 	logger.Instance
 }
 
-func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
@@ -177,7 +177,7 @@ func NewService(stack *node.Node, config Config, store *Store, signer valkeystor
 	return svc, nil
 }
 
-func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	svc := &Service{
 		config:             config,
 		done:               make(chan struct{}),

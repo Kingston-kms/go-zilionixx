@@ -3,11 +3,11 @@ package vecmt
 import (
 	"testing"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag/tdag"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/dag/tdag"
+	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )

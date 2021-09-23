@@ -1,8 +1,8 @@
 package migration
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/zilion-base/kvdb"
 )
 
 // KvdbIDStore stores id

@@ -5,9 +5,9 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/Fantom-foundation/lachesis-base/gossip/dagprocessor"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
+	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/dag"
 	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/zilionixx/go-zilionixx/eventcheck"

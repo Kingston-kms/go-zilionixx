@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/zilion-base/hash"
 )
 
 func openEventFile(path string, isSyncMode bool) *os.File {

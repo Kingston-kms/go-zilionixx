@@ -25,7 +25,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -46,6 +45,7 @@ import (
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/tyler-smith/go-bip39"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/hash"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
@@ -2145,7 +2145,7 @@ func (api *PrivateDebugAPI) ChaindbCompact() error {
 
 // SetHead rewinds the head of the blockchain to a previous block.
 func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) error {
-	return errors.New("lachesis cannot rewind blocks due to the BFT algorithm")
+	return errors.New("zilionixx cannot rewind blocks due to the BFT algorithm")
 }
 
 // PublicNetAPI offers network related RPC methods

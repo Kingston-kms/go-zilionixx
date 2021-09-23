@@ -4,11 +4,11 @@ import (
 	"crypto/sha256"
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
 	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
@@ -41,7 +41,7 @@ type BlockState struct {
 	FinalizedStateRoot hash.Hash
 
 	EpochGas      uint64
-	EpochCheaters lachesis.Cheaters
+	EpochCheaters zilionbft.Cheaters
 
 	ValidatorStates       []ValidatorBlockState
 	NextValidatorProfiles ValidatorProfiles
@@ -53,7 +53,7 @@ type BlockState struct {
 
 func (bs BlockState) Copy() BlockState {
 	cp := bs
-	cp.EpochCheaters = make(lachesis.Cheaters, len(bs.EpochCheaters))
+	cp.EpochCheaters = make(zilionbft.Cheaters, len(bs.EpochCheaters))
 	copy(cp.EpochCheaters, bs.EpochCheaters)
 	cp.ValidatorStates = make([]ValidatorBlockState, len(bs.ValidatorStates))
 	copy(cp.ValidatorStates, bs.ValidatorStates)

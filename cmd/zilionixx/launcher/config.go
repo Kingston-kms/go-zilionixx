@@ -12,9 +12,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
@@ -23,6 +20,9 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/naoina/toml"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
@@ -60,7 +60,7 @@ var (
 		Usage: "TOML configuration file",
 	}
 
-	// DataDirFlag defines directory to store Lachesis state and user's wallets
+	// DataDirFlag defines directory to store ZilionBFT state and user's wallets
 	DataDirFlag = utils.DirectoryFlag{
 		Name:  "datadir",
 		Usage: "Data directory for the databases and keystore",
@@ -120,8 +120,8 @@ type config struct {
 	Node          node.Config
 	Zilionixx         gossip.Config
 	ZilionixxStore    gossip.StoreConfig
-	Lachesis      abft.Config
-	LachesisStore abft.StoreConfig
+	ZilionBFT      abft.Config
+	ZilionBFTStore abft.StoreConfig
 	VectorClock   vecmt.IndexConfig
 }
 
@@ -129,8 +129,8 @@ func (c *config) AppConfigs() integration.Configs {
 	return integration.Configs{
 		Zilionixx:          c.Zilionixx,
 		ZilionixxStore:     c.ZilionixxStore,
-		Lachesis:       c.Lachesis,
-		LachesisStore:  c.LachesisStore,
+		ZilionBFT:       c.ZilionBFT,
+		ZilionBFTStore:  c.ZilionBFTStore,
 		VectorClock:    c.VectorClock,
 		AllowedGenesis: AllowedzilionixxGenesisHashes,
 	}
@@ -344,8 +344,8 @@ func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 		Node:          defaultNodeConfig(),
 		Zilionixx:         gossip.DefaultConfig(cacheRatio),
 		ZilionixxStore:    gossip.DefaultStoreConfig(cacheRatio),
-		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(cacheRatio),
+		ZilionBFT:      abft.DefaultConfig(),
+		ZilionBFTStore: abft.DefaultStoreConfig(cacheRatio),
 		VectorClock:   vecmt.DefaultConfig(cacheRatio),
 	}
 

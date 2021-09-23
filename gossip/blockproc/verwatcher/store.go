@@ -1,7 +1,7 @@
 package verwatcher
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb"
 
 	"github.com/zilionixx/go-zilionixx/logger"
 )

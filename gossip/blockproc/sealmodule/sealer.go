@@ -3,9 +3,9 @@ package sealmodule
 import (
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
-	"github.com/Fantom-foundation/lachesis-base/lachesis"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 )
@@ -87,7 +87,7 @@ func (s *zilionixxEpochsSealer) SealEpoch() (blockproc.BlockState, blockproc.Epo
 	s.es.EpochStateRoot = s.bs.FinalizedStateRoot
 
 	s.bs.EpochGas = 0
-	s.bs.EpochCheaters = lachesis.Cheaters{}
+	s.bs.EpochCheaters = zilionbft.Cheaters{}
 	newEpoch := s.es.Epoch + 1
 	s.es.Epoch = newEpoch
 

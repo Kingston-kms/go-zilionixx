@@ -6,14 +6,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
-	"github.com/Fantom-foundation/lachesis-base/kvdb/leveldb"
-	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb/leveldb"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
@@ -43,8 +43,8 @@ func BenchmarkFlushDBs(b *testing.B) {
 	}, Configs{
 		Zilionixx:         gossip.DefaultConfig(cachescale.Identity),
 		ZilionixxStore:    gossip.DefaultStoreConfig(cachescale.Identity),
-		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
+		ZilionBFT:      abft.DefaultConfig(),
+		ZilionBFTStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(cachescale.Identity),
 	})
 	defer store.Close()

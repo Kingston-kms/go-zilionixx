@@ -1,10 +1,10 @@
 package evmstore
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/kvdb"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 )

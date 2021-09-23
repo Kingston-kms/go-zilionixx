@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
 

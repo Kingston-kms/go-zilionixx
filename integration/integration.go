@@ -3,12 +3,12 @@ package integration
 import (
 	"time"
 
-	"github.com/Fantom-foundation/lachesis-base/abft"
-	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/node"
 	"github.com/ethereum/go-ethereum/p2p/simulations/adapters"
 	"github.com/status-im/keycard-go/hexutils"
+	"github.com/zilionixx/zilion-base/abft"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
@@ -26,8 +26,8 @@ func NewIntegration(ctx *adapters.ServiceContext, genesis InputGenesis, stack *n
 	cfg := Configs{
 		Zilionixx:         gossipCfg,
 		ZilionixxStore:    gossip.DefaultStoreConfig(cachescale.Identity),
-		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
+		ZilionBFT:      abft.DefaultConfig(),
+		ZilionBFTStore: abft.DefaultStoreConfig(cachescale.Identity),
 		VectorClock:   vecmt.DefaultConfig(cachescale.Identity),
 	}
 

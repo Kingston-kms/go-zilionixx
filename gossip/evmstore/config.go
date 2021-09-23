@@ -1,7 +1,7 @@
 package evmstore
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
+	"github.com/zilionixx/zilion-base/utils/cachescale"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 )
 

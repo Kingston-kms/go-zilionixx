@@ -39,7 +39,7 @@ func TestConsoleWelcome(t *testing.T) {
 
 	// Verify the actual welcome message to the required template
 	cli.Expect(`
-Welcome to the Lachesis JavaScript console!
+Welcome to the ZilionBFT JavaScript console!
 
 instance: go-zilionixx/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
 coinbase: {{.Coinbase}}
@@ -58,7 +58,7 @@ func TestIPCAttachWelcome(t *testing.T) {
 	// Configure the instance for IPC attachement
 	var ipc string
 	if runtime.GOOS == "windows" {
-		ipc = `\\.\pipe\lachesis.ipc`
+		ipc = `\\.\pipe\zilionbft.ipc`
 	} else {
 		ws := tmpdir(t)
 		defer os.RemoveAll(ws)
@@ -121,7 +121,7 @@ func testAttachWelcome(t *testing.T, cli *testcli, endpoint, apis string) {
 
 	// Verify the actual welcome message to the required template
 	attach.Expect(`
-Welcome to the Lachesis JavaScript console!
+Welcome to the ZilionBFT JavaScript console!
 
 instance: go-zilionixx/v{{version}}/{{goos}}-{{goarch}}/{{gover}}
 coinbase: {{coinbase}}

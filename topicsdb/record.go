@@ -1,7 +1,7 @@
 package topicsdb
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/zilionixx/zilion-base/kvdb"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 )

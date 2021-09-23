@@ -7,9 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
@@ -22,6 +19,9 @@ import (
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/pkg/errors"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 
 	"github.com/zilionixx/go-zilionixx/ethapi"
 	"github.com/zilionixx/go-zilionixx/evmcore"
@@ -156,7 +156,7 @@ func (b *EthAPIBackend) GetFullEventID(shortEventID string) (hash.Event, error) 
 	return options[0], nil
 }
 
-// GetEventPayload returns Lachesis event by hash or short ID.
+// GetEventPayload returns ZilionBFT event by hash or short ID.
 func (b *EthAPIBackend) GetEventPayload(ctx context.Context, shortEventID string) (*inter.EventPayload, error) {
 	id, err := b.GetFullEventID(shortEventID)
 	if err != nil {
@@ -165,7 +165,7 @@ func (b *EthAPIBackend) GetEventPayload(ctx context.Context, shortEventID string
 	return b.svc.store.GetEventPayload(id), nil
 }
 
-// GetEvent returns the Lachesis event header by hash or short ID.
+// GetEvent returns the ZilionBFT event header by hash or short ID.
 func (b *EthAPIBackend) GetEvent(ctx context.Context, shortEventID string) (*inter.Event, error) {
 	id, err := b.GetFullEventID(shortEventID)
 	if err != nil {

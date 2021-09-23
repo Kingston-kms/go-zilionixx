@@ -3,7 +3,7 @@ module github.com/zilionixx/go-zilionixx
 go 1.14
 
 require (
-	github.com/Fantom-foundation/lachesis-base v0.0.0-20210721130657-54ad3c8a18c1
+	github.com/zilionixx/zilion-base v0.1.2 // indirects
 	github.com/allegro/bigcache v1.2.1 // indirect
 	github.com/certifi/gocertifi v0.0.0-20191021191039-0944d244cd40 // indirect
 	github.com/cespare/cp v1.1.1

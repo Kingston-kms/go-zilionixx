@@ -1,10 +1,10 @@
 package vecmt
 
 import (
-	"github.com/Fantom-foundation/lachesis-base/inter/dag"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/vecengine"
-	"github.com/Fantom-foundation/lachesis-base/vecfc"
+	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/vecengine"
+	"github.com/zilionixx/zilion-base/vecfc"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )

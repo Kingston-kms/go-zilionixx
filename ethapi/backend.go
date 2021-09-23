@@ -21,9 +21,6 @@ import (
 	"context"
 	"math/big"
 
-	"github.com/Fantom-foundation/lachesis-base/hash"
-	"github.com/Fantom-foundation/lachesis-base/inter/idx"
-	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
@@ -33,6 +30,9 @@ import (
 	notify "github.com/ethereum/go-ethereum/event"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/zilionixx/zilion-base/hash"
+	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/zilion-base/inter/pos"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
@@ -89,14 +89,14 @@ type Backend interface {
 	ChainConfig() *params.ChainConfig
 	CurrentBlock() *evmcore.EvmBlock
 
-	// Lachesis DAG API
+	// ZilionBFT DAG API
 	GetEventPayload(ctx context.Context, shortEventID string) (*inter.EventPayload, error)
 	GetEvent(ctx context.Context, shortEventID string) (*inter.Event, error)
 	GetHeads(ctx context.Context, epoch rpc.BlockNumber) (hash.Events, error)
 	CurrentEpoch(ctx context.Context) idx.Epoch
 	SealedEpochTiming(ctx context.Context) (start inter.Timestamp, end inter.Timestamp)
 
-	// Lachesis SFC API
+	// ZilionBFT SFC API
 	GetValidators(ctx context.Context) *pos.Validators
 	GetUptime(ctx context.Context, stakerID idx.ValidatorID) (*big.Int, error)
 	GetOriginatedFee(ctx context.Context, stakerID idx.ValidatorID) (*big.Int, error)
