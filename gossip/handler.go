@@ -9,6 +9,12 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	notify "github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/zilionixx/zilion-base/eventcheck/queuedcheck"
 	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
 	"github.com/zilionixx/zilion-base/gossip/dagstream"
@@ -19,12 +25,6 @@ import (
 	"github.com/zilionixx/zilion-base/inter/dag"
 	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/zilionixx/zilion-base/utils/datasemaphore"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	notify "github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rlp"
 
 	"github.com/zilionixx/go-zilionixx/eventcheck"
 	"github.com/zilionixx/go-zilionixx/eventcheck/parentlesscheck"
@@ -123,8 +123,8 @@ type ProtocolManager struct {
 	logger.Instance
 }
 
-// newHandler returns a new Fantom sub protocol manager. The Fantom sub protocol manages peers capable
-// with the Fantom network.
+// newHandler returns a new Zilionixx sub protocol manager. The Zilionixx sub protocol manages peers capable
+// with the Zilionixx network.
 func newHandler(
 	c handlerConfig,
 ) (
@@ -432,7 +432,7 @@ func (pm *ProtocolManager) Start(maxPeers int) {
 }
 
 func (pm *ProtocolManager) Stop() {
-	log.Info("Stopping Fantom protocol")
+	log.Info("Stopping Zilionixx protocol")
 
 	pm.leecher.Stop()
 	pm.seeder.Stop()
@@ -466,7 +466,7 @@ func (pm *ProtocolManager) Stop() {
 	// Wait for all peer handler goroutines to come down.
 	pm.wg.Wait()
 
-	log.Info("Fantom protocol stopped")
+	log.Info("Zilionixx protocol stopped")
 }
 
 func (pm *ProtocolManager) myProgress() PeerProgress {

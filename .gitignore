@@ -56,3 +56,4 @@ zilionbft_*
 .#*
 
 **/coverage.txt
+/cmd/zilionixx/zilionixx.exe
