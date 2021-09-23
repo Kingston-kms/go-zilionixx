@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/zilionixx/zilion-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/hash"
 	"github.com/status-im/keycard-go/hexutils"
 
 	"github.com/zilionixx/go-zilionixx/utils/iodb"

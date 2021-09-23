@@ -5,9 +5,9 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/zilionixx/zilion-base/eventcheck/epochcheck"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/Fantom-foundation/lachesis-base/eventcheck/epochcheck"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )

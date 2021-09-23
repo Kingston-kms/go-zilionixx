@@ -3,33 +3,56 @@ package gossip
 import (
 	"math/big"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/trie"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/ethereum/go-ethereum/params"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
+	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 	"github.com/zilionixx/go-zilionixx/inter"
+)
+
+var (
+	big3 = big.NewInt(3)
+	big4 = big.NewInt(4)
 )
 
 type EvmStateReader struct {
 	*ServiceFeed
 
 	store *Store
+	gpo   *gasprice.Oracle
 }
 
 func (s *Service) GetEvmStateReader() *EvmStateReader {
 	return &EvmStateReader{
 		ServiceFeed: &s.feed,
 		store:       s.store,
+		gpo:         s.gpo,
 	}
 }
 
+// MinGasPrice returns current hard lower bound for gas price
 func (r *EvmStateReader) MinGasPrice() *big.Int {
 	return r.store.GetRules().Economy.MinGasPrice
+}
+
+// RecommendedMinGasPrice returns current soft lower bound for gas price
+func (r *EvmStateReader) RecommendedMinGasPrice() *big.Int {
+	est := new(big.Int).Set(r.gpo.SuggestPrice())
+	est.Mul(est, big3)
+	est.Div(est, big4)
+
+	min := r.MinGasPrice()
+	if min.Cmp(est) > 0 {
+		return min
+	}
+
+	return est
 }
 
 func (r *EvmStateReader) MaxGasLimit() uint64 {
@@ -41,6 +64,10 @@ func (r *EvmStateReader) MaxGasLimit() uint64 {
 		return 0
 	}
 	return rules.Economy.Gas.MaxEventGas - maxEmptyEventGas
+}
+
+func (r *EvmStateReader) Config() *params.ChainConfig {
+	return r.store.GetRules().EvmChainConfig()
 }
 
 func (r *EvmStateReader) CurrentBlock() *evmcore.EvmBlock {
@@ -71,6 +98,11 @@ func (r *EvmStateReader) getBlock(h hash.Event, n idx.Block, readTxs bool) *evmc
 	if (h != hash.Event{}) && (h != block.Atropos) {
 		return nil
 	}
+	if readTxs {
+		if cached := r.store.EvmStore().GetCachedEvmBlock(n); cached != nil {
+			return cached
+		}
+	}
 
 	var transactions types.Transactions
 	if readTxs {
@@ -98,7 +130,6 @@ func (r *EvmStateReader) getBlock(h hash.Event, n idx.Block, readTxs bool) *evmc
 				continue
 			}
 			transactions = append(transactions, e.Txs()...)
-
 		}
 
 		transactions = inter.FilterSkippedTxs(transactions, block.SkippedTxs)
@@ -112,21 +143,24 @@ func (r *EvmStateReader) getBlock(h hash.Event, n idx.Block, readTxs bool) *evmc
 	}
 	evmHeader := evmcore.ToEvmHeader(block, n, prev)
 
+	var evmBlock *evmcore.EvmBlock
 	if readTxs {
-		if len(transactions) == 0 {
-			evmHeader.TxHash = types.EmptyRootHash
-		} else {
-			evmHeader.TxHash = types.DeriveSha(transactions, new(trie.Trie))
+		evmBlock = evmcore.NewEvmBlock(evmHeader, transactions)
+		r.store.EvmStore().SetCachedEvmBlock(n, evmBlock)
+	} else {
+		// not completed block here
+		evmBlock = &evmcore.EvmBlock{
+			EvmHeader: *evmHeader,
 		}
 	}
 
-	evmBlock := &evmcore.EvmBlock{
-		EvmHeader:    *evmHeader,
-		Transactions: transactions,
-	}
 	return evmBlock
 }
 
 func (r *EvmStateReader) StateAt(root common.Hash) (*state.StateDB, error) {
 	return r.store.evm.StateDB(hash.Hash(root))
+}
+
+func (r *EvmStateReader) TxExists(txid common.Hash) bool {
+	return r.store.EvmStore().GetTxPosition(txid) != nil
 }

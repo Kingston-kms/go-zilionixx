@@ -9,17 +9,19 @@ import (
 	"math"
 	"os"
 	"os/signal"
+	"path"
 	"strings"
 	"syscall"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/status-im/keycard-go/hexutils"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
@@ -30,6 +32,19 @@ import (
 	"github.com/zilionixx/go-zilionixx/utils/ioread"
 )
 
+type restrictedEvmBatch struct {
+	kvdb.Batch
+}
+
+func (v *restrictedEvmBatch) Put(key []byte, value []byte) error {
+	if len(key) != 32 {
+		if !bytes.HasPrefix(key, []byte("secure-key-")) && !bytes.HasPrefix(key, []byte("c")) {
+			return errors.New("not expected prefix for EVM history dump")
+		}
+	}
+	return v.Batch.Put(key, value)
+}
+
 func importEvm(ctx *cli.Context) error {
 	if len(ctx.Args()) < 1 {
 		utils.Fatalf("This command requires an argument.")
@@ -37,7 +52,8 @@ func importEvm(ctx *cli.Context) error {
 
 	cfg := makeAllConfigs(ctx)
 
-	gdb, err := makeRawGossipStore(cfg.Node.DataDir, cfg)
+	rawProducer := integration.DBProducer(path.Join(cfg.Node.DataDir, "chaindata"), cacheScaler(ctx))
+	gdb, err := makeRawGossipStore(rawProducer, cfg)
 	if err != nil {
 		log.Crit("DB opening error", "datadir", cfg.Node.DataDir, "err", err)
 	}
@@ -71,7 +87,7 @@ func importEvmFile(fn string, gdb *gossip.Store) error {
 		defer reader.(*gzip.Reader).Close()
 	}
 
-	return iodb.Read(reader, gdb.EvmStore().EvmKvdbTable().NewBatch())
+	return iodb.Read(reader, &restrictedEvmBatch{gdb.EvmStore().EvmKvdbTable().NewBatch()})
 }
 
 func importEvents(ctx *cli.Context) error {

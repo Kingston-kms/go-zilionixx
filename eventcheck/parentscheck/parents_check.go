@@ -3,7 +3,7 @@ package parentscheck
 import (
 	"errors"
 
-	base "github.com/zilionixx/zilion-base/eventcheck/parentscheck"
+	base "github.com/Fantom-foundation/lachesis-base/eventcheck/parentscheck"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )

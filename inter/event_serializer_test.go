@@ -10,10 +10,10 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 )
 
 func emptyEvent() EventPayload {
@@ -37,8 +37,28 @@ func TestEventPayloadSerialization(t *testing.T) {
 	max.SetExtra(bytes.Repeat([]byte{math.MaxUint8}, 100))
 	max.SetCreationTime(math.MaxUint64)
 	max.SetMedianTime(math.MaxUint64)
-	tx1 := types.NewRawTransaction(math.MaxUint64, nil, h.Big(), math.MaxUint64, h.Big(), []byte{}, big.NewInt(0xff), h.Big(), h.Big())
-	tx2 := types.NewRawTransaction(math.MaxUint64, &common.Address{}, h.Big(), math.MaxUint64, h.Big(), max.extra, big.NewInt(0xff), h.Big(), h.Big())
+	tx1 := types.NewTx(&types.LegacyTx{
+		Nonce:    math.MaxUint64,
+		GasPrice: h.Big(),
+		Gas:      math.MaxUint64,
+		To:       nil,
+		Value:    h.Big(),
+		Data:     []byte{},
+		V:        big.NewInt(0xff),
+		R:        h.Big(),
+		S:        h.Big(),
+	})
+	tx2 := types.NewTx(&types.LegacyTx{
+		Nonce:    math.MaxUint64,
+		GasPrice: h.Big(),
+		Gas:      math.MaxUint64,
+		To:       &common.Address{},
+		Value:    h.Big(),
+		Data:     max.extra,
+		V:        big.NewInt(0xff),
+		R:        h.Big(),
+		S:        h.Big(),
+	})
 	txs := types.Transactions{}
 	for i := 0; i < 200; i++ {
 		txs = append(txs, tx1)
@@ -53,69 +73,44 @@ func TestEventPayloadSerialization(t *testing.T) {
 	}
 
 	t.Run("ok", func(t *testing.T) {
-		assertar := assert.New(t)
+		require := require.New(t)
 
 		for name, header0 := range ee {
 			buf, err := rlp.EncodeToBytes(&header0)
-			if !assertar.NoError(err) {
-				return
-			}
+			require.NoError(err)
 
 			var header1 EventPayload
 			err = rlp.DecodeBytes(buf, &header1)
-			if !assertar.NoError(err, name) {
-				return
-			}
+			require.NoError(err, name)
 
-			if !assert.EqualValues(t, header0.extEventData, header1.extEventData, name) {
-				return
-			}
-			if !assert.EqualValues(t, header0.sigData, header1.sigData, name) {
-				return
-			}
+			require.EqualValues(header0.extEventData, header1.extEventData, name)
+			require.EqualValues(header0.sigData, header1.sigData, name)
 			for i := range header0.payloadData.txs {
-				if !assert.EqualValues(t, header0.payloadData.txs[i].Hash(), header1.payloadData.txs[i].Hash(), name) {
-					return
-				}
+				require.EqualValues(header0.payloadData.txs[i].Hash(), header1.payloadData.txs[i].Hash(), name)
 			}
-			if !assert.EqualValues(t, header0.baseEvent, header1.baseEvent, name) {
-				return
-			}
-			if !assert.EqualValues(t, header0.ID(), header1.ID(), name) {
-				return
-			}
-			if !assert.EqualValues(t, header0.HashToSign(), header1.HashToSign(), name) {
-				return
-			}
-			if !assert.EqualValues(t, header0.Size(), header1.Size(), name) {
-				return
-			}
+			require.EqualValues(header0.baseEvent, header1.baseEvent, name)
+			require.EqualValues(header0.ID(), header1.ID(), name)
+			require.EqualValues(header0.HashToSign(), header1.HashToSign(), name)
+			require.EqualValues(header0.Size(), header1.Size(), name)
 		}
 	})
 
 	t.Run("err", func(t *testing.T) {
-		assertar := assert.New(t)
+		require := require.New(t)
 
 		for name, header0 := range ee {
 			bin, err := header0.MarshalBinary()
-			if !assertar.NoError(err, name) {
-				return
-			}
+			require.NoError(err, name)
 
 			n := rand.Intn(len(bin) - len(header0.Extra()) - 1)
 			bin = bin[0:n]
 
 			buf, err := rlp.EncodeToBytes(bin)
-			if !assertar.NoError(err, name) {
-				return
-			}
+			require.NoError(err, name)
 
 			var header1 Event
 			err = rlp.DecodeBytes(buf, &header1)
-			if !assertar.Error(err, name) {
-				return
-			}
-			//t.Log(err)
+			require.Error(err, name)
 		}
 	})
 }
@@ -228,6 +223,35 @@ func randBig(r *rand.Rand) *big.Int {
 	return new(big.Int).SetBytes(b)
 }
 
+func randAddr(r *rand.Rand) common.Address {
+	addr := common.Address{}
+	r.Read(addr[:])
+	return addr
+}
+
+func randBytes(r *rand.Rand, size int) []byte {
+	b := make([]byte, size)
+	r.Read(b)
+	return b
+}
+
+func randAddrPtr(r *rand.Rand) *common.Address {
+	addr := randAddr(r)
+	return &addr
+}
+
+func randAccessList(r *rand.Rand, maxAddrs, maxKeys int) types.AccessList {
+	accessList := make(types.AccessList, r.Intn(maxAddrs))
+	for i := range accessList {
+		accessList[i].Address = randAddr(r)
+		accessList[i].StorageKeys = make([]common.Hash, r.Intn(maxKeys))
+		for j := range accessList[i].StorageKeys {
+			r.Read(accessList[i].StorageKeys[j][:])
+		}
+	}
+	return accessList
+}
+
 // FakeEvent generates random event for testing purpose.
 func FakeEvent(txsNum int) *EventPayload {
 
@@ -244,13 +268,35 @@ func FakeEvent(txsNum int) *EventPayload {
 	random.SetGasPowerLeft(GasPowerLeft{[2]uint64{r.Uint64(), r.Uint64()}})
 	txs := types.Transactions{}
 	for i := 0; i < txsNum; i++ {
-		h := hash.BytesToHash(bytes.Repeat([]byte{math.MaxUint8}, 32))
-		addr := common.BytesToAddress(h.Bytes()[:20])
+		h := hash.Hash{}
+		r.Read(h[:])
 		if i%2 == 0 {
-			tx := types.NewRawTransaction(r.Uint64(), nil, randBig(r), r.Uint64(), randBig(r), []byte{}, big.NewInt(int64(r.Intn(0xffffffff))), h.Big(), h.Big())
+			tx := types.NewTx(&types.LegacyTx{
+				Nonce:    r.Uint64(),
+				GasPrice: randBig(r),
+				Gas:      257 + r.Uint64(),
+				To:       nil,
+				Value:    randBig(r),
+				Data:     randBytes(r, r.Intn(300)),
+				V:        big.NewInt(int64(r.Intn(0xffffffff))),
+				R:        h.Big(),
+				S:        h.Big(),
+			})
 			txs = append(txs, tx)
 		} else {
-			tx := types.NewRawTransaction(r.Uint64(), &addr, randBig(r), r.Uint64(), randBig(r), []byte{}, new(big.Int), new(big.Int), new(big.Int))
+			tx := types.NewTx(&types.AccessListTx{
+				ChainID:    randBig(r),
+				Nonce:      r.Uint64(),
+				GasPrice:   randBig(r),
+				Gas:        r.Uint64(),
+				To:         randAddrPtr(r),
+				Value:      randBig(r),
+				Data:       randBytes(r, r.Intn(300)),
+				AccessList: randAccessList(r, 300, 300),
+				V:          big.NewInt(int64(r.Intn(0xffffffff))),
+				R:          h.Big(),
+				S:          h.Big(),
+			})
 			txs = append(txs, tx)
 		}
 	}

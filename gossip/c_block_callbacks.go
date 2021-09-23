@@ -6,16 +6,16 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/Fantom-foundation/lachesis-base/lachesis"
+	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
-	"github.com/zilionixx/zilion-base/utils/workers"
-	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
@@ -27,9 +27,14 @@ import (
 	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
+type ExtendedTxPosition struct {
+	evmstore.TxPosition
+	EventCreator idx.ValidatorID
+}
+
 // GetConsensusCallbacks returns single (for Service) callback instance.
-func (s *Service) GetConsensusCallbacks() zilionbft.ConsensusCallbacks {
-	return zilionbft.ConsensusCallbacks{
+func (s *Service) GetConsensusCallbacks() lachesis.ConsensusCallbacks {
+	return lachesis.ConsensusCallbacks{
 		BeginBlock: consensusCallbackBeginBlockFn(
 			s.blockProcTasks,
 			&s.blockProcWg,
@@ -46,7 +51,7 @@ func (s *Service) GetConsensusCallbacks() zilionbft.ConsensusCallbacks {
 }
 
 // consensusCallbackBeginBlockFn takes only necessaries for block processing and
-// makes zilionixx.BeginBlockFn.
+// makes lachesis.BeginBlockFn.
 // Note that onBlockEnd would be run async.
 func consensusCallbackBeginBlockFn(
 	parallelTasks *workers.Workers,
@@ -59,8 +64,8 @@ func consensusCallbackBeginBlockFn(
 	emitter *emitter.Emitter,
 	verWatcher *verwatcher.VerWarcher,
 	onBlockEnd func(block *inter.Block, preInternalReceipts, internalReceipts, externalReceipts types.Receipts),
-) zilionbft.BeginBlockFn {
-	return func(cBlock *zilionbft.Block) zilionbft.BlockCallbacks {
+) lachesis.BeginBlockFn {
+	return func(cBlock *lachesis.Block) lachesis.BlockCallbacks {
 		wg.Wait()
 		start := time.Now()
 
@@ -85,7 +90,7 @@ func consensusCallbackBeginBlockFn(
 		atroposDegenerate := true
 		confirmedEvents := make(hash.OrderedEvents, 0, 3*es.Validators.Len())
 
-		return zilionbft.BlockCallbacks{
+		return lachesis.BlockCallbacks{
 			ApplyEvent: func(_e dag.Event) {
 				e := _e.(inter.EventI)
 				if cBlock.Atropos == e.ID() {
@@ -204,16 +209,19 @@ func consensusCallbackBeginBlockFn(
 					block.GasUsed = evmBlock.GasUsed
 
 					// memorize event position of each tx
-					txPositions := make(map[common.Hash]evmstore.TxPosition)
+					txPositions := make(map[common.Hash]ExtendedTxPosition)
 					for _, e := range blockEvents {
 						for i, tx := range e.Txs() {
 							// If tx was met in multiple events, then assign to first ordered event
 							if _, ok := txPositions[tx.Hash()]; ok {
 								continue
 							}
-							txPositions[tx.Hash()] = evmstore.TxPosition{
-								Event:       e.ID(),
-								EventOffset: uint32(i),
+							txPositions[tx.Hash()] = ExtendedTxPosition{
+								TxPosition: evmstore.TxPosition{
+									Event:       e.ID(),
+									EventOffset: uint32(i),
+								},
+								EventCreator: e.Creator(),
 							}
 						}
 					}
@@ -228,14 +236,9 @@ func consensusCallbackBeginBlockFn(
 
 					// call OnNewReceipt
 					for i, r := range allReceipts {
-						txEventPos := txPositions[r.TxHash]
-						var creator idx.ValidatorID
-						if !txEventPos.Event.IsZero() {
-							txEvent := store.GetEvent(txEventPos.Event)
-							creator = txEvent.Creator()
-							if es.Validators.Get(creator) == 0 {
-								creator = 0
-							}
+						creator := txPositions[r.TxHash].EventCreator
+						if creator != 0 && es.Validators.Get(creator) == 0 {
+							creator = 0
 						}
 						txListener.OnNewReceipt(evmBlock.Transactions[i], r, creator)
 					}
@@ -247,7 +250,7 @@ func consensusCallbackBeginBlockFn(
 					if txIndex {
 						for _, tx := range evmBlock.Transactions {
 							// not skipped txs only
-							store.evm.SetTxPosition(tx.Hash(), txPositions[tx.Hash()])
+							store.evm.SetTxPosition(tx.Hash(), txPositions[tx.Hash()].TxPosition)
 						}
 
 						// Index receipts
@@ -266,6 +269,7 @@ func consensusCallbackBeginBlockFn(
 					store.SetBlockIndex(block.Atropos, blockCtx.Idx)
 					bs.LastBlock = blockCtx
 					store.SetBlockEpochState(bs, es)
+					store.EvmStore().SetCachedEvmBlock(blockCtx.Idx, evmBlock)
 
 					// Notify about new block and txs
 					if feed != nil {
@@ -286,11 +290,10 @@ func consensusCallbackBeginBlockFn(
 
 					store.commitEVM()
 
-					log.Info("New block", "index", blockCtx.Idx, "atropos", block.Atropos, "gas_used",
-						evmBlock.GasUsed, "skipped_txs", len(block.SkippedTxs), "txs", len(evmBlock.Transactions), "t", time.Since(start))
+					log.Info("New block", "index", blockCtx.Idx, "id", block.Atropos, "gas_used",
+						evmBlock.GasUsed, "skipped_txs", len(block.SkippedTxs), "txs", len(evmBlock.Transactions), "t", common.PrettyDuration(time.Since(start)))
 				}
-				// TODO: enable parallel block processing after more extensive testing
-				if false && confirmedEvents.Len() != 0 {
+				if confirmedEvents.Len() != 0 {
 					atomic.StoreUint32(blockBusyFlag, 1)
 					wg.Add(1)
 					err := parallelTasks.Enqueue(func() {
@@ -341,7 +344,7 @@ func spillBlockEvents(store *Store, block *inter.Block, network zilionixx.Rules)
 	return block, fullEvents
 }
 
-func mergeCheaters(a, b zilionbft.Cheaters) zilionbft.Cheaters {
+func mergeCheaters(a, b lachesis.Cheaters) lachesis.Cheaters {
 	if len(b) == 0 {
 		return a
 	}
@@ -349,7 +352,7 @@ func mergeCheaters(a, b zilionbft.Cheaters) zilionbft.Cheaters {
 		return b
 	}
 	aSet := a.Set()
-	merged := make(zilionbft.Cheaters, 0, len(b)+len(a))
+	merged := make(lachesis.Cheaters, 0, len(b)+len(a))
 	for _, v := range a {
 		merged = append(merged, v)
 	}

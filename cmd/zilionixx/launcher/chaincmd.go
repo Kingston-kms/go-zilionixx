@@ -16,7 +16,7 @@ var (
 		ArgsUsage: "<filename> (<filename 2> ... <filename N>) [check=false]",
 		Category:  "MISCELLANEOUS COMMANDS",
 		Description: `
-	zilionixx import events
+    zilionixx import events
 
 The import command imports events from an RLP-encoded files.
 Events are fully verified by default, unless overridden by check=false flag.`,
@@ -83,9 +83,9 @@ be gzipped
 
 		Subcommands: []cli.Command{
 			{
-				Name:      "evm",
-				Usage:     "Check EVM storage",
-				Action:    utils.MigrateFlags(checkEvm),
+				Name:   "evm",
+				Usage:  "Check EVM storage",
+				Action: utils.MigrateFlags(checkEvm),
 				Flags: []cli.Flag{
 					DataDirFlag,
 				},

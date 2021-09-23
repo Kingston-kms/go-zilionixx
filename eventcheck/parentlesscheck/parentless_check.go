@@ -1,9 +1,10 @@
 package parentlesscheck
 
 import (
-	"github.com/zilionixx/zilion-base/eventcheck/queuedcheck"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
+	"github.com/Fantom-foundation/lachesis-base/eventcheck/epochcheck"
+	"github.com/Fantom-foundation/lachesis-base/eventcheck/queuedcheck"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
 )
 
 type Checker struct {
@@ -13,7 +14,7 @@ type Checker struct {
 type LightCheck func(dag.Event) error
 
 type HeavyCheck interface {
-	Enqueue(tasks []queuedcheck.EventTask, onValidated func(ee []queuedcheck.EventTask)) error
+	Enqueue(tasks []queuedcheck.EventTask, onValidated func([]queuedcheck.EventTask)) error
 }
 
 type Callback struct {
@@ -31,22 +32,26 @@ func New(callback Callback) *Checker {
 }
 
 // Enqueue tries to fill gaps the fetcher's future import queue.
-func (c *Checker) Enqueue(tasks []queuedcheck.EventTask, checked func(ee []queuedcheck.EventTask)) error {
+func (c *Checker) Enqueue(tasks []queuedcheck.EventTask, checked func([]queuedcheck.EventTask)) error {
+	// Run light checks right away
 	passed := make([]queuedcheck.EventTask, 0, len(tasks))
-
-	for _, e := range tasks {
-		if len(c.callback.OnlyInterested(hash.Events{e.Event().ID()}))  == 0 {
-			checked([]queuedcheck.EventTask{e})
+	for _, t := range tasks {
+		// Filter already known events
+		if len(c.callback.OnlyInterested(hash.Events{t.Event().ID()})) == 0 {
+			t.SetResult(epochcheck.ErrNotRelevant)
+			checked([]queuedcheck.EventTask{t})
 			continue
 		}
 
-		err := c.callback.LightCheck(e.Event())
+		err := c.callback.LightCheck(t.Event())
 		if err != nil {
-			checked([]queuedcheck.EventTask{e})
+			t.SetResult(err)
+			checked([]queuedcheck.EventTask{t})
 			continue
 		}
-		passed = append(passed, e)
+		passed = append(passed, t)
 	}
 
+	// Run heavy check in parallel
 	return c.callback.HeavyCheck.Enqueue(passed, checked)
 }

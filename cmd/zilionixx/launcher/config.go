@@ -5,12 +5,16 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math/big"
 	"os"
+	"path"
 	"path/filepath"
 	"reflect"
 	"strings"
-	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/abft"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
@@ -18,8 +22,7 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/naoina/toml"
-	"github.com/zilionixx/zilion-base/abft"
-	"github.com/zilionixx/zilion-base/utils/cachescale"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
@@ -64,11 +67,40 @@ var (
 		Value: utils.DirectoryString(DefaultDataDir()),
 	}
 
+	CacheFlag = cli.IntFlag{
+		Name:  "cache",
+		Usage: "Megabytes of memory allocated to internal caching",
+		Value: DefaultCacheSize,
+	}
+
 	// GenesisFlag specifies network genesis configuration
 	GenesisFlag = cli.StringFlag{
 		Name:  "genesis",
 		Usage: "'path to genesis file' - sets the network genesis configuration.",
 	}
+
+	RPCGlobalGasCapFlag = cli.Uint64Flag{
+		Name:  "rpc.gascap",
+		Usage: "Sets a cap on gas that can be used in ftm_call/estimateGas (0=infinite)",
+		Value: gossip.DefaultConfig(cachescale.Identity).RPCGasCap,
+	}
+	RPCGlobalTxFeeCapFlag = cli.Float64Flag{
+		Name:  "rpc.txfeecap",
+		Usage: "Sets a cap on transaction fee (in FTM) that can be sent via the RPC APIs (0 = no cap)",
+		Value: gossip.DefaultConfig(cachescale.Identity).RPCTxFeeCap,
+	}
+
+	AllowedzilionixxGenesisHashes = map[uint64]hash.Hash{
+		zilionixx.MainNetworkID: hash.HexToHash("0x4a53c5445584b3bfc20dbfb2ec18ae20037c716f3ba2d9e1da768a9deca17cb4"),
+		zilionixx.TestNetworkID: hash.HexToHash("0xc4a5fc96e575a16a9a0c7349d44dc4d0f602a54e0a8543360c2fee4c3937b49e"),
+	}
+)
+
+const (
+	// DefaultCacheSize is calculated as memory consumption in a worst case scenario with default configuration
+	// Average memory consumption might be 3-5 times lower than the maximum
+	DefaultCacheSize  = 3200
+	ConstantCacheSize = 1024
 )
 
 // These settings ensure that TOML keys use the same names as Go struct fields.
@@ -95,11 +127,12 @@ type config struct {
 
 func (c *config) AppConfigs() integration.Configs {
 	return integration.Configs{
-		Zilionixx:         c.Zilionixx,
-		ZilionixxStore:    c.ZilionixxStore,
-		Lachesis:      c.Lachesis,
-		LachesisStore: c.LachesisStore,
-		VectorClock:   c.VectorClock,
+		Zilionixx:          c.Zilionixx,
+		ZilionixxStore:     c.ZilionixxStore,
+		Lachesis:       c.Lachesis,
+		LachesisStore:  c.LachesisStore,
+		VectorClock:    c.VectorClock,
+		AllowedGenesis: AllowedzilionixxGenesisHashes,
 	}
 }
 
@@ -147,32 +180,6 @@ func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {
 				return nil
 			},
 		}
-		store := genesisstore.NewMemStore()
-		genesis.Read(store)
-
-		myFile, err := os.Create("aaa.g")
-		genesisstore.WriteGenesisStore(myFile, store)
-	case ctx.GlobalIsSet(MainNetFlag.Name):
-		mainGenesisStore := makegenesis.MainnetGenesisStore(futils.ToFtm(1000000000), futils.ToFtm(5000000))
-		genesis = integration.InputGenesis{
-			Hash: mainGenesisStore.Hash(),
-			Read: func(store *genesisstore.Store) error {
-				buf := bytes.NewBuffer(nil)
-				err := mainGenesisStore.Export(buf)
-				if err != nil {
-					return err
-				}
-				return store.Import(buf)
-			},
-			Close: func() error {
-				return nil
-			},
-		}
-		store := genesisstore.NewMemStore()
-		genesis.Read(store)
-
-		myFile, _ := os.Create("mainnet.g")
-		genesisstore.WriteGenesisStore(myFile, store)
 	case ctx.GlobalIsSet(GenesisFlag.Name):
 		genesisPath := ctx.GlobalString(GenesisFlag.Name)
 
@@ -197,19 +204,18 @@ func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {
 }
 
 func setBootnodes(ctx *cli.Context, urls []string, cfg *node.Config) {
+	cfg.P2P.BootstrapNodesV5 = []*enode.Node{}
 	for _, url := range urls {
 		if url != "" {
-			//node, err := discv5.ParseNode(url)
-			node, err := enode.ParseV4(url)
+			node, err := enode.Parse(enode.ValidSchemes, url)
 			if err != nil {
 				log.Error("Bootstrap URL invalid", "enode", url, "err", err)
 				continue
 			}
-			log.Debug("Parse BootNode", "NODE", node)
-			//cfg.P2P.BootstrapNodesV5 = append(cfg.P2P.BootstrapNodesV5, node)
-			cfg.P2P.BootstrapNodes = append(cfg.P2P.BootstrapNodes, node)
+			cfg.P2P.BootstrapNodesV5 = append(cfg.P2P.BootstrapNodesV5, node)
 		}
 	}
+	cfg.P2P.BootstrapNodes = cfg.P2P.BootstrapNodesV5
 }
 
 func setDataDir(ctx *cli.Context, cfg *node.Config) {
@@ -224,25 +230,14 @@ func setDataDir(ctx *cli.Context, cfg *node.Config) {
 			log.Crit("Invalid flag", "flag", FakeNetFlag.Name, "err", err)
 		}
 		cfg.DataDir = filepath.Join(defaultDataDir, fmt.Sprintf("fakenet-%d", num))
-	case ctx.GlobalBool(utils.LegacyTestnetFlag.Name):
-		cfg.DataDir = filepath.Join(defaultDataDir, "testnet")
 	default:
 		cfg.DataDir = defaultDataDir
 	}
 }
 
 func setGPO(ctx *cli.Context, cfg *gasprice.Config) {
-	if ctx.GlobalIsSet(utils.LegacyGpoBlocksFlag.Name) {
-		cfg.Blocks = ctx.GlobalInt(utils.LegacyGpoBlocksFlag.Name)
-	}
-	if ctx.GlobalIsSet(utils.GpoBlocksFlag.Name) {
-		cfg.Blocks = ctx.GlobalInt(utils.GpoBlocksFlag.Name)
-	}
-	if ctx.GlobalIsSet(utils.LegacyGpoPercentileFlag.Name) {
-		cfg.Percentile = ctx.GlobalInt(utils.LegacyGpoPercentileFlag.Name)
-	}
-	if ctx.GlobalIsSet(utils.GpoPercentileFlag.Name) {
-		cfg.Percentile = ctx.GlobalInt(utils.GpoPercentileFlag.Name)
+	if ctx.GlobalIsSet(utils.GpoMaxGasPriceFlag.Name) {
+		cfg.MaxPrice = big.NewInt(ctx.GlobalInt64(utils.GpoMaxGasPriceFlag.Name))
 	}
 }
 
@@ -292,40 +287,14 @@ func setTxPool(ctx *cli.Context, cfg *evmcore.TxPoolConfig) {
 func gossipConfigWithFlags(ctx *cli.Context, src gossip.Config) (gossip.Config, error) {
 	cfg := src
 
-	// Avoid conflicting network flags
-	utils.CheckExclusive(ctx, FakeNetFlag, utils.DeveloperFlag, utils.LegacyTestnetFlag)
-	utils.CheckExclusive(ctx, FakeNetFlag, utils.DeveloperFlag, utils.ExternalSignerFlag) // Can't use both ephemeral unlocked and external signer
-
 	setGPO(ctx, &cfg.GPO)
 	setTxPool(ctx, &cfg.TxPool)
 
-	// TODO cache config
-	//if ctx.GlobalIsSet(utils.CacheFlag.Name) || ctx.GlobalIsSet(utils.CacheDatabaseFlag.Name) {
-	//	cfg.DatabaseCache = ctx.GlobalInt(utils.CacheFlag.Name) * ctx.GlobalInt(utils.CacheDatabaseFlag.Name) / 100
-	//}
-	//if ctx.GlobalIsSet(utils.CacheFlag.Name) || ctx.GlobalIsSet(CacheTrieFlag.Name) {
-	//	cfg.TrieCleanCache = ctx.GlobalInt(utils.CacheFlag.Name) * ctx.GlobalInt(CacheTrieFlag.Name) / 100
-	//}
-	//if ctx.GlobalIsSet(utils.CacheFlag.Name) || ctx.GlobalIsSet(CacheGCFlag.Name) {
-	//	cfg.TrieDirtyCache = ctx.GlobalInt(utils.CacheFlag.Name) * ctx.GlobalInt(CacheGCFlag.Name) / 100
-	//}
-
-	if ctx.GlobalIsSet(utils.VMEnableDebugFlag.Name) {
-		cfg.EnablePreimageRecording = ctx.GlobalBool(utils.VMEnableDebugFlag.Name)
+	if ctx.GlobalIsSet(RPCGlobalGasCapFlag.Name) {
+		cfg.RPCGasCap = ctx.GlobalUint64(RPCGlobalGasCapFlag.Name)
 	}
-
-	if ctx.GlobalIsSet(utils.EWASMInterpreterFlag.Name) {
-		cfg.EWASMInterpreter = ctx.GlobalString(utils.EWASMInterpreterFlag.Name)
-	}
-
-	if ctx.GlobalIsSet(utils.EVMInterpreterFlag.Name) {
-		cfg.EVMInterpreter = ctx.GlobalString(utils.EVMInterpreterFlag.Name)
-	}
-	if ctx.GlobalIsSet(utils.RPCGlobalGasCap.Name) {
-		cfg.RPCGasCap = ctx.GlobalUint64(utils.RPCGlobalGasCap.Name)
-	}
-	if ctx.GlobalIsSet(utils.RPCGlobalTxFeeCap.Name) {
-		cfg.RPCTxFeeCap = ctx.GlobalFloat64(utils.RPCGlobalTxFeeCap.Name)
+	if ctx.GlobalIsSet(RPCGlobalTxFeeCapFlag.Name) {
+		cfg.RPCTxFeeCap = ctx.GlobalFloat64(RPCGlobalTxFeeCapFlag.Name)
 	}
 
 	err := setValidator(ctx, &cfg.Emitter)
@@ -333,6 +302,14 @@ func gossipConfigWithFlags(ctx *cli.Context, src gossip.Config) (gossip.Config, 
 		return cfg, err
 	}
 
+	return cfg, nil
+}
+
+func gossipStoreConfigWithFlags(ctx *cli.Context, src gossip.StoreConfig) (gossip.StoreConfig, error) {
+	cfg := src
+	if !ctx.GlobalBool(utils.SnapshotFlag.Name) {
+		cfg.EVM.EnableSnapshots = false
+	}
 	return cfg, nil
 }
 
@@ -346,30 +323,35 @@ func nodeConfigWithFlags(ctx *cli.Context, cfg node.Config) node.Config {
 	return cfg
 }
 
+func cacheScaler(ctx *cli.Context) cachescale.Func {
+	if !ctx.GlobalIsSet(CacheFlag.Name) {
+		return cachescale.Identity
+	}
+	totalCache := ctx.GlobalInt(CacheFlag.Name)
+	if totalCache < DefaultCacheSize {
+		log.Crit("Invalid flag", "flag", CacheFlag.Name, "err", fmt.Sprintf("minimum cache size is %d MB", DefaultCacheSize))
+	}
+	return cachescale.Ratio{
+		Base:   DefaultCacheSize - ConstantCacheSize,
+		Target: uint64(totalCache - ConstantCacheSize),
+	}
+}
+
 func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 	// Defaults (low priority)
+	cacheRatio := cacheScaler(ctx)
 	cfg := config{
 		Node:          defaultNodeConfig(),
-		Zilionixx:         gossip.DefaultConfig(),
-		ZilionixxStore:    gossip.DefaultStoreConfig(),
+		Zilionixx:         gossip.DefaultConfig(cacheRatio),
+		ZilionixxStore:    gossip.DefaultStoreConfig(cacheRatio),
 		Lachesis:      abft.DefaultConfig(),
-		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
-		VectorClock:   vecmt.DefaultConfig(),
+		LachesisStore: abft.DefaultStoreConfig(cacheRatio),
+		VectorClock:   vecmt.DefaultConfig(cacheRatio),
 	}
+
 	if ctx.GlobalIsSet(FakeNetFlag.Name) {
 		_, num, _ := parseFakeGen(ctx.GlobalString(FakeNetFlag.Name))
-		cfg.Zilionixx = gossip.FakeConfig(num)
-	}
-
-	if ctx.GlobalIsSet(validatorIDFlag.Name) {
-		num := ctx.GlobalInt(validatorIDFlag.Name)
-		cfg.Zilionixx.Emitter.EmitIntervals.Max = 10 * time.Second
-		cfg.Zilionixx.Emitter.EmitIntervals.DoublesignProtection = 5 * time.Second
-
-		if num == 1 {
-			log.Info("DoubleSignProtection SET", "******", 0)
-			cfg.Zilionixx.Emitter.EmitIntervals.DoublesignProtection = 0
-		}
+		cfg.Zilionixx = gossip.FakeConfig(num, cacheRatio)
 	}
 
 	// Load config file (medium priority)
@@ -385,7 +367,14 @@ func mayMakeAllConfigs(ctx *cli.Context) (*config, error) {
 	if err != nil {
 		return nil, err
 	}
+	cfg.ZilionixxStore, err = gossipStoreConfigWithFlags(ctx, cfg.ZilionixxStore)
+	if err != nil {
+		return nil, err
+	}
 	cfg.Node = nodeConfigWithFlags(ctx, cfg.Node)
+	if cfg.Zilionixx.Emitter.Validator.ID != 0 && len(cfg.Zilionixx.Emitter.PrevEmittedEventFile.Path) == 0 {
+		cfg.Zilionixx.Emitter.PrevEmittedEventFile.Path = cfg.Node.ResolvePath(path.Join("emitter", fmt.Sprintf("last-%d", cfg.Zilionixx.Emitter.Validator.ID)))
+	}
 
 	if err := cfg.Zilionixx.Validate(); err != nil {
 		return nil, err
@@ -406,8 +395,8 @@ func defaultNodeConfig() node.Config {
 	cfg := NodeDefaultConfig
 	cfg.Name = clientIdentifier
 	cfg.Version = params.VersionWithCommit(gitCommit, gitDate)
-	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "znx", "dag", "sfc", "abft", "web3")
-	cfg.WSModules = append(cfg.WSModules, "eth", "znx", "dag", "sfc", "abft", "web3")
+	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
+	cfg.WSModules = append(cfg.WSModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
 	cfg.IPCPath = "zilionixx.ipc"
 	cfg.DataDir = DefaultDataDir()
 	return cfg

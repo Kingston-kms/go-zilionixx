@@ -4,12 +4,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/zilionixx/zilion-base/common/bigendian"
-	"github.com/zilionixx/zilion-base/kvdb"
-	"github.com/zilionixx/zilion-base/kvdb/flushable"
-	"github.com/zilionixx/zilion-base/kvdb/memorydb"
-	"github.com/zilionixx/zilion-base/kvdb/table"
-	"github.com/zilionixx/zilion-base/utils/wlru"
+	"github.com/Fantom-foundation/lachesis-base/common/bigendian"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/flushable"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/Fantom-foundation/lachesis-base/utils/wlru"
 	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/zilionixx/go-zilionixx/gossip/evmstore"
@@ -57,6 +57,7 @@ type Store struct {
 		EventsHeaders   *wlru.Cache  `cache:"-"` // store by pointer
 		Blocks          *wlru.Cache  `cache:"-"` // store by pointer
 		BlockHashes     *wlru.Cache  `cache:"-"` // store by pointer
+		EvmBlocks       *wlru.Cache  `cache:"-"` // store by pointer
 		BlockEpochState atomic.Value // store by value
 		HighestLamport  atomic.Value // store by value
 	}
@@ -100,6 +101,10 @@ func NewStore(dbs kvdb.FlushableDBProducer, cfg StoreConfig) *Store {
 	s.initCache()
 	s.evm = evmstore.NewStore(s.mainDB, cfg.EVM)
 	s.sfcapi = sfcapi.NewStore(s.table.SfcAPI)
+
+	if err := s.migrateData(); err != nil {
+		s.Log.Crit("Failed to migrate Gossip DB", "err", err)
+	}
 
 	return s
 }
@@ -152,6 +157,30 @@ func (s *Store) commitEVM() {
 	s.evm.Cap(s.cfg.MaxNonFlushedSize/3, s.cfg.MaxNonFlushedSize/4)
 }
 
+func (s *Store) Init() error {
+	if !s.cfg.EVM.EnableSnapshots {
+		return nil
+	}
+	// DB is being flushed in a middle of this call to limit memory usage of initial snapshot building
+	res := make(chan error)
+	go func() {
+		res <- s.EvmStore().InitEvmSnapshot(s.GetBlockState().FinalizedStateRoot)
+	}()
+	ticker := time.NewTicker(10 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			if s.IsCommitNeeded(false) {
+				_ = s.Commit()
+			}
+		case err := <-res:
+			_ = s.Commit()
+			return err
+		}
+	}
+}
+
 // Commit changes.
 func (s *Store) Commit() error {
 	s.prevFlushTime = time.Now()
@@ -159,6 +188,11 @@ func (s *Store) Commit() error {
 	// Flush the DBs
 	s.FlushBlockEpochState()
 	s.FlushHighestLamport()
+	es := s.getAnyEpochStore()
+	if es != nil {
+		es.FlushHeads()
+		es.FlushLastEvents()
+	}
 	return s.dbs.Flush(flushID)
 }
 

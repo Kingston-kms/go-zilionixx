@@ -2,25 +2,26 @@ package launcher
 
 import (
 	"bytes"
+	"path"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/Fantom-foundation/lachesis-base/utils/simplewlru"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/kvdb/table"
-	"github.com/zilionixx/zilion-base/utils/simplewlru"
 	"gopkg.in/urfave/cli.v1"
 
+	"github.com/zilionixx/go-zilionixx/integration"
 	"github.com/zilionixx/go-zilionixx/inter"
 )
 
 var (
 	emptyCodeHash = common.BytesToHash(crypto.Keccak256(nil))
-	emptyRoot     = common.HexToHash("56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421")
 	emptyHash     = common.Hash{}
 )
 
@@ -31,7 +32,8 @@ func checkEvm(ctx *cli.Context) error {
 
 	cfg := makeAllConfigs(ctx)
 
-	gdb, err := makeRawGossipStore(cfg.Node.DataDir, cfg)
+	rawProducer := integration.DBProducer(path.Join(cfg.Node.DataDir, "chaindata"), cacheScaler(ctx))
+	gdb, err := makeRawGossipStore(rawProducer, cfg)
 	if err != nil {
 		log.Crit("DB opening error", "datadir", cfg.Node.DataDir, "err", err)
 	}
@@ -50,6 +52,7 @@ func checkEvm(ctx *cli.Context) error {
 
 	log.Info("Checking every node hash")
 	nodeIt := evmt.NewIterator(nil, nil)
+	defer nodeIt.Release()
 	for nodeIt.Next() {
 		if len(nodeIt.Key()) != 32 {
 			continue
@@ -62,6 +65,7 @@ func checkEvm(ctx *cli.Context) error {
 
 	log.Info("Checking every code hash")
 	codeIt := table.New(evmt, []byte("c")).NewIterator(nil, nil)
+	defer codeIt.Release()
 	for codeIt.Next() {
 		if len(codeIt.Key()) != 32 {
 			continue
@@ -74,6 +78,7 @@ func checkEvm(ctx *cli.Context) error {
 
 	log.Info("Checking every preimage")
 	preimageIt := table.New(evmt, []byte("secure-key-")).NewIterator(nil, nil)
+	defer preimageIt.Release()
 	for preimageIt.Next() {
 		if len(preimageIt.Key()) != 32 {
 			continue

@@ -3,12 +3,12 @@ package integration
 import (
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/abft"
+	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/node"
 	"github.com/ethereum/go-ethereum/p2p/simulations/adapters"
 	"github.com/status-im/keycard-go/hexutils"
-	"github.com/zilionixx/zilion-base/abft"
-	"github.com/zilionixx/zilion-base/utils/cachescale"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
@@ -22,16 +22,16 @@ var (
 
 // NewIntegration creates gossip service for the integration test
 func NewIntegration(ctx *adapters.ServiceContext, genesis InputGenesis, stack *node.Node) *gossip.Service {
-	gossipCfg := gossip.FakeConfig(1)
+	gossipCfg := gossip.FakeConfig(1, cachescale.Identity)
 	cfg := Configs{
 		Zilionixx:         gossipCfg,
-		ZilionixxStore:    gossip.DefaultStoreConfig(),
+		ZilionixxStore:    gossip.DefaultStoreConfig(cachescale.Identity),
 		Lachesis:      abft.DefaultConfig(),
 		LachesisStore: abft.DefaultStoreConfig(cachescale.Identity),
-		VectorClock:   vecmt.DefaultConfig(),
+		VectorClock:   vecmt.DefaultConfig(cachescale.Identity),
 	}
 
-	engine, dagIndex, gdb, _, _, blockProc := MakeEngine(DBProducer(ctx.Config.DataDir), genesis, cfg)
+	engine, dagIndex, gdb, _, _, blockProc := MakeEngine(DBProducer(ctx.Config.DataDir, cachescale.Identity), genesis, cfg)
 	_ = genesis.Close()
 
 	valKeystore := valkeystore.NewDefaultMemKeystore()

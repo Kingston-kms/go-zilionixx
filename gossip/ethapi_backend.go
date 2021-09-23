@@ -7,9 +7,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -19,28 +21,24 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/pkg/errors"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/ethapi"
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
-	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 	"github.com/zilionixx/go-zilionixx/gossip/sfcapi"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/inter/drivertype"
 	"github.com/zilionixx/go-zilionixx/topicsdb"
 	"github.com/zilionixx/go-zilionixx/tracing"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 // EthAPIBackend implements ethapi.Backend.
 type EthAPIBackend struct {
-	extRPCEnabled bool
-	svc           *Service
-	state         *EvmStateReader
-	gpo           *gasprice.Oracle
+	extRPCEnabled       bool
+	svc                 *Service
+	state               *EvmStateReader
+	allowUnprotectedTxs bool
 }
 
 // ChainConfig returns the active chain configuration.
@@ -188,7 +186,7 @@ func (b *EthAPIBackend) GetHeads(ctx context.Context, epoch rpc.BlockNumber) (he
 	}
 
 	if requested == current {
-		heads = b.svc.store.GetHeads(requested)
+		heads = b.svc.store.GetHeadsSlice(requested)
 	} else {
 		err = errors.New("heads for previous epochs are not available")
 		return
@@ -266,6 +264,11 @@ func (b *EthAPIBackend) GetReceiptsByNumber(ctx context.Context, number rpc.Bloc
 	}
 
 	receipts := b.svc.store.evm.GetReceipts(idx.Block(number))
+	block := b.state.GetBlock(common.Hash{}, uint64(number))
+	err := receipts.DeriveFields(b.svc.store.GetRules().EvmChainConfig(), block.Hash, uint64(number), block.Transactions)
+	if err != nil {
+		return nil, err
+	}
 	return receipts, nil
 }
 
@@ -295,13 +298,16 @@ func (b *EthAPIBackend) GetTd(_ common.Hash) *big.Int {
 	return big.NewInt(0)
 }
 
-func (b *EthAPIBackend) GetEVM(ctx context.Context, msg evmcore.Message, state *state.StateDB, header *evmcore.EvmHeader) (*vm.EVM, func() error, error) {
-	state.SetBalance(msg.From(), math.MaxBig256)
+func (b *EthAPIBackend) GetEVM(ctx context.Context, msg evmcore.Message, state *state.StateDB, header *evmcore.EvmHeader, vmConfig *vm.Config) (*vm.EVM, func() error, error) {
 	vmError := func() error { return nil }
 
-	context := evmcore.NewEVMContext(msg, header, b.state, nil)
+	if vmConfig == nil {
+		vmConfig = &zilionixx.DefaultVMConfig
+	}
+	txContext := evmcore.NewEVMTxContext(msg)
+	context := evmcore.NewEVMBlockContext(header, b.state, nil)
 	config := b.ChainConfig()
-	return vm.NewEVM(context, state, config, zilionixx.DefaultVMConfig), vmError, nil
+	return vm.NewEVM(context, txContext, state, config, *vmConfig), vmError, nil
 }
 
 func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction) error {
@@ -404,12 +410,8 @@ func (b *EthAPIBackend) Progress() ethapi.PeerProgress {
 	}
 }
 
-func (b *EthAPIBackend) ProtocolVersion() int {
-	return int(ProtocolVersions[len(ProtocolVersions)-1])
-}
-
 func (b *EthAPIBackend) SuggestPrice(ctx context.Context) (*big.Int, error) {
-	return b.gpo.SuggestPrice(ctx)
+	return b.svc.gpo.SuggestPrice(), nil
 }
 
 func (b *EthAPIBackend) ChainDb() ethdb.Database {
@@ -422,6 +424,10 @@ func (b *EthAPIBackend) AccountManager() *accounts.Manager {
 
 func (b *EthAPIBackend) ExtRPCEnabled() bool {
 	return b.extRPCEnabled
+}
+
+func (b *EthAPIBackend) UnprotectedAllowed() bool {
+	return b.allowUnprotectedTxs
 }
 
 func (b *EthAPIBackend) RPCGasCap() uint64 {
@@ -536,14 +542,14 @@ func (b *EthAPIBackend) extendStaker(stakerID idx.ValidatorID, staker *sfcapi.Sf
 		staker.DelegatedMe = new(big.Int)
 	}
 	staker.IsValidator = es.Validators.Exists(stakerID)
+	if staker.Status == 1 {
+		staker.Status = 0
+	}
 	if staker.Status == drivertype.DoublesignBit {
 		staker.Status = sfcapi.ForkBit
 	}
 	if staker.Status == 1<<3 {
 		staker.Status = sfcapi.OfflineBit
-	}
-	if staker.Status == 1 {
-		staker.Status = 0
 	}
 	return staker
 }

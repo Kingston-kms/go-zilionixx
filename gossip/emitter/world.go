@@ -2,20 +2,21 @@ package emitter
 
 import (
 	"errors"
+	"math/big"
 	"sync"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	notify "github.com/ethereum/go-ethereum/event"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/valkeystore"
 	"github.com/zilionixx/go-zilionixx/vecmt"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 var (
@@ -30,6 +31,7 @@ type (
 
 		Check(e *inter.EventPayload, parents inter.Events) error
 		Process(*inter.EventPayload) error
+		Broadcast(*inter.EventPayload)
 		Build(*inter.MutableEventPayload, func()) error
 		DagIndex() *vecmt.Index
 
@@ -61,6 +63,7 @@ type Reader interface {
 	GetHeads(idx.Epoch) hash.Events
 	GetGenesisTime() inter.Timestamp
 	GetRules() zilionixx.Rules
+	GetRecommendedGasPrice() *big.Int
 }
 
 type TxPool interface {
@@ -74,4 +77,7 @@ type TxPool interface {
 	// SubscribeNewTxsNotify should return an event subscription of
 	// NewTxsNotify and send events to the given channel.
 	SubscribeNewTxsNotify(chan<- evmcore.NewTxsNotify) notify.Subscription
+
+	// Count returns the total number of transactions
+	Count() int
 }

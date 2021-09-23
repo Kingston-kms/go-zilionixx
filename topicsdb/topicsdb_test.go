@@ -2,16 +2,17 @@ package topicsdb
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
 	"sync"
 	"testing"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/require"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 
 	"github.com/zilionixx/go-zilionixx/logger"
 )
@@ -23,7 +24,7 @@ func (tt *Index) FindInBlocksAsync(ctx context.Context, from, to idx.Block, patt
 		return
 	}
 
-	err = checkPattern(pattern)
+	pattern, err = limitPattern(pattern)
 	if err != nil {
 		return
 	}
@@ -49,10 +50,6 @@ func (tt *Index) FindInBlocksAsync(ctx context.Context, from, to idx.Block, patt
 	}()
 
 	onMatched := func(rec *logrec) (gonext bool, err error) {
-		if rec.ID.BlockNumber() > uint64(to) {
-			return
-		}
-
 		wg.Add(1)
 		go func() {
 			rec.fetch(tt.table.Logrec)
@@ -63,7 +60,7 @@ func (tt *Index) FindInBlocksAsync(ctx context.Context, from, to idx.Block, patt
 		return
 	}
 
-	err = tt.searchLazy(ctx, pattern, uintToBytes(uint64(from)), onMatched)
+	err = tt.searchLazy(ctx, pattern, uintToBytes(uint64(from)), uint64(to), onMatched)
 	wg.Wait()
 
 	return
@@ -165,6 +162,29 @@ func TestIndexSearchMultyVariants(t *testing.T) {
 				require.NoError(err)
 				require.Equal(2, len(got))
 				check(require, got)
+			})
+
+			t.Run("With addresses and blocks", func(t *testing.T) {
+				require := require.New(t)
+
+				got1, err := method(nil, 2, 998, [][]common.Hash{
+					{addr1.Hash(), addr2.Hash(), addr3.Hash(), addr4.Hash()},
+					{hash1, hash2, hash3, hash4},
+					{},
+					{hash1, hash2, hash3, hash4},
+				})
+				require.NoError(err)
+				require.Equal(2, len(got1))
+				check(require, got1)
+
+				got2, err := method(nil, 2, 998, [][]common.Hash{
+					{addr4.Hash(), addr3.Hash(), addr2.Hash(), addr1.Hash()},
+					{hash1, hash2, hash3, hash4},
+					{},
+					{hash1, hash2, hash3, hash4},
+				})
+				require.NoError(err)
+				require.ElementsMatch(got1, got2)
 			})
 
 		})
@@ -288,6 +308,44 @@ func TestIndexSearchSimple(t *testing.T) {
 		})
 	}
 
+}
+
+func TestMaxTopicsCount(t *testing.T) {
+	logger.SetTestMode(t)
+
+	testdata := &types.Log{
+		BlockNumber: 1,
+		Address:     randAddress(),
+		Topics:      make([]common.Hash, MaxTopicsCount),
+	}
+	pattern := make([][]common.Hash, MaxTopicsCount+1)
+	pattern[0] = []common.Hash{testdata.Address.Hash()}
+	for i := range testdata.Topics {
+		testdata.Topics[i] = common.BytesToHash([]byte(fmt.Sprintf("topic%d", i)))
+		pattern[0] = append(pattern[0], testdata.Topics[i])
+		pattern[i+1] = []common.Hash{testdata.Topics[i]}
+	}
+
+	index := New(memorydb.New())
+	err := index.Push(testdata)
+	require.NoError(t, err)
+
+	for dsc, method := range map[string]func(context.Context, idx.Block, idx.Block, [][]common.Hash) ([]*types.Log, error){
+		"sync":  index.FindInBlocks,
+		"async": index.FindInBlocksAsync,
+	} {
+		t.Run(dsc, func(t *testing.T) {
+			require := require.New(t)
+
+			got, err := method(nil, 0, 0xffffffff, pattern)
+			require.NoError(err)
+			require.Equal(1, len(got))
+			require.Equal(MaxTopicsCount, len(got[0].Topics))
+		})
+	}
+
+	require.Equal(t, MaxTopicsCount+1, len(pattern))
+	require.Equal(t, MaxTopicsCount+1, len(pattern[0]))
 }
 
 func genTestData(count int) (

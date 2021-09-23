@@ -8,12 +8,12 @@ import (
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/utils"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type EVMModule struct{}
@@ -27,7 +27,7 @@ func (p *EVMModule) Start(block blockproc.BlockCtx, statedb *state.StateDB, read
 	if block.Idx != 0 {
 		prevBlockHash = reader.GetHeader(common.Hash{}, uint64(block.Idx-1)).Hash
 	}
-	return &ZilionixxEVMProcessor{
+	return &zilionixxEVMProcessor{
 		block:         block,
 		reader:        reader,
 		statedb:       statedb,
@@ -38,7 +38,7 @@ func (p *EVMModule) Start(block blockproc.BlockCtx, statedb *state.StateDB, read
 	}
 }
 
-type ZilionixxEVMProcessor struct {
+type zilionixxEVMProcessor struct {
 	block    blockproc.BlockCtx
 	reader   evmcore.DummyChain
 	statedb  *state.StateDB
@@ -55,29 +55,27 @@ type ZilionixxEVMProcessor struct {
 	receipts    types.Receipts
 }
 
-func (p *ZilionixxEVMProcessor) evmBlockWith(txs types.Transactions) *evmcore.EvmBlock {
-	return &evmcore.EvmBlock{
-		EvmHeader: evmcore.EvmHeader{
-			Number:     p.blockIdx,
-			Hash:       common.Hash(p.block.Atropos),
-			ParentHash: p.prevBlockHash,
-			Root:       common.Hash{},
-			TxHash:     common.Hash{},
-			Time:       p.block.Time,
-			Coinbase:   common.Address{},
-			GasLimit:   math.MaxUint64,
-			GasUsed:    p.gasUsed,
-		},
-		Transactions: txs,
+func (p *zilionixxEVMProcessor) evmBlockWith(txs types.Transactions) *evmcore.EvmBlock {
+	h := &evmcore.EvmHeader{
+		Number:     p.blockIdx,
+		Hash:       common.Hash(p.block.Atropos),
+		ParentHash: p.prevBlockHash,
+		Root:       common.Hash{},
+		Time:       p.block.Time,
+		Coinbase:   common.Address{},
+		GasLimit:   math.MaxUint64,
+		GasUsed:    p.gasUsed,
 	}
+
+	return evmcore.NewEvmBlock(h, txs)
 }
 
-func (p *ZilionixxEVMProcessor) Execute(txs types.Transactions, internal bool) types.Receipts {
+func (p *zilionixxEVMProcessor) Execute(txs types.Transactions, internal bool) types.Receipts {
 	evmProcessor := evmcore.NewStateProcessor(p.net.EvmChainConfig(), p.reader)
 
 	// Process txs
 	evmBlock := p.evmBlockWith(txs)
-	receipts, _, gasUsed, skipped, err := evmProcessor.Process(evmBlock, p.statedb, zilionixx.DefaultVMConfig, internal, func(log *types.Log, _ *state.StateDB) {
+	receipts, _, skipped, err := evmProcessor.Process(evmBlock, p.statedb, zilionixx.DefaultVMConfig, &p.gasUsed, internal, func(log *types.Log, _ *state.StateDB) {
 		p.onNewLog(log)
 	})
 	if err != nil {
@@ -91,7 +89,6 @@ func (p *ZilionixxEVMProcessor) Execute(txs types.Transactions, internal bool) t
 		}
 	}
 
-	p.gasUsed += gasUsed
 	p.incomingTxs = append(p.incomingTxs, txs...)
 	p.skippedTxs = append(p.skippedTxs, skipped...)
 	p.receipts = append(p.receipts, receipts...)
@@ -99,7 +96,7 @@ func (p *ZilionixxEVMProcessor) Execute(txs types.Transactions, internal bool) t
 	return receipts
 }
 
-func (p *ZilionixxEVMProcessor) Finalize() (evmBlock *evmcore.EvmBlock, skippedTxs []uint32, receipts types.Receipts) {
+func (p *zilionixxEVMProcessor) Finalize() (evmBlock *evmcore.EvmBlock, skippedTxs []uint32, receipts types.Receipts) {
 	evmBlock = p.evmBlockWith(
 		// Filter skipped transactions. Receipts are filtered already
 		inter.FilterSkippedTxs(p.incomingTxs, p.skippedTxs),

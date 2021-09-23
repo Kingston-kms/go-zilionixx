@@ -5,16 +5,17 @@ import (
 	"math/big"
 	"sync/atomic"
 
+	"github.com/Fantom-foundation/lachesis-base/gossip/dagprocessor"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
 
 	"github.com/zilionixx/go-zilionixx/eventcheck"
 	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 	"github.com/zilionixx/go-zilionixx/gossip/emitter"
 	"github.com/zilionixx/go-zilionixx/inter"
+	"github.com/zilionixx/go-zilionixx/utils/concurrent"
 )
 
 var (
@@ -89,6 +90,7 @@ func (s *Service) processSavedEvent(e *inter.EventPayload, es *blockproc.EpochSt
 
 // saveAndProcessEvent deletes event in a case if it fails validation during event processing
 func (s *Service) saveAndProcessEvent(e *inter.EventPayload, es *blockproc.EpochState) error {
+	fixEventTxHashes(e)
 	// indexing event
 	s.store.SetEvent(e)
 	defer s.dagIndexer.DropNotFlushed()
@@ -102,6 +104,23 @@ func (s *Service) saveAndProcessEvent(e *inter.EventPayload, es *blockproc.Epoch
 	// save event index after success
 	s.dagIndexer.Flush()
 	return nil
+}
+
+func processEventHeads(heads *concurrent.EventsSet, e *inter.EventPayload) *concurrent.EventsSet {
+	// track events with no descendants, i.e. "heads"
+	heads.Lock()
+	defer heads.Unlock()
+	heads.Val.Erase(e.Parents()...)
+	heads.Val.Add(e.ID())
+	return heads
+}
+
+func processLastEvent(lasts *concurrent.ValidatorEventsSet, e *inter.EventPayload) *concurrent.ValidatorEventsSet {
+	// set validator's last event. we don't care about forks, because this index is used only for emitter
+	lasts.Lock()
+	defer lasts.Unlock()
+	lasts.Val[e.Creator()] = e.ID()
+	return lasts
 }
 
 // processEvent extends the engine.Process with gossip-specific actions on each event processing
@@ -139,14 +158,10 @@ func (s *Service) processEvent(e *inter.EventPayload) error {
 
 	newEpoch := s.store.GetEpoch()
 
-	// track events with no descendants, i.e. heads
-	for _, parent := range e.Parents() {
-		s.store.DelHead(oldEpoch, parent)
-	}
-	s.store.AddHead(oldEpoch, e.ID())
-	// set validator's last event. we don't care about forks, because this index is used only for emitter
-	s.store.SetLastEvent(oldEpoch, e.Creator(), e.ID())
-	// update highest lamport
+	// index DAG heads and last events
+	s.store.SetHeads(oldEpoch, processEventHeads(s.store.GetHeads(oldEpoch), e))
+	s.store.SetLastEvents(oldEpoch, processLastEvent(s.store.GetLastEvents(oldEpoch), e))
+	// update highest Lamport
 	if newEpoch != oldEpoch {
 		s.store.SetHighestLamport(0)
 	} else if e.Lamport() > s.store.GetHighestLamport() {

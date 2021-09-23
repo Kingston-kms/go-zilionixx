@@ -20,8 +20,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/trie"
@@ -49,6 +49,22 @@ type (
 		Transactions types.Transactions
 	}
 )
+
+// NewEvmBlock constructor.
+func NewEvmBlock(h *EvmHeader, txs types.Transactions) *EvmBlock {
+	b := &EvmBlock{
+		EvmHeader:    *h,
+		Transactions: txs,
+	}
+
+	if len(txs) == 0 {
+		b.EvmHeader.TxHash = types.EmptyRootHash
+	} else {
+		b.EvmHeader.TxHash = types.DeriveSha(txs, new(trie.Trie))
+	}
+
+	return b
+}
 
 // ToEvmHeader converts inter.Block to EvmHeader.
 func ToEvmHeader(block *inter.Block, index idx.Block, prevHash hash.Event) *EvmHeader {
@@ -119,4 +135,12 @@ func (b *EvmBlock) EthBlock() *types.Block {
 		return nil
 	}
 	return types.NewBlock(b.EvmHeader.EthHeader(), b.Transactions, nil, nil, new(trie.Trie))
+}
+
+func (b *EvmBlock) EstimateSize() int {
+	est := 0
+	for _, tx := range b.Transactions {
+		est += len(tx.Data())
+	}
+	return est + b.Transactions.Len()*256
 }

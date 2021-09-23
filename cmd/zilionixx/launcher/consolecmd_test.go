@@ -47,6 +47,7 @@ at block: 1 ({{niltime}})
  datadir: {{.Datadir}}
  modules: {{apis}}
 
+To exit, press ctrl-d
 > {{.InputLine "exit"}}
 `)
 	cli.ExpectExit()
@@ -57,7 +58,7 @@ func TestIPCAttachWelcome(t *testing.T) {
 	// Configure the instance for IPC attachement
 	var ipc string
 	if runtime.GOOS == "windows" {
-		ipc = `\\.\pipe\zilionixx.ipc`
+		ipc = `\\.\pipe\lachesis.ipc`
 	} else {
 		ws := tmpdir(t)
 		defer os.RemoveAll(ws)
@@ -128,6 +129,7 @@ at block: 1 ({{niltime}}){{if ipc}}
  datadir: {{datadir}}{{end}}
  modules: {{apis}}
 
+To exit, press ctrl-d
 > {{.InputLine "exit" }}
 `)
 	attach.ExpectExit()

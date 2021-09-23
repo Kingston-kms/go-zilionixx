@@ -3,9 +3,9 @@ package emitter
 import (
 	"time"
 
-	"github.com/zilionixx/zilion-base/emitter/ancestor"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/emitter/ancestor"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 )
 
 // buildSearchStrategies returns a strategy for each parent search

@@ -3,14 +3,15 @@ package emitter
 import (
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/common/bigendian"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/zilionixx/zilion-base/common/bigendian"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
 
+	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
 	"github.com/zilionixx/go-zilionixx/eventcheck/gaspowercheck"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/utils"
@@ -149,28 +150,24 @@ func (em *Emitter) isMyTxTurn(txHash common.Hash, sender common.Address, account
 	return validators.GetID(idx.Validator(rounds[roundIndex])) == me
 }
 
-func (em *Emitter) addTxs(e *inter.MutableEventPayload, poolTxs map[common.Address]types.Transactions) {
-	if len(poolTxs) == 0 {
-		return
-	}
-
+func (em *Emitter) addTxs(e *inter.MutableEventPayload, sorted *types.TransactionsByPriceAndNonce) {
 	maxGasUsed := em.maxGasPowerToUse(e)
 	if maxGasUsed <= e.GasPowerUsed() {
 		return
 	}
 
 	// sort transactions by price and nonce
-	sorted := types.NewTransactionsByPriceAndNonce(em.world.TxSigner, poolTxs)
-	senderTxs := make(map[common.Address]int)
+	rules := em.world.GetRules()
+	softGasPriceLimit := em.world.GetRecommendedGasPrice()
 	for tx := sorted.Peek(); tx != nil; tx = sorted.Peek() {
-		// check we don't originate too many txs from the same sender
 		sender, _ := types.Sender(em.world.TxSigner, tx)
-		if senderTxs[sender] >= em.config.MaxTxsPerAddress {
+		// check transaction epoch rules
+		if epochcheck.CheckTxs(types.Transactions{tx}, rules) != nil {
 			sorted.Pop()
 			continue
 		}
-		// check transaction is not underpriced
-		if tx.GasPrice().Cmp(em.world.GetRules().Economy.MinGasPrice) < 0 {
+		// check transaction gas price against the soft limit
+		if tx.GasPrice().Cmp(softGasPriceLimit) < 0 {
 			sorted.Pop()
 			continue
 		}
@@ -202,7 +199,6 @@ func (em *Emitter) addTxs(e *inter.MutableEventPayload, poolTxs map[common.Addre
 		e.SetGasPowerUsed(e.GasPowerUsed() + tx.Gas())
 		e.SetGasPowerLeft(e.GasPowerLeft().Sub(tx.Gas()))
 		e.SetTxs(append(e.Txs(), tx))
-		senderTxs[sender]++
 		sorted.Shift()
 	}
 }

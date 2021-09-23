@@ -4,11 +4,11 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 // EmitIntervals is the configuration of emit intervals.
@@ -23,6 +23,11 @@ type EmitIntervals struct {
 type ValidatorConfig struct {
 	ID     idx.ValidatorID
 	PubKey validatorpk.PubKey
+}
+
+type PrevEmittedEventFile struct {
+	Path     string
+	SyncMode bool
 }
 
 // Config is the configuration of events emitter.
@@ -41,6 +46,10 @@ type Config struct {
 	LimitedTpsThreshold uint64
 	NoTxsThreshold      uint64
 	EmergencyThreshold  uint64
+
+	TxsCacheInvalidation time.Duration
+
+	PrevEmittedEventFile PrevEmittedEventFile
 }
 
 // DefaultConfig returns the default configurations for the events emitter.
@@ -49,20 +58,22 @@ func DefaultConfig() Config {
 		VersionToPublish: params.VersionWithMeta(),
 
 		EmitIntervals: EmitIntervals{
-			Min:                        200 * time.Millisecond,
-			Max:                        9 * time.Minute,
-			Confirming:                 200 * time.Millisecond,
+			Min:                        110 * time.Millisecond,
+			Max:                        10 * time.Minute,
+			Confirming:                 120 * time.Millisecond,
 			DoublesignProtection:       27 * time.Minute, // should be greater than MaxEmitInterval
 			ParallelInstanceProtection: 1 * time.Minute,
 		},
 
-		MaxTxsPerAddress: TxTurnNonces / 3,
+		MaxTxsPerAddress: TxTurnNonces,
 
 		MaxParents: 0,
 
 		LimitedTpsThreshold: zilionixx.DefaultEventGas * 120,
 		NoTxsThreshold:      zilionixx.DefaultEventGas * 30,
 		EmergencyThreshold:  zilionixx.DefaultEventGas * 5,
+
+		TxsCacheInvalidation: 200 * time.Millisecond,
 	}
 }
 

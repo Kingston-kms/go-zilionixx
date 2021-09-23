@@ -3,20 +3,20 @@ package topicsdb
 import (
 	"context"
 	"fmt"
+	"math"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/kvdb"
-	"github.com/zilionixx/zilion-base/kvdb/table"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 )
 
-const MaxTopicsCount = 0xff
+const MaxTopicsCount = math.MaxUint8
 
 var (
-	ErrTooManyTopics = fmt.Errorf("Too many topics")
-	ErrEmptyTopics   = fmt.Errorf("Empty topics")
+	ErrEmptyTopics = fmt.Errorf("Empty topics")
 )
 
 // Index is a specialized indexes for log records storing and fetching.
@@ -58,7 +58,8 @@ func (tt *Index) FindInBlocks(ctx context.Context, from, to idx.Block, pattern [
 
 // ForEach matches log records by pattern. 1st pattern element is an address.
 func (tt *Index) ForEach(ctx context.Context, pattern [][]common.Hash, onLog func(*types.Log) (gonext bool)) error {
-	if err := checkPattern(pattern); err != nil {
+	pattern, err := limitPattern(pattern)
+	if err != nil {
 		return err
 	}
 
@@ -72,7 +73,7 @@ func (tt *Index) ForEach(ctx context.Context, pattern [][]common.Hash, onLog fun
 		return
 	}
 
-	return tt.searchLazy(ctx, pattern, nil, onMatched)
+	return tt.searchLazy(ctx, pattern, nil, 0, onMatched)
 }
 
 // ForEachInBlocks matches log records of block range by pattern. 1st pattern element is an address.
@@ -81,15 +82,12 @@ func (tt *Index) ForEachInBlocks(ctx context.Context, from, to idx.Block, patter
 		return nil
 	}
 
-	if err := checkPattern(pattern); err != nil {
+	pattern, err := limitPattern(pattern)
+	if err != nil {
 		return err
 	}
 
 	onMatched := func(rec *logrec) (gonext bool, err error) {
-		if rec.ID.BlockNumber() > uint64(to) {
-			return
-		}
-
 		rec.fetch(tt.table.Logrec)
 		if rec.err != nil {
 			err = rec.err
@@ -99,26 +97,27 @@ func (tt *Index) ForEachInBlocks(ctx context.Context, from, to idx.Block, patter
 		return
 	}
 
-	return tt.searchLazy(ctx, pattern, uintToBytes(uint64(from)), onMatched)
+	return tt.searchLazy(ctx, pattern, uintToBytes(uint64(from)), uint64(to), onMatched)
 }
 
-func checkPattern(pattern [][]common.Hash) error {
+func limitPattern(pattern [][]common.Hash) (limited [][]common.Hash, err error) {
 	if len(pattern) > MaxTopicsCount {
-		return ErrTooManyTopics
+		limited = make([][]common.Hash, MaxTopicsCount)
+	} else {
+		limited = make([][]common.Hash, len(pattern))
 	}
+	copy(limited, pattern)
 
 	ok := false
-	for _, variants := range pattern {
-		if len(variants) > MaxTopicsCount {
-			return ErrTooManyTopics
-		}
+	for _, variants := range limited {
 		ok = ok || len(variants) > 0
 	}
 	if !ok {
-		return ErrEmptyTopics
+		err = ErrEmptyTopics
+		return
 	}
 
-	return nil
+	return
 }
 
 // MustPush calls Write() and panics if error.
@@ -132,17 +131,13 @@ func (tt *Index) MustPush(recs ...*types.Log) {
 // Write log record to database.
 func (tt *Index) Push(recs ...*types.Log) error {
 	for _, rec := range recs {
-		if len(rec.Topics) > MaxTopicsCount {
-			return ErrTooManyTopics
-		}
-
 		var (
 			id    = NewID(rec.BlockNumber, rec.TxHash, rec.Index)
 			count = posToBytes(uint8(len(rec.Topics)))
-			pos   int
+			pos   uint8
 		)
 		pushIndex := func(topic common.Hash) error {
-			key := topicKey(topic, uint8(pos), id)
+			key := topicKey(topic, pos, id)
 			if err := tt.table.Topic.Put(key, count); err != nil {
 				return err
 			}
@@ -155,7 +150,10 @@ func (tt *Index) Push(recs ...*types.Log) error {
 		}
 
 		buf := make([]byte, 0, common.HashLength*len(rec.Topics)+common.HashLength+common.AddressLength+len(rec.Data))
-		for _, topic := range rec.Topics {
+		for j, topic := range rec.Topics {
+			if j >= MaxTopicsCount {
+				break // to don't overflow the pos
+			}
 			if err := pushIndex(topic); err != nil {
 				return err
 			}

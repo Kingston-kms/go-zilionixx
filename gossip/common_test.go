@@ -9,6 +9,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/lachesis"
+	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -17,15 +21,12 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/utils/workers"
-	"github.com/zilionixx/zilion-base/zilionbft"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/utils"
+	"github.com/zilionixx/go-zilionixx/utils/gsignercache"
 	"github.com/zilionixx/go-zilionixx/zilionixx"
 	"github.com/zilionixx/go-zilionixx/zilionixx/genesis/gpos"
 )
@@ -82,7 +83,7 @@ func newTestEnv() *testEnv {
 	env := &testEnv{
 		blockProcModules: blockProc,
 		store:            store,
-		signer:           types.NewEIP155Signer(big.NewInt(int64(genesis.Rules.NetworkID))),
+		signer:           gsignercache.Wrap(types.NewEIP2930Signer(big.NewInt(int64(genesis.Rules.NetworkID)))),
 
 		lastBlock:     1,
 		lastState:     store.GetBlockState().FinalizedStateRoot,
@@ -120,7 +121,7 @@ func (env *testEnv) GetEvmStateReader() *EvmStateReader {
 // Note that onBlockEnd would be run async.
 func (env *testEnv) consensusCallbackBeginBlockFn(
 	onBlockEnd func(block *inter.Block, preInternalReceipts, internalReceipts, externalReceipts types.Receipts),
-) zilionbft.BeginBlockFn {
+) lachesis.BeginBlockFn {
 	const txIndex = true
 	callback := consensusCallbackBeginBlockFn(
 		env.blockProcTasks,
@@ -156,7 +157,7 @@ func (env *testEnv) ApplyBlock(spent time.Duration, txs ...*types.Transaction) (
 	}
 
 	beginBlock := env.consensusCallbackBeginBlockFn(onBlockEnd)
-	process := beginBlock(&zilionbft.Block{
+	process := beginBlock(&lachesis.Block{
 		Atropos: event.ID(),
 	})
 
@@ -276,7 +277,7 @@ func (env *testEnv) CallContract(ctx context.Context, call ethereum.CallMsg, blo
 // callContract implements common code between normal and pending contract calls.
 // state is modified during execution, make sure to copy it if necessary.
 func (env *testEnv) callContract(
-	ctx context.Context, call ethereum.CallMsg, block *evmcore.EvmBlock, statedb *state.StateDB,
+	ctx context.Context, call ethereum.CallMsg, block *evmcore.EvmBlock, state *state.StateDB,
 ) (
 	ret []byte, usedGas uint64, failed bool, err error,
 ) {
@@ -291,15 +292,16 @@ func (env *testEnv) callContract(
 		call.Value = new(big.Int)
 	}
 	// Set infinite balance to the fake caller account.
-	from := statedb.GetOrNewStateObject(call.From)
+	from := state.GetOrNewStateObject(call.From)
 	from.SetBalance(big.NewInt(math.MaxInt64))
 
 	msg := callmsg{call}
 
-	evmContext := evmcore.NewEVMContext(msg, block.Header(), env.GetEvmStateReader(), &call.From)
 	// Create a new environment which holds all relevant information
 	// about the transaction and calling mechanisms.
-	vmenv := vm.NewEVM(evmContext, statedb, env.store.GetRules().EvmChainConfig(), zilionixx.DefaultVMConfig)
+	txContext := evmcore.NewEVMTxContext(msg)
+	context := evmcore.NewEVMBlockContext(block.Header(), env.GetEvmStateReader(), nil)
+	vmenv := vm.NewEVM(context, txContext, state, env.store.GetRules().EvmChainConfig(), zilionixx.DefaultVMConfig)
 	gaspool := new(evmcore.GasPool).AddGas(math.MaxUint64)
 	res, err := evmcore.NewStateTransition(vmenv, msg, gaspool).TransitionDb()
 
@@ -372,11 +374,12 @@ type callmsg struct {
 	ethereum.CallMsg
 }
 
-func (m callmsg) From() common.Address { return m.CallMsg.From }
-func (m callmsg) Nonce() uint64        { return 0 }
-func (m callmsg) CheckNonce() bool     { return false }
-func (m callmsg) To() *common.Address  { return m.CallMsg.To }
-func (m callmsg) GasPrice() *big.Int   { return m.CallMsg.GasPrice }
-func (m callmsg) Gas() uint64          { return m.CallMsg.Gas }
-func (m callmsg) Value() *big.Int      { return m.CallMsg.Value }
-func (m callmsg) Data() []byte         { return m.CallMsg.Data }
+func (m callmsg) From() common.Address         { return m.CallMsg.From }
+func (m callmsg) To() *common.Address          { return m.CallMsg.To }
+func (m callmsg) GasPrice() *big.Int           { return m.CallMsg.GasPrice }
+func (m callmsg) Gas() uint64                  { return m.CallMsg.Gas }
+func (m callmsg) Value() *big.Int              { return m.CallMsg.Value }
+func (m callmsg) Nonce() uint64                { return 0 }
+func (m callmsg) CheckNonce() bool             { return false }
+func (m callmsg) Data() []byte                 { return m.CallMsg.Data }
+func (m callmsg) AccessList() types.AccessList { return nil }

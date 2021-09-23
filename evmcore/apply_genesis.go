@@ -23,9 +23,9 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 	"github.com/zilionixx/go-zilionixx/zilionixx/genesis"
 )
 

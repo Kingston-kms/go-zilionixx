@@ -1,7 +1,7 @@
 package eventcheck
 
 import (
-	base "github.com/zilionixx/zilion-base/eventcheck"
+	base "github.com/Fantom-foundation/lachesis-base/eventcheck"
 
 	"github.com/zilionixx/go-zilionixx/eventcheck/epochcheck"
 )

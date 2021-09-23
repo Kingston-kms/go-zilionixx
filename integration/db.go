@@ -4,22 +4,25 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/leveldb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/memorydb"
+	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
 	"github.com/syndtr/goleveldb/leveldb/opt"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
-	"github.com/zilionixx/zilion-base/kvdb"
-	"github.com/zilionixx/zilion-base/kvdb/leveldb"
-	"github.com/zilionixx/zilion-base/kvdb/memorydb"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
 )
 
-func DBProducer(chaindataDir string) kvdb.IterableDBProducer {
+func DBProducer(chaindataDir string, scale cachescale.Func) kvdb.IterableDBProducer {
 	if chaindataDir == "inmemory" || chaindataDir == "" {
 		return memorydb.NewProducer("")
 	}
 
-	return leveldb.NewProducer(chaindataDir, dbCacheSize)
+	return leveldb.NewProducer(chaindataDir, func(name string) int {
+		return dbCacheSize(name, scale.I)
+	})
 }
 
 func CheckDBList(names []string) error {
@@ -33,8 +36,8 @@ func CheckDBList(names []string) error {
 	if !namesMap["gossip"] {
 		return errors.New("gossip DB is not found")
 	}
-	if !namesMap["zilionixx"] {
-		return errors.New("zilionixx DB is not found")
+	if !namesMap["lachesis"] {
+		return errors.New("lachesis DB is not found")
 	}
 	if !namesMap["genesis"] {
 		return errors.New("genesis DB is not found")
@@ -42,20 +45,20 @@ func CheckDBList(names []string) error {
 	return nil
 }
 
-func dbCacheSize(name string) int {
+func dbCacheSize(name string, scale func(int) int) int {
 	if name == "gossip" {
-		return 64 * opt.MiB
+		return scale(128 * opt.MiB)
 	}
-	if name == "zilionixx" {
-		return 4 * opt.MiB
+	if name == "lachesis" {
+		return scale(4 * opt.MiB)
 	}
-	if strings.HasPrefix(name, "zilionixx-") {
-		return 8 * opt.MiB
+	if strings.HasPrefix(name, "lachesis-") {
+		return scale(8 * opt.MiB)
 	}
 	if strings.HasPrefix(name, "gossip-") {
-		return 8 * opt.MiB
+		return scale(8 * opt.MiB)
 	}
-	return 2 * opt.MiB
+	return scale(2 * opt.MiB)
 }
 
 func dropAllDBs(producer kvdb.IterableDBProducer) {

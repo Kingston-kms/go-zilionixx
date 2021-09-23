@@ -1,16 +1,16 @@
 package vecmt
 
 import (
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
-	"github.com/zilionixx/zilion-base/kvdb"
-	"github.com/zilionixx/zilion-base/kvdb/table"
-	"github.com/zilionixx/zilion-base/utils/cachescale"
-	"github.com/zilionixx/zilion-base/utils/wlru"
-	"github.com/zilionixx/zilion-base/vecengine"
-	"github.com/zilionixx/zilion-base/vecfc"
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
+	"github.com/Fantom-foundation/lachesis-base/kvdb/table"
+	"github.com/Fantom-foundation/lachesis-base/utils/cachescale"
+	"github.com/Fantom-foundation/lachesis-base/utils/wlru"
+	"github.com/Fantom-foundation/lachesis-base/vecengine"
+	"github.com/Fantom-foundation/lachesis-base/vecfc"
 )
 
 // IndexCacheConfig - config for cache sizes of Engine
@@ -49,11 +49,11 @@ type Index struct {
 }
 
 // DefaultConfig returns default index config
-func DefaultConfig() IndexConfig {
+func DefaultConfig(scale cachescale.Func) IndexConfig {
 	return IndexConfig{
-		Fc: vecfc.DefaultConfig(cachescale.Identity),
+		Fc: vecfc.DefaultConfig(scale),
 		Caches: IndexCacheConfig{
-			HighestBeforeTimeSize: 160 * 1024,
+			HighestBeforeTimeSize: scale.U(160 * 1024),
 		},
 	}
 }

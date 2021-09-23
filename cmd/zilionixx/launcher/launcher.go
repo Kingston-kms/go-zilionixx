@@ -42,41 +42,52 @@ var (
 	// The app that holds all commands and flags.
 	app = flags.NewApp(gitCommit, gitDate, "the go-zilionixx command line interface")
 
-	testFlags    []cli.Flag
-	mainnetFlags []cli.Flag
-	nodeFlags    []cli.Flag
-	rpcFlags     []cli.Flag
-	metricsFlags []cli.Flag
+	nodeFlags        []cli.Flag
+	testFlags        []cli.Flag
+	gpoFlags         []cli.Flag
+	accountFlags     []cli.Flag
+	performanceFlags []cli.Flag
+	networkingFlags  []cli.Flag
+	txpoolFlags      []cli.Flag
+	zilionixxFlags       []cli.Flag
+	legacyRpcFlags   []cli.Flag
+	rpcFlags         []cli.Flag
+	metricsFlags     []cli.Flag
 )
 
-// init the CLI app.
-func init() {
-	overrideFlags()
-	overrideParams()
-
+func initFlags() {
 	// Flags for testing purpose.
 	testFlags = []cli.Flag{
 		FakeNetFlag,
 	}
 
-	mainnetFlags = []cli.Flag{
-		MainNetFlag,
-	}
-
 	// Flags that configure the node.
-	nodeFlags = []cli.Flag{
-		GenesisFlag,
-		utils.IdentityFlag,
+	gpoFlags = []cli.Flag{
+		utils.GpoMaxGasPriceFlag,
+	}
+	accountFlags = []cli.Flag{
 		utils.UnlockedAccountFlag,
 		utils.PasswordFileFlag,
-		utils.BootnodesFlag,
-		utils.LegacyBootnodesV4Flag,
-		utils.LegacyBootnodesV5Flag,
-		DataDirFlag,
-		utils.KeyStoreDirFlag,
 		utils.ExternalSignerFlag,
-		utils.NoUSBFlag,
-		utils.SmartCardDaemonPathFlag,
+		utils.InsecureUnlockAllowedFlag,
+	}
+	performanceFlags = []cli.Flag{
+		CacheFlag,
+		utils.SnapshotFlag,
+	}
+	networkingFlags = []cli.Flag{
+		utils.BootnodesFlag,
+		utils.ListenPortFlag,
+		utils.MaxPeersFlag,
+		utils.MaxPendingPeersFlag,
+		utils.NATFlag,
+		utils.NoDiscoverFlag,
+		utils.DiscoveryV5Flag,
+		utils.NetrestrictFlag,
+		utils.NodeKeyFileFlag,
+		utils.NodeKeyHexFlag,
+	}
+	txpoolFlags = []cli.Flag{
 		utils.TxPoolLocalsFlag,
 		utils.TxPoolNoLocalsFlag,
 		utils.TxPoolJournalFlag,
@@ -88,37 +99,30 @@ func init() {
 		utils.TxPoolAccountQueueFlag,
 		utils.TxPoolGlobalQueueFlag,
 		utils.TxPoolLifetimeFlag,
+	}
+	zilionixxFlags = []cli.Flag{
+		GenesisFlag,
+		utils.IdentityFlag,
+		DataDirFlag,
+		utils.MinFreeDiskSpaceFlag,
+		utils.KeyStoreDirFlag,
+		utils.USBFlag,
+		utils.SmartCardDaemonPathFlag,
 		utils.ExitWhenSyncedFlag,
-		utils.CacheFlag,
-		utils.CacheDatabaseFlag,
-		utils.CacheTrieFlag,
-		utils.CacheGCFlag,
-		utils.CacheNoPrefetchFlag,
-		utils.ListenPortFlag,
-		utils.MaxPeersFlag,
-		utils.MaxPendingPeersFlag,
-		utils.NATFlag,
-		utils.NoDiscoverFlag,
-		utils.DiscoveryV5Flag,
-		utils.NetrestrictFlag,
-		utils.NodeKeyFileFlag,
-		utils.NodeKeyHexFlag,
-		utils.VMEnableDebugFlag,
-		utils.NetworkIdFlag,
-		utils.EthStatsURLFlag,
-		utils.NoCompactionFlag,
-		utils.GpoBlocksFlag,
-		utils.LegacyGpoBlocksFlag,
-		utils.GpoPercentileFlag,
-		utils.LegacyGpoPercentileFlag,
-		utils.GpoMaxGasPriceFlag,
-		utils.EWASMInterpreterFlag,
-		utils.EVMInterpreterFlag,
 		utils.LightKDFFlag,
 		configFileFlag,
 		validatorIDFlag,
 		validatorPubkeyFlag,
 		validatorPasswordFlag,
+	}
+	legacyRpcFlags = []cli.Flag{
+		utils.NoUSBFlag,
+		utils.LegacyRPCEnabledFlag,
+		utils.LegacyRPCListenAddrFlag,
+		utils.LegacyRPCPortFlag,
+		utils.LegacyRPCCORSDomainFlag,
+		utils.LegacyRPCVirtualHostsFlag,
+		utils.LegacyRPCApiFlag,
 	}
 
 	rpcFlags = []cli.Flag{
@@ -127,30 +131,21 @@ func init() {
 		utils.HTTPPortFlag,
 		utils.HTTPCORSDomainFlag,
 		utils.HTTPVirtualHostsFlag,
-		utils.LegacyRPCEnabledFlag,
-		utils.LegacyRPCListenAddrFlag,
-		utils.LegacyRPCPortFlag,
-		utils.LegacyRPCCORSDomainFlag,
-		utils.LegacyRPCVirtualHostsFlag,
 		utils.GraphQLEnabledFlag,
 		utils.GraphQLCORSDomainFlag,
 		utils.GraphQLVirtualHostsFlag,
 		utils.HTTPApiFlag,
-		utils.LegacyRPCApiFlag,
+		utils.HTTPPathPrefixFlag,
 		utils.WSEnabledFlag,
 		utils.WSListenAddrFlag,
-		utils.LegacyWSListenAddrFlag,
 		utils.WSPortFlag,
-		utils.LegacyWSPortFlag,
 		utils.WSApiFlag,
-		utils.LegacyWSApiFlag,
 		utils.WSAllowedOriginsFlag,
-		utils.LegacyWSAllowedOriginsFlag,
+		utils.WSPathPrefixFlag,
 		utils.IPCDisabledFlag,
 		utils.IPCPathFlag,
-		utils.InsecureUnlockAllowedFlag,
-		utils.RPCGlobalGasCap,
-		utils.RPCGlobalTxFeeCap,
+		RPCGlobalGasCapFlag,
+		RPCGlobalTxFeeCapFlag,
 	}
 
 	metricsFlags = []cli.Flag{
@@ -166,9 +161,26 @@ func init() {
 		tracing.EnableFlag,
 	}
 
+	nodeFlags = []cli.Flag{}
+	nodeFlags = append(nodeFlags, gpoFlags...)
+	nodeFlags = append(nodeFlags, accountFlags...)
+	nodeFlags = append(nodeFlags, performanceFlags...)
+	nodeFlags = append(nodeFlags, networkingFlags...)
+	nodeFlags = append(nodeFlags, txpoolFlags...)
+	nodeFlags = append(nodeFlags, zilionixxFlags...)
+	nodeFlags = append(nodeFlags, legacyRpcFlags...)
+}
+
+// init the CLI app.
+func init() {
+	overrideFlags()
+	overrideParams()
+
+	initFlags()
+
 	// App.
 
-	app.Action = zilionixxMain
+	app.Action = lachesisMain
 	app.Version = params.VersionWithCommit(gitCommit, gitDate)
 	app.HideVersion = true // we have a command to print the version
 	app.Commands = []cli.Command{
@@ -191,11 +203,12 @@ func init() {
 		importCommand,
 		exportCommand,
 		checkCommand,
+		// See snapshot.go
+		snapshotCommand,
 	}
 	sort.Sort(cli.CommandsByName(app.Commands))
 
 	app.Flags = append(app.Flags, testFlags...)
-	app.Flags = append(app.Flags, mainnetFlags...)
 	app.Flags = append(app.Flags, nodeFlags...)
 	app.Flags = append(app.Flags, rpcFlags...)
 	app.Flags = append(app.Flags, consoleFlags...)
@@ -229,7 +242,7 @@ func Launch(args []string) error {
 // zilionixx is the main entry point into the system if no special subcommand is ran.
 // It creates a default node based on the command line arguments and runs it in
 // blocking mode, waiting for it to be shut down.
-func zilionixxMain(ctx *cli.Context) error {
+func lachesisMain(ctx *cli.Context) error {
 	if args := ctx.Args(); len(args) > 0 {
 		return fmt.Errorf("invalid command: %q", args[0])
 	}
@@ -252,7 +265,6 @@ func zilionixxMain(ctx *cli.Context) error {
 
 func makeNode(ctx *cli.Context, cfg *config, genesis integration.InputGenesis) (*node.Node, *gossip.Service, func()) {
 	// check errlock file
-	// TODO: do the same with with stack.OpenDatabaseWithFreezer()
 	errlock.SetDefaultDatadir(cfg.Node.DataDir)
 	errlock.Check()
 
@@ -262,19 +274,17 @@ func makeNode(ctx *cli.Context, cfg *config, genesis integration.InputGenesis) (
 	if err := os.MkdirAll(chaindataDir, 0700); err != nil {
 		utils.Fatalf("Failed to create chaindata directory: %v", err)
 	}
-	engine, dagIndex, gdb, cdb, genesisStore, blockProc := integration.MakeEngine(integration.DBProducer(chaindataDir), genesis, cfg.AppConfigs())
+	engine, dagIndex, gdb, cdb, genesisStore, blockProc := integration.MakeEngine(integration.DBProducer(chaindataDir, cacheScaler(ctx)), genesis, cfg.AppConfigs())
 	_ = genesis.Close()
 	metrics.SetDataDir(cfg.Node.DataDir)
 
 	valKeystore := valkeystore.NewDefaultFileKeystore(path.Join(getValKeystoreDir(cfg.Node), "validator"))
 	valPubkey := cfg.Zilionixx.Emitter.Validator.PubKey
-
-	/*
-		if key := getFakeValidatorKey(ctx); key != nil && cfg.Zilionixx.Emitter.Validator.ID != 0 {
-			addFakeValidatorKey(ctx, key, valPubkey, valKeystore)
-			coinbase := integration.SetAccountKey(stack.AccountManager(), key, "fakepassword")
-			log.Info("Unlocked fake validator account", "address", coinbase.Address.Hex())
-		}*/
+	if key := getFakeValidatorKey(ctx); key != nil && cfg.Zilionixx.Emitter.Validator.ID != 0 {
+		addFakeValidatorKey(ctx, key, valPubkey, valKeystore)
+		coinbase := integration.SetAccountKey(stack.AccountManager(), key, "fakepassword")
+		log.Info("Unlocked fake validator account", "address", coinbase.Address.Hex())
+	}
 
 	// unlock validator key
 	if !valPubkey.Empty() {
@@ -323,7 +333,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	debug.Memsize.Add("node", stack)
 
 	// Start up the node itself
-	utils.StartNode(stack)
+	utils.StartNode(ctx, stack)
 
 	// Unlock any account specifically requested
 	unlockAccounts(ctx, stack)

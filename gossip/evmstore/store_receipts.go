@@ -5,9 +5,9 @@ package evmstore
 */
 
 import (
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/zilionixx/zilion-base/inter/idx"
 )
 
 // SetReceipts stores transaction receipts.

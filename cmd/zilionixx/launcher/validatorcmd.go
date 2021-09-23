@@ -10,7 +10,6 @@ import (
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/status-im/keycard-go/hexutils"
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
@@ -39,7 +38,7 @@ Note that exporting your key in unencrypted format is NOT supported.
 
 Keys are stored under <DATADIR>/keystore/validator.
 It is safe to transfer the entire directory or the individual keys therein
-between Zilionixx nodes by simply copying.
+between zilionixx nodes by simply copying.
 
 Make sure you backup your keys regularly.`,
 		Subcommands: []cli.Command{
@@ -116,7 +115,6 @@ func validatorKeyCreate(ctx *cli.Context) error {
 	}
 
 	fmt.Printf("\nYour new key was generated\n\n")
-	fmt.Printf("Private key:                 %s\n", hexutils.BytesToHex(privateKey))
 	fmt.Printf("Public key:                  %s\n", publicKey.String())
 	fmt.Printf("Path of the secret key file: %s\n\n", valKeystore.PathOf(publicKey))
 	fmt.Printf("- You can share your public key with anyone. Others need it to validate messages from you.\n")

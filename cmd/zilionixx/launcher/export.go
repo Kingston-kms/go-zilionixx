@@ -10,14 +10,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/kvdb"
 	"github.com/ethereum/go-ethereum/cmd/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/status-im/keycard-go/hexutils"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/kvdb"
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/zilionixx/go-zilionixx/gossip"
@@ -40,7 +40,8 @@ func exportEvents(ctx *cli.Context) error {
 
 	cfg := makeAllConfigs(ctx)
 
-	gdb, err := makeRawGossipStore(cfg.Node.DataDir, cfg)
+	rawProducer := integration.DBProducer(path.Join(cfg.Node.DataDir, "chaindata"), cacheScaler(ctx))
+	gdb, err := makeRawGossipStore(rawProducer, cfg)
 	if err != nil {
 		log.Crit("DB opening error", "datadir", cfg.Node.DataDir, "err", err)
 	}
@@ -112,8 +113,7 @@ func checkStateInitialized(rawProducer kvdb.IterableDBProducer) error {
 	return errors.New("datadir is not initialized")
 }
 
-func makeRawGossipStore(dataDir string, cfg *config) (*gossip.Store, error) {
-	rawProducer := integration.DBProducer(path.Join(dataDir, "chaindata"))
+func makeRawGossipStore(rawProducer kvdb.IterableDBProducer, cfg *config) (*gossip.Store, error) {
 	if err := checkStateInitialized(rawProducer); err != nil {
 		return nil, err
 	}

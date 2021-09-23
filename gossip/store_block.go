@@ -1,9 +1,9 @@
 package gossip
 
 import (
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 )
@@ -54,6 +54,7 @@ func (s *Store) GetBlock(n idx.Block) *inter.Block {
 
 func (s *Store) ForEachBlock(fn func(index idx.Block, block *inter.Block)) {
 	it := s.table.Blocks.NewIterator(nil, nil)
+	defer it.Release()
 	for it.Next() {
 		var block inter.Block
 		err := rlp.DecodeBytes(it.Value(), &block)

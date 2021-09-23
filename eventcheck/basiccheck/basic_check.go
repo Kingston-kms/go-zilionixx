@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math"
 
-	base "github.com/zilionixx/zilion-base/eventcheck/basiccheck"
+	base "github.com/Fantom-foundation/lachesis-base/eventcheck/basiccheck"
 	"github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
@@ -37,7 +37,7 @@ func (v *Checker) validateTx(tx *types.Transaction) error {
 		return ErrNegativeValue
 	}
 	// Ensure the transaction has more gas than the basic tx fee.
-	intrGas, err := evmcore.IntrinsicGas(tx.Data(), tx.To() == nil)
+	intrGas, err := evmcore.IntrinsicGas(tx.Data(), tx.AccessList(), tx.To() == nil)
 	if err != nil {
 		return err
 	}

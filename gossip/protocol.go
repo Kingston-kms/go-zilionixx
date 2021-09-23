@@ -1,11 +1,11 @@
 package gossip
 
 import (
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	notify "github.com/ethereum/go-ethereum/event"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/evmcore"
 	"github.com/zilionixx/go-zilionixx/inter"
@@ -13,17 +13,17 @@ import (
 
 // Constants to match up protocol versions and messages
 const (
-	zilionixx62 = 62 // derived from eth62
+	ProtocolVersion = 62 // derived from eth62
 )
 
-// protocolName is the official short name of the protocol used during capability negotiation.
-const protocolName = "zilionixx"
+// ProtocolName is the official short name of the protocol used during capability negotiation.
+const ProtocolName = "zilionixx"
 
 // ProtocolVersions are the supported versions of the protocol (first is primary).
-var ProtocolVersions = []uint{zilionixx62}
+var ProtocolVersions = []uint{ProtocolVersion}
 
 // protocolLengths are the number of implemented message corresponding to different protocol versions.
-var protocolLengths = map[uint]uint64{zilionixx62: EventsStreamResponse + 1}
+var protocolLengths = map[uint]uint64{ProtocolVersion: EventsStreamResponse + 1}
 
 const protocolMaxMsgSize = 10 * 1024 * 1024 // Maximum cap on the size of a protocol message
 

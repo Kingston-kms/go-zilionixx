@@ -1,10 +1,10 @@
 # Zilionixx
 
-EVM-compatible chain secured by the Zilion consensus algorithm.
+EVM-compatible chain secured by the Lachesis consensus algorithm.
 
 ## Building the source
 
-Building `Zilionixx` requires both a Go (version 1.14 or later) and a C compiler. You can install
+Building `zilionixx` requires both a Go (version 1.14 or later) and a C compiler. You can install
 them using your favourite package manager. Once the dependencies are installed, run
 
 ```shell
@@ -120,7 +120,7 @@ ok  	github.com/zilionixx/go-zilionixx/integration	21.640s
 
 Also it is tested with [fuzzing](./FUZZING.md).
 
-### Zilionixxting a private network (fakenet)
+### zilionixxting a private network (fakenet)
 
 Fakenet is a private network optimized for your private testing.
 It'll generate a genesis containing N validators with equal stakes.
@@ -161,7 +161,7 @@ For the testing purposes, the full demo may be launched using:
 
 ```shell
 cd demo/
-./start.sh # start the Zilionixx processes
+./start.sh # start the zilionixx processes
 ./stop.sh # stop the demo
 ./clean.sh # erase the chain data
 ```

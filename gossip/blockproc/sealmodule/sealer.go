@@ -3,46 +3,46 @@ package sealmodule
 import (
 	"math/big"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
-	"github.com/zilionixx/zilion-base/zilionbft"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
+	"github.com/Fantom-foundation/lachesis-base/lachesis"
 
 	"github.com/zilionixx/go-zilionixx/gossip/blockproc"
 )
 
-type ZilionixxEpochsSealerModule struct{}
+type zilionixxEpochsSealerModule struct{}
 
-func New() *ZilionixxEpochsSealerModule {
-	return &ZilionixxEpochsSealerModule{}
+func New() *zilionixxEpochsSealerModule {
+	return &zilionixxEpochsSealerModule{}
 }
 
-func (m *ZilionixxEpochsSealerModule) Start(block blockproc.BlockCtx, bs blockproc.BlockState, es blockproc.EpochState) blockproc.SealerProcessor {
-	return &ZilionixxEpochsSealer{
+func (m *zilionixxEpochsSealerModule) Start(block blockproc.BlockCtx, bs blockproc.BlockState, es blockproc.EpochState) blockproc.SealerProcessor {
+	return &zilionixxEpochsSealer{
 		block: block,
 		es:    es,
 		bs:    bs,
 	}
 }
 
-type ZilionixxEpochsSealer struct {
+type zilionixxEpochsSealer struct {
 	block blockproc.BlockCtx
 	es    blockproc.EpochState
 	bs    blockproc.BlockState
 }
 
-func (s *ZilionixxEpochsSealer) EpochSealing() bool {
+func (s *zilionixxEpochsSealer) EpochSealing() bool {
 	sealEpoch := s.bs.EpochGas >= s.es.Rules.Epochs.MaxEpochGas
 	sealEpoch = sealEpoch || (s.block.Time-s.es.EpochStart) >= s.es.Rules.Epochs.MaxEpochDuration
 	sealEpoch = sealEpoch || s.bs.AdvanceEpochs > 0
 	return sealEpoch || s.bs.EpochCheaters.Len() != 0
 }
 
-func (p *ZilionixxEpochsSealer) Update(bs blockproc.BlockState, es blockproc.EpochState) {
+func (p *zilionixxEpochsSealer) Update(bs blockproc.BlockState, es blockproc.EpochState) {
 	p.bs, p.es = bs, es
 }
 
 // SealEpoch is called after pre-internal transactions are executed
-func (s *ZilionixxEpochsSealer) SealEpoch() (blockproc.BlockState, blockproc.EpochState) {
+func (s *zilionixxEpochsSealer) SealEpoch() (blockproc.BlockState, blockproc.EpochState) {
 	// Select new validators
 	oldValidators := s.es.Validators
 	builder := pos.NewBigBuilder()
@@ -87,7 +87,7 @@ func (s *ZilionixxEpochsSealer) SealEpoch() (blockproc.BlockState, blockproc.Epo
 	s.es.EpochStateRoot = s.bs.FinalizedStateRoot
 
 	s.bs.EpochGas = 0
-	s.bs.EpochCheaters = zilionbft.Cheaters{}
+	s.bs.EpochCheaters = lachesis.Cheaters{}
 	newEpoch := s.es.Epoch + 1
 	s.es.Epoch = newEpoch
 

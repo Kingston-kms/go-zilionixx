@@ -5,19 +5,19 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/pos"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/inter/pos"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/gossip/emitter/mock"
 	"github.com/zilionixx/go-zilionixx/integration/makegenesis"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/vecmt"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 //go:generate go run github.com/golang/mock/mockgen -package=mock -destination=mock/world.go github.com/zilionixx/go-zilionixx/gossip/emitter External,TxPool,TxSigner,Signer

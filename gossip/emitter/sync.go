@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zilionixx/zilion-base/emitter/doublesign"
-	"github.com/zilionixx/zilion-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/emitter/doublesign"
+	"github.com/Fantom-foundation/lachesis-base/hash"
 
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/utils/errlock"
@@ -50,6 +50,10 @@ func (em *Emitter) currentSyncStatus() doublesign.SyncStatus {
 	}
 	if em.world.IsSynced() {
 		s.P2PSynced = em.syncStatus.p2pSynced
+	}
+	prevEmitted := em.readLastEmittedEventID()
+	if prevEmitted != nil && (em.world.GetEvent(*prevEmitted) == nil && em.epoch <= prevEmitted.Epoch()) {
+		s.P2PSynced = time.Time{}
 	}
 	return s
 }

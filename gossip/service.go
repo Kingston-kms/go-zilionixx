@@ -6,6 +6,11 @@ import (
 	"math/rand"
 	"sync"
 
+	"github.com/Fantom-foundation/lachesis-base/hash"
+	"github.com/Fantom-foundation/lachesis-base/inter/dag"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/lachesis"
+	"github.com/Fantom-foundation/lachesis-base/utils/workers"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -13,14 +18,11 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/node"
 	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/discv5"
+	"github.com/ethereum/go-ethereum/p2p/dnsdisc"
+	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/ethereum/go-ethereum/p2p/enr"
 	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/zilionixx/zilion-base/hash"
-	"github.com/zilionixx/zilion-base/inter/dag"
-	"github.com/zilionixx/zilion-base/inter/idx"
-	"github.com/zilionixx/zilion-base/utils/workers"
-	"github.com/zilionixx/zilion-base/zilionbft"
+	"github.com/zilionixx/go-zilionixx/zilionixx"
 
 	"github.com/zilionixx/go-zilionixx/ethapi"
 	"github.com/zilionixx/go-zilionixx/eventcheck"
@@ -41,10 +43,10 @@ import (
 	"github.com/zilionixx/go-zilionixx/gossip/gasprice"
 	"github.com/zilionixx/go-zilionixx/inter"
 	"github.com/zilionixx/go-zilionixx/logger"
+	"github.com/zilionixx/go-zilionixx/utils/gsignercache"
 	"github.com/zilionixx/go-zilionixx/utils/wgmutex"
 	"github.com/zilionixx/go-zilionixx/valkeystore"
 	"github.com/zilionixx/go-zilionixx/vecmt"
-	"github.com/zilionixx/go-zilionixx/zilionixx"
 )
 
 type ServiceFeed struct {
@@ -110,15 +112,12 @@ type Service struct {
 	// server
 	p2pServer *p2p.Server
 	Name      string
-	Topic     discv5.Topic
-
-	serverPool *serverPool
 
 	accountManager *accounts.Manager
 
 	// application
 	store               *Store
-	engine              zilionbft.Consensus
+	engine              lachesis.Consensus
 	dagIndexer          *vecmt.Index
 	engineMu            *sync.RWMutex
 	emitter             *emitter.Emitter
@@ -141,8 +140,12 @@ type Service struct {
 
 	feed ServiceFeed
 
+	gpo *gasprice.Oracle
+
 	// application protocol
 	pm *ProtocolManager
+
+	dialCandidates enode.Iterator
 
 	EthAPI        *EthAPIBackend
 	netRPCService *ethapi.PublicNetAPI
@@ -152,7 +155,7 @@ type Service struct {
 	logger.Instance
 }
 
-func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func NewService(stack *node.Node, config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
@@ -174,7 +177,7 @@ func NewService(stack *node.Node, config Config, store *Store, signer valkeystor
 	return svc, nil
 }
 
-func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine zilionbft.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
+func newService(config Config, store *Store, signer valkeystore.SignerI, blockProc BlockProc, engine lachesis.Consensus, dagIndexer *vecmt.Index) (*Service, error) {
 	svc := &Service{
 		config:             config,
 		done:               make(chan struct{}),
@@ -191,31 +194,6 @@ func newService(config Config, store *Store, signer valkeystore.SignerI, blockPr
 
 	svc.blockProcTasks = workers.New(new(sync.WaitGroup), svc.blockProcTasksDone, 1)
 
-	// create server pool
-	trustedNodes := []string{}
-	svc.serverPool = newServerPool(store.async.table.Peers, svc.done, &svc.wg, trustedNodes)
-
-	// create tx pool
-	net := store.GetRules()
-	stateReader := svc.GetEvmStateReader()
-	svc.txpool = evmcore.NewTxPool(config.TxPool, net.EvmChainConfig(), stateReader)
-
-	// create checkers
-	svc.heavyCheckReader.Addrs.Store(NewEpochPubKeys(svc.store, svc.store.GetEpoch()))                                             // read pub keys of current epoch from disk
-	svc.gasPowerCheckReader.Ctx.Store(NewGasPowerContext(svc.store, svc.store.GetValidators(), svc.store.GetEpoch(), net.Economy)) // read gaspower check data from disk
-	svc.checkers = makeCheckers(config.HeavyCheck, net.EvmChainConfig().ChainID, &svc.heavyCheckReader, &svc.gasPowerCheckReader, svc.store)
-
-	// create protocol manager
-	var err error
-	svc.pm, err = NewProtocolManager(config, &svc.feed, svc.txpool, svc.engineMu, svc.checkers, store, svc.processEvent, svc.serverPool)
-	if err != nil {
-		return nil, err
-	}
-
-	// create API backend
-	svc.EthAPI = &EthAPIBackend{config.ExtRPCEnabled, svc, stateReader, nil}
-	svc.EthAPI.gpo = gasprice.NewOracle(svc.EthAPI, svc.config.GPO)
-
 	// load epoch DB
 	svc.store.loadEpochStore(svc.store.GetEpoch())
 	es := svc.store.getEpochStore(svc.store.GetEpoch())
@@ -225,6 +203,33 @@ func newService(config Config, store *Store, signer valkeystore.SignerI, blockPr
 	// load caches for mutable values to avoid race condition
 	svc.store.GetBlockEpochState()
 	svc.store.GetHighestLamport()
+
+	// create GPO
+	svc.gpo = gasprice.NewOracle(&GPOBackend{store}, svc.config.GPO)
+
+	// create checkers
+	net := store.GetRules()
+	svc.heavyCheckReader.Addrs.Store(NewEpochPubKeys(svc.store, svc.store.GetEpoch()))                                             // read pub keys of current epoch from disk
+	svc.gasPowerCheckReader.Ctx.Store(NewGasPowerContext(svc.store, svc.store.GetValidators(), svc.store.GetEpoch(), net.Economy)) // read gaspower check data from disk
+	svc.checkers = makeCheckers(config.HeavyCheck, net.EvmChainConfig().ChainID, &svc.heavyCheckReader, &svc.gasPowerCheckReader, svc.store)
+
+	// create tx pool
+	stateReader := svc.GetEvmStateReader()
+	svc.txpool = evmcore.NewTxPool(config.TxPool, net.EvmChainConfig(), stateReader)
+
+	// init dialCandidates
+	dnsclient := dnsdisc.NewClient(dnsdisc.Config{})
+	var err error
+	svc.dialCandidates, err = dnsclient.NewIterator()
+
+	// create protocol manager
+	svc.pm, err = newHandler(handlerConfig{config, &svc.feed, svc.txpool, svc.engineMu, svc.checkers, store, svc.processEvent})
+	if err != nil {
+		return nil, err
+	}
+
+	// create API backend
+	svc.EthAPI = &EthAPIBackend{config.ExtRPCEnabled, svc, stateReader, config.AllowUnprotectedTxs}
 
 	svc.emitter = svc.makeEmitter(signer)
 
@@ -236,7 +241,7 @@ func newService(config Config, store *Store, signer valkeystore.SignerI, blockPr
 // makeCheckers builds event checkers
 func makeCheckers(heavyCheckCfg heavycheck.Config, chainID *big.Int, heavyCheckReader *HeavyCheckReader, gasPowerCheckReader *GasPowerCheckReader, store *Store) *eventcheck.Checkers {
 	// create signatures checker
-	heavyCheck := heavycheck.New(heavyCheckCfg, heavyCheckReader, types.NewEIP155Signer(chainID))
+	heavyCheck := heavycheck.New(heavyCheckCfg, heavyCheckReader, gsignercache.Wrap(types.NewEIP2930Signer(chainID)))
 
 	// create gaspower checker
 	gaspowerCheck := gaspowercheck.New(gasPowerCheckReader)
@@ -251,7 +256,7 @@ func makeCheckers(heavyCheckCfg heavycheck.Config, chainID *big.Int, heavyCheckR
 }
 
 func (s *Service) makeEmitter(signer valkeystore.SignerI) *emitter.Emitter {
-	txSigner := types.NewEIP155Signer(s.store.GetRules().EvmChainConfig().ChainID)
+	txSigner := gsignercache.Wrap(types.NewEIP2930Signer(s.store.GetRules().EvmChainConfig().ChainID))
 
 	return emitter.NewEmitter(s.config.Emitter, emitter.World{
 		External: &emitterWorld{
@@ -265,14 +270,48 @@ func (s *Service) makeEmitter(signer valkeystore.SignerI) *emitter.Emitter {
 	})
 }
 
+// MakeProtocols constructs the P2P protocol definitions for `zilionixx`.
+func MakeProtocols(svc *Service, backend *ProtocolManager, network uint64, disc enode.Iterator) []p2p.Protocol {
+	protocols := make([]p2p.Protocol, len(ProtocolVersions))
+	for i, version := range ProtocolVersions {
+		version := version // Closure
+
+		protocols[i] = p2p.Protocol{
+			Name:    ProtocolName,
+			Version: version,
+			Length:  protocolLengths[version],
+			Run: func(p *p2p.Peer, rw p2p.MsgReadWriter) error {
+				peer := NewPeer(int(version), p, rw, backend.config.Protocol.PeerCache)
+
+				select {
+				case backend.newPeerCh <- peer:
+					backend.wg.Add(1)
+					defer backend.wg.Done()
+					err := backend.handle(peer)
+					return err
+				case <-backend.quitSync:
+					return p2p.DiscQuitting
+				}
+			},
+			NodeInfo: func() interface{} {
+				return backend.NodeInfo()
+			},
+			PeerInfo: func(id enode.ID) interface{} {
+				if p := backend.peers.Peer(fmt.Sprintf("%x", id[:8])); p != nil {
+					return p.Info()
+				}
+				return nil
+			},
+			Attributes:     []enr.Entry{currentENREntry(svc)},
+			DialCandidates: disc,
+		}
+	}
+	return protocols
+}
+
 // Protocols returns protocols the service can communicate on.
 func (s *Service) Protocols() []p2p.Protocol {
-	protos := make([]p2p.Protocol, len(ProtocolVersions))
-	for i, vsn := range ProtocolVersions {
-		protos[i] = s.pm.makeProtocol(vsn)
-		protos[i].Attributes = []enr.Entry{s.currentEnr()}
-	}
-	return protos
+	return MakeProtocols(s, s.pm, s.store.GetRules().NetworkID, s.dialCandidates)
 }
 
 // APIs returns api methods the service wants to expose on rpc channels.
@@ -288,7 +327,7 @@ func (s *Service) APIs() []rpc.API {
 		}, {
 			Namespace: "eth",
 			Version:   "1.0",
-			Service:   filters.NewPublicFilterAPI(s.EthAPI),
+			Service:   filters.NewPublicFilterAPI(s.EthAPI, s.config.FilterAPI),
 			Public:    true,
 		}, {
 			Namespace: "net",
@@ -303,23 +342,16 @@ func (s *Service) APIs() []rpc.API {
 
 // Start method invoked when the node is ready to start the service.
 func (s *Service) Start() error {
-	genesis := *s.store.GetGenesisHash()
-	s.Topic = discv5.Topic("zilionixx@" + genesis.Hex())
-
-	if s.p2pServer.DiscV5 != nil {
-		go func(topic discv5.Topic) {
-			s.Log.Info("Starting topic registration")
-			defer s.Log.Info("Terminated topic registration")
-
-			s.p2pServer.DiscV5.RegisterTopic(topic, s.done)
-		}(s.Topic)
+	err := s.store.Init()
+	if err != nil {
+		return err
 	}
+
+	StartENRUpdater(s, s.p2pServer.LocalNode())
 
 	s.blockProcTasks.Start(1)
 
 	s.pm.Start(s.p2pServer.MaxPeers)
-
-	s.serverPool.start(s.p2pServer, s.Topic)
 
 	s.emitter.Start()
 

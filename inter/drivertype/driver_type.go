@@ -3,7 +3,7 @@ package drivertype
 import (
 	"math/big"
 
-	"github.com/zilionixx/zilion-base/inter/idx"
+	"github.com/Fantom-foundation/lachesis-base/inter/idx"
 
 	"github.com/zilionixx/go-zilionixx/inter/validatorpk"
 )

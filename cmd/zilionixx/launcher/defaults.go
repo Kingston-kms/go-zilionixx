@@ -15,10 +15,9 @@ import (
 )
 
 const (
-	DefaultP2PPort     = 5050  // Default p2p port for listening
-	DefaultHTTPPort    = 18545 // Default TCP port for the HTTP RPC server
-	DefaultWSPort      = 18546 // Default TCP port for the websocket RPC server
-	DefaultGraphQLPort = 18547 // Default TCP port for the GraphQL server
+	DefaultP2PPort  = 5050  // Default p2p port for listening
+	DefaultHTTPPort = 18545 // Default TCP port for the HTTP RPC server
+	DefaultWSPort   = 18546 // Default TCP port for the websocket RPC server
 )
 
 func overrideFlags() {
@@ -26,9 +25,6 @@ func overrideFlags() {
 	utils.HTTPPortFlag.Value = DefaultHTTPPort
 	utils.LegacyRPCPortFlag.Value = DefaultHTTPPort
 	utils.WSPortFlag.Value = DefaultWSPort
-	utils.LegacyWSPortFlag.Value = DefaultWSPort
-	utils.LegacyGraphQLPortFlag.Value = DefaultGraphQLPort
-	utils.LegacyGraphQLPortFlag.Value = DefaultGraphQLPort
 }
 
 // NodeDefaultConfig contains reasonable default settings.
@@ -58,17 +54,17 @@ func DefaultDataDir() string {
 	if home != "" {
 		switch runtime.GOOS {
 		case "darwin":
-			return filepath.Join(home, "Library", "Zilionixx")
+			return filepath.Join(home, "Library", "Lachesis")
 		case "windows":
 			// We used to put everything in %HOME%\AppData\Roaming, but this caused
 			// problems with non-typical setups. If this fallback location exists and
 			// is non-empty, use it, otherwise DTRT and check %LOCALAPPDATA%.
-			fallback := filepath.Join(home, "AppData", "Roaming", "Zilionixx")
+			fallback := filepath.Join(home, "AppData", "Roaming", "Lachesis")
 			appdata := windowsAppData()
 			if appdata == "" || isNonEmptyDir(fallback) {
 				return fallback
 			}
-			return filepath.Join(appdata, "Zilionixx")
+			return filepath.Join(appdata, "Lachesis")
 		default:
 			return filepath.Join(home, ".zilionixx")
 		}
