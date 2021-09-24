@@ -92,7 +92,7 @@ var (
 
 	AllowedzilionixxGenesisHashes = map[uint64]hash.Hash{
 		zilionixx.MainNetworkID: hash.HexToHash("0x4a53c5445584b3bfc20dbfb2ec18ae20037c716f3ba2d9e1da768a9deca17cb4"),
-		zilionixx.TestNetworkID: hash.HexToHash("0xc4a5fc96e575a16a9a0c7349d44dc4d0f602a54e0a8543360c2fee4c3937b49e"),
+		zilionixx.TestNetworkID: hash.HexToHash("0x0eb355c99c823be0d1c870f41781d3f4cec33fefd2f77822de42f0e048217e06"),
 	}
 )
 
@@ -154,6 +154,66 @@ func loadAllConfigs(file string, cfg *config) error {
 			"If node was recently upgraded and a previous network config file is used, then check updates for the config file.", err))
 	}
 	return err
+}
+
+func generateZilionixxGenesis(ctx *cli.Context) bool {
+	ret := false
+
+	switch {
+	case ctx.GlobalIsSet(GenTestNetGenesisBlock.Name):
+		testGenesisStore := makegenesis.TestNetGenesisStore(futils.ToFtm(1000000000), futils.ToFtm(5000000))
+		genesis := integration.InputGenesis{
+			Hash: testGenesisStore.Hash(),
+			Read: func(store *genesisstore.Store) error {
+				buf := bytes.NewBuffer(nil)
+				err := testGenesisStore.Export(buf)
+				if err != nil {
+					return err
+				}
+				return store.Import(buf)
+			},
+			Close: func() error {
+				return nil
+			},
+		}
+
+		store := genesisstore.NewMemStore()
+		genesis.Read(store)
+
+		myFile, _ := os.Create("testnet.g")
+		genesisstore.WriteGenesisStore(myFile, store)
+
+		ret = true
+		log.Info("testnet genesis hash", "hash", testGenesisStore.Hash())
+		log.Info("testnet.g was created successfully")
+	case ctx.GlobalIsSet(GenMainNetGenesisBlock.Name):
+		mainGenesisStore := makegenesis.MainNetGenesisStore(futils.ToFtm(1000000000), futils.ToFtm(5000000))
+		genesis := integration.InputGenesis{
+			Hash: mainGenesisStore.Hash(),
+			Read: func(store *genesisstore.Store) error {
+				buf := bytes.NewBuffer(nil)
+				err := mainGenesisStore.Export(buf)
+				if err != nil {
+					return err
+				}
+				return store.Import(buf)
+			},
+			Close: func() error {
+				return nil
+			},
+		}
+
+		store := genesisstore.NewMemStore()
+		genesis.Read(store)
+
+		myFile, _ := os.Create("mainnet.g")
+		genesisstore.WriteGenesisStore(myFile, store)
+
+		ret = true
+		log.Crit("mainnet.g was created successfully")
+	default:
+	}
+	return ret
 }
 
 func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {

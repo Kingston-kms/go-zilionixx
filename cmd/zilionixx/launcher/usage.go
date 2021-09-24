@@ -79,6 +79,10 @@ func calcAppHelpFlagGroups() []flags.FlagGroup {
 			Flags: testFlags,
 		},
 		{
+			Name: "GENERATE",
+			Flags: genGenesisFlags,
+		},
+		{
 			Name:  "LOGGING AND DEBUGGING",
 			Flags: debug.Flags,
 		},

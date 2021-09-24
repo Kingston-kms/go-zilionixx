@@ -18,9 +18,9 @@ import (
 )
 
 const (
-	MainNetworkID   uint64 = 0xfa
-	TestNetworkID   uint64 = 0xfa2
-	FakeNetworkID   uint64 = 0xfa3
+	MainNetworkID   uint64 = 0x5a
+	TestNetworkID   uint64 = 0x5d
+	FakeNetworkID   uint64 = 0x63
 	DefaultEventGas uint64 = 28000
 )
 

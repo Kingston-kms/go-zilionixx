@@ -57,3 +57,5 @@ zilionbft_*
 
 **/coverage.txt
 /cmd/zilionixx/zilionixx.exe
+/cmd/zilionixx/testnet.g
+/cmd/zilionixx/mainnet.g

@@ -43,6 +43,7 @@ var (
 	app = flags.NewApp(gitCommit, gitDate, "the go-zilionixx command line interface")
 
 	nodeFlags        []cli.Flag
+	genGenesisFlags  []cli.Flag
 	testFlags        []cli.Flag
 	gpoFlags         []cli.Flag
 	accountFlags     []cli.Flag
@@ -59,6 +60,12 @@ func initFlags() {
 	// Flags for testing purpose.
 	testFlags = []cli.Flag{
 		FakeNetFlag,
+	}
+
+	// Flags that generate the genesis file.
+	genGenesisFlags = []cli.Flag{
+		GenTestNetGenesisBlock,
+		GenMainNetGenesisBlock,
 	}
 
 	// Flags that configure the node.
@@ -169,6 +176,7 @@ func initFlags() {
 	nodeFlags = append(nodeFlags, txpoolFlags...)
 	nodeFlags = append(nodeFlags, zilionixxFlags...)
 	nodeFlags = append(nodeFlags, legacyRpcFlags...)
+	nodeFlags = append(nodeFlags, genGenesisFlags...)
 }
 
 // init the CLI app.
@@ -255,6 +263,9 @@ func zilionBFTMain(ctx *cli.Context) error {
 	//defer tracingStop()
 
 	cfg := makeAllConfigs(ctx)
+	if (generateZilionixxGenesis(ctx)) {
+		return nil
+	}
 	genesisPath := getZilionixxGenesis(ctx)
 	node, _, nodeClose := makeNode(ctx, cfg, genesisPath)
 	defer nodeClose()
