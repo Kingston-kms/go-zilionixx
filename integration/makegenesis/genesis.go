@@ -319,11 +319,11 @@ func TestNetGenesisStore(balance, stake *big.Int) *genesisstore.Store {
 
 	genStore.SetEvmAccount(common.HexToAddress("0xF7C913733Ab38Aa2b3a4a69B2Bf640d5E340Fc43"), genesis.Account{
 		Code:    []byte{},
-		Balance: utils.ToFtm(88888888),
+		Balance: utils.ToZnx(88888888),
 		Nonce:   0,
 	})
 
-	totalSupply.Add(totalSupply, utils.ToFtm(88888888))
+	totalSupply.Add(totalSupply, utils.ToZnx(88888888))
 
 	owner := validators[0].Address
 
@@ -405,11 +405,11 @@ func MainNetGenesisStore(balance, stake *big.Int) *genesisstore.Store {
 
 	genStore.SetEvmAccount(common.HexToAddress("0xF7C913733Ab38Aa2b3a4a69B2Bf640d5E340Fc43"), genesis.Account{
 		Code:    []byte{},
-		Balance: utils.ToFtm(88888888),
+		Balance: utils.ToZnx(88888888),
 		Nonce:   0,
 	})
 
-	totalSupply.Add(totalSupply, utils.ToFtm(88888888))
+	totalSupply.Add(totalSupply, utils.ToZnx(88888888))
 
 	owner := validators[0].Address
 

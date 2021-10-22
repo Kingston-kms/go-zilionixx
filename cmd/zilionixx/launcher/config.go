@@ -161,7 +161,7 @@ func generateZilionixxGenesis(ctx *cli.Context) bool {
 
 	switch {
 	case ctx.GlobalIsSet(GenTestNetGenesisBlock.Name):
-		testGenesisStore := makegenesis.TestNetGenesisStore(futils.ToFtm(1000000000), futils.ToFtm(5000000))
+		testGenesisStore := makegenesis.TestNetGenesisStore(futils.ToZnx(1000000000), futils.ToZnx(5000000))
 		genesis := integration.InputGenesis{
 			Hash: testGenesisStore.Hash(),
 			Read: func(store *genesisstore.Store) error {
@@ -187,7 +187,7 @@ func generateZilionixxGenesis(ctx *cli.Context) bool {
 		log.Info("testnet genesis hash", "hash", testGenesisStore.Hash())
 		log.Info("testnet.g was created successfully")
 	case ctx.GlobalIsSet(GenMainNetGenesisBlock.Name):
-		mainGenesisStore := makegenesis.MainNetGenesisStore(futils.ToFtm(1000000000), futils.ToFtm(5000000))
+		mainGenesisStore := makegenesis.MainNetGenesisStore(futils.ToZnx(1000000000), futils.ToZnx(5000000))
 		genesis := integration.InputGenesis{
 			Hash: mainGenesisStore.Hash(),
 			Read: func(store *genesisstore.Store) error {
@@ -225,7 +225,7 @@ func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {
 		if err != nil {
 			log.Crit("Invalid flag", "flag", FakeNetFlag.Name, "err", err)
 		}
-		fakeGenesisStore := makegenesis.FakeGenesisStore(num, futils.ToFtm(1000000000), futils.ToFtm(5000000))
+		fakeGenesisStore := makegenesis.FakeGenesisStore(num, futils.ToZnx(1000000000), futils.ToZnx(5000000))
 		genesis = integration.InputGenesis{
 			Hash: fakeGenesisStore.Hash(),
 			Read: func(store *genesisstore.Store) error {
@@ -455,8 +455,8 @@ func defaultNodeConfig() node.Config {
 	cfg := NodeDefaultConfig
 	cfg.Name = clientIdentifier
 	cfg.Version = params.VersionWithCommit(gitCommit, gitDate)
-	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
-	cfg.WSModules = append(cfg.WSModules, "eth", "ftm", "dag", "sfc", "abft", "web3")
+	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "znx", "dag", "sfc", "abft", "web3")
+	cfg.WSModules = append(cfg.WSModules, "eth", "znx", "dag", "sfc", "abft", "web3")
 	cfg.IPCPath = "zilionixx.ipc"
 	cfg.DataDir = DefaultDataDir()
 	return cfg

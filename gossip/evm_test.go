@@ -9,9 +9,9 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/zilionixx/zilion-base/hash"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/require"
+	"github.com/zilionixx/zilion-base/hash"
 
 	"github.com/zilionixx/go-zilionixx/gossip/contract/ballot"
 	"github.com/zilionixx/go-zilionixx/logger"
@@ -54,7 +54,7 @@ func BenchmarkBallotTxsProcessing(b *testing.B) {
 
 	// Init accounts
 	for i := 2; i <= count; i++ {
-		tx := env.Transfer(1, i, utils.ToFtm(10))
+		tx := env.Transfer(1, i, utils.ToZnx(10))
 		require.NoError(err)
 		txs = append(txs, tx)
 		if len(txs) > 2 {
