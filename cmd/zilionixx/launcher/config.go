@@ -156,66 +156,6 @@ func loadAllConfigs(file string, cfg *config) error {
 	return err
 }
 
-func generateZilionixxGenesis(ctx *cli.Context) bool {
-	ret := false
-
-	switch {
-	case ctx.GlobalIsSet(GenTestNetGenesisBlock.Name):
-		testGenesisStore := makegenesis.TestNetGenesisStore(futils.ToZnx(1000000000), futils.ToZnx(5000000))
-		genesis := integration.InputGenesis{
-			Hash: testGenesisStore.Hash(),
-			Read: func(store *genesisstore.Store) error {
-				buf := bytes.NewBuffer(nil)
-				err := testGenesisStore.Export(buf)
-				if err != nil {
-					return err
-				}
-				return store.Import(buf)
-			},
-			Close: func() error {
-				return nil
-			},
-		}
-
-		store := genesisstore.NewMemStore()
-		genesis.Read(store)
-
-		myFile, _ := os.Create("testnet.g")
-		genesisstore.WriteGenesisStore(myFile, store)
-
-		ret = true
-		log.Info("testnet genesis hash", "hash", testGenesisStore.Hash())
-		log.Info("testnet.g was created successfully")
-	case ctx.GlobalIsSet(GenMainNetGenesisBlock.Name):
-		mainGenesisStore := makegenesis.MainNetGenesisStore(futils.ToZnx(1000000000), futils.ToZnx(5000000))
-		genesis := integration.InputGenesis{
-			Hash: mainGenesisStore.Hash(),
-			Read: func(store *genesisstore.Store) error {
-				buf := bytes.NewBuffer(nil)
-				err := mainGenesisStore.Export(buf)
-				if err != nil {
-					return err
-				}
-				return store.Import(buf)
-			},
-			Close: func() error {
-				return nil
-			},
-		}
-
-		store := genesisstore.NewMemStore()
-		genesis.Read(store)
-
-		myFile, _ := os.Create("mainnet.g")
-		genesisstore.WriteGenesisStore(myFile, store)
-
-		ret = true
-		log.Crit("mainnet.g was created successfully")
-	default:
-	}
-	return ret
-}
-
 func getZilionixxGenesis(ctx *cli.Context) integration.InputGenesis {
 
 	var genesis integration.InputGenesis
