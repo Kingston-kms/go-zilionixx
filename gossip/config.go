@@ -5,6 +5,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/zilionixx/zilion-base/gossip/dagprocessor"
 	"github.com/zilionixx/zilion-base/gossip/dagstream/streamleecher"
 	"github.com/zilionixx/zilion-base/gossip/dagstream/streamseeder"
@@ -12,7 +13,6 @@ import (
 	"github.com/zilionixx/zilion-base/inter/dag"
 	"github.com/zilionixx/zilion-base/inter/idx"
 	"github.com/zilionixx/zilion-base/utils/cachescale"
-	"github.com/syndtr/goleveldb/leveldb/opt"
 
 	"github.com/zilionixx/go-zilionixx/eventcheck/heavycheck"
 	"github.com/zilionixx/go-zilionixx/evmcore"
@@ -184,7 +184,7 @@ func DefaultConfig(scale cachescale.Func) Config {
 		RPCLogsBloom: true,
 
 		RPCGasCap:   25000000,
-		RPCTxFeeCap: 100, // 100 FTM
+		RPCTxFeeCap: 100, // 100 ZNX
 	}
 	cfg.Protocol.Processor.EventsBufferLimit.Num = idx.Event(cfg.Protocol.StreamLeecher.Session.ParallelChunksDownload)*cfg.Protocol.StreamLeecher.Session.DefaultChunkSize.Num + softLimitItems
 	cfg.Protocol.Processor.EventsBufferLimit.Size = uint64(cfg.Protocol.StreamLeecher.Session.ParallelChunksDownload)*cfg.Protocol.StreamLeecher.Session.DefaultChunkSize.Size + 8*opt.MiB
