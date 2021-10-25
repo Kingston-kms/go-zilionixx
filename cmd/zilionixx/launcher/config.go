@@ -91,7 +91,7 @@ var (
 	}
 
 	AllowedzilionixxGenesisHashes = map[uint64]hash.Hash{
-		zilionixx.MainNetworkID: hash.HexToHash("0x4a53c5445584b3bfc20dbfb2ec18ae20037c716f3ba2d9e1da768a9deca17cb4"),
+		zilionixx.MainNetworkID: hash.HexToHash("0xe03d5d95a0fb5348e78bb1d055e552403bec5979673cd45a3181fba1e5fd9010"),
 		zilionixx.TestNetworkID: hash.HexToHash("0x0eb355c99c823be0d1c870f41781d3f4cec33fefd2f77822de42f0e048217e06"),
 	}
 )
